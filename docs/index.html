@@ -1,0 +1,240 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Introduction · Barocss Math Editor</title><meta name="description" content="Introduction for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" aria-current="page">Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="barocssmath-editor">@barocss/math-editor</h1>
+<p>An embeddable math editor with a framework-independent model, an existing rich React UI, and a new native DOM surface for pure JavaScript, Web Components, Vue, Svelte, Solid and React. Write expressions in place, select existing math, and wrap it in fractions, roots, powers or delimiters. The demo includes a live KaTeX preview.</p>
+<p><strong>Status:</strong> working prototype, not yet a production-ready replacement for the math features in Note, Word or Slides. This package does not calculate, solve equations or parse arbitrary LaTeX.</p>
+<p>See <a href="/docs/adapters.html">framework adapters and inline/custom toolbar integration</a>, <a href="/docs/localization.html">custom locales</a>, and <a href="/docs/roadmap.html">progress / roadmap</a>. The new native renderer has explicit parity gaps; existing React consumers keep their current UI.</p>
+<p>For editor-only, external toolbar, LaTeX, preview, inline and popup compositions, see <a href="/docs/embedding.html">Embedding</a> and <code>/layouts.html</code> in the demo.</p>
+<h2 id="quick-start">Quick start</h2>
+<p>Install version 0.1.0 from npm:</p>
+<pre><code class="language-sh">npm install @barocss/math-editor@0.1.0
+# For the rich React UI:
+npm install react react-dom
+</code></pre>
+<p>Import <code>@barocss/math-editor/style.css</code> once. Framework-free consumers use <code>/core</code> and <code>/dom</code>; each framework adapter has its own subpath. See <a href="/docs/adapters.html">ADAPTERS.md</a>.</p>
+<p>To develop the package and demo from this monorepo:</p>
+<pre><code class="language-sh">pnpm install
+pnpm --filter @barocss/math-editor build
+pnpm --filter @barocss/math-demo dev
+# http://localhost:5184
+</code></pre>
+<p>A workspace consumer should declare <code>&quot;@barocss/math-editor&quot;: &quot;workspace:*&quot;</code>. Framework peer dependencies are optional; React consumers install React and React DOM (&gt;=18).</p>
+<pre><code class="language-tsx">import { MathEditor, createMathDocument, type MathDocument } from '@barocss/math-editor';
+import '@barocss/math-editor/style.css';
+
+function Formula({ documentId, saved, save }: {
+  documentId: string;
+  saved?: MathDocument;
+  save: (document: MathDocument, latex: string) =&gt; void;
+}) {
+  return (
+    &lt;MathEditor
+      key={documentId}
+      locale=&quot;en&quot;
+      defaultValue={saved ?? createMathDocument()}
+      onChange={save}
+      onExit={direction =&gt; console.log('Return focus to the host:', direction)}
+    /&gt;
+  );
+}
+</code></pre>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Prop</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>defaultValue?: MathDocument</code></td>
+<td>Read on mount. Change the React <code>key</code> to open another document. This is not a controlled <code>value</code> prop.</td>
+</tr>
+<tr>
+<td><code>locale?: MathLocale</code></td>
+<td>Defaults to <code>ko</code>. Changes UI text without resetting the document or undo history.</td>
+</tr>
+<tr>
+<td><code>toolbar?: boolean</code></td>
+<td>Show the rich React toolbar panels; defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>toolbarEnd?: ReactNode</code></td>
+<td>Host actions such as reset/save appended to the toolbar.</td>
+</tr>
+<tr>
+<td><code>showTokenLegend?: boolean</code></td>
+<td>Show lexical color guidance; defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>showLineNumbers?: boolean</code></td>
+<td>Defaults to <code>true</code>. Displays UI-only line numbers when there are two or more top-level rows. Never included in the model, clipboard or LaTeX.</td>
+</tr>
+<tr>
+<td><code>label?: string</code></td>
+<td>Host-provided accessible group name; otherwise localized. Hosts translate their own custom label.</td>
+</tr>
+<tr>
+<td><code>onChange?(document, latex)</code></td>
+<td>Receives committed model changes and their LaTeX output. IME drafts are not published.</td>
+</tr>
+<tr>
+<td><code>onExit?(direction)</code></td>
+<td>Requests host focus restoration at an outer navigation boundary: -1 before, +1 after.</td>
+</tr>
+</tbody>
+</table></div><h2 id="suggestion-ordering">Suggestion ordering</h2>
+<p>Matching literal characters appear before editable structures and templates. For example, <code>/</code> offers <code>÷</code> then Fraction; <code>^</code> offers <code>∧</code> before the script structures; <code>sum</code> offers <code>+</code>, <code>±</code>, then the editable sum. To create a fraction, type <code>x/</code>, press Down once, then Enter. The same ranking applies to all adapters.</p>
+<h2 id="editing-flows">Editing flows</h2>
+<p>Use <strong>All symbols</strong> to browse all 90 symbols without knowing a name in advance. Search by glyph, English/Korean name, alias or LaTeX command, then click to insert at the last caret or replace the model selection. Escape closes the browser. Search-field clipboard actions do not affect the formula.</p>
+<ul>
+<li>Type <code>x/</code>, then Enter: convert to a fraction and enter the denominator. <code>/</code>, <code>^</code> and <code>_</code> remain opt-in suggestions, not immediate structural conversions.</li>
+<li>Type <code>matrix</code>, <code>identity</code>, <code>aligned</code> or <code>cases</code>, then choose a suggestion. Korean aliases work in both UI languages.</li>
+<li>Type <code>30degree</code>, <code>30도</code> or <code>30각도</code>, then Enter to insert <code>30°</code> on the current line. <code>angle</code> inserts the separate symbol <code>∠</code>.</li>
+<li>Search <code>reals</code>, <code>integers</code>, <code>setminus</code>, <code>parallel</code>, or their Korean names. <a href="/docs/support.html">The complete catalog</a> lists every symbol and alias.</li>
+<li>Use the template selector for zero matrices, column vectors, the quadratic formula and the Pythagorean theorem. Every part remains editable. Template insertion replaces a model selection if one is active; otherwise it inserts at the caret.</li>
+<li>Click a token to edit it. Only the current token mounts a native <code>input</code>; the others are ordinary elements. Blur switches to preview. Escape closes suggestions first, then returns to preview.</li>
+<li>Drag to select math. The selection tools and main toolbar wrap it in a fraction, root, power, subscript, parentheses, brackets or absolute value. Fractions focus the denominator; powers/subscripts focus their new slot; roots/delimiters place the caret after the structure.</li>
+<li>Complex power bases receive parentheses. Existing structured delimiters are preserved. This is a conservative display rule, not symbolic algebra.</li>
+</ul>
+<p>Variables, numeric literals and symbols use distinct colors. Classification is lexical: a letter named <code>c</code> or <code>e</code> is not automatically a declared constant. The model does not resolve names or binding scopes.</p>
+<h2 id="keyboard-reference">Keyboard reference</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Context</th>
+<th>Key</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Suggestions</td>
+<td>Up / Down, Enter</td>
+<td>Choose and apply; IME composition reserves these keys for the input method</td>
+</tr>
+<tr>
+<td>Any active slot</td>
+<td>Tab / Shift+Tab</td>
+<td>Traverse tokens and structural slots</td>
+</tr>
+<tr>
+<td>Token boundary</td>
+<td>Left / Right</td>
+<td>Move into a neighboring token or slot</td>
+</tr>
+<tr>
+<td>Top-level row</td>
+<td>Enter</td>
+<td>Split the row, unless applying a suggestion</td>
+</tr>
+<tr>
+<td>Start of a later top-level row</td>
+<td>Backspace</td>
+<td>Join the previous row</td>
+</tr>
+<tr>
+<td>Grid</td>
+<td>Up / Down</td>
+<td>Move to the same column in the adjacent row</td>
+</tr>
+<tr>
+<td>Grid</td>
+<td>Shift+Enter</td>
+<td>Insert a row</td>
+</tr>
+<tr>
+<td>Matrix</td>
+<td>Shift+Space</td>
+<td>Insert a column</td>
+</tr>
+<tr>
+<td>Grid</td>
+<td>Alt+Shift+Up</td>
+<td>Delete the current row</td>
+</tr>
+<tr>
+<td>Matrix</td>
+<td>Alt+Shift+Left</td>
+<td>Delete the current column</td>
+</tr>
+<tr>
+<td>Aligned / cases</td>
+<td>Enter</td>
+<td>Insert a row, unless applying a suggestion</td>
+</tr>
+<tr>
+<td>Just after a fraction/root/delimiter</td>
+<td>Backspace</td>
+<td>Unwrap, preserving contents</td>
+</tr>
+<tr>
+<td>Outer grid edge</td>
+<td>Backspace / Delete</td>
+<td>Delete empty grid; select filled grid first, press again to delete</td>
+</tr>
+<tr>
+<td>Preview surface</td>
+<td>Cmd/Ctrl+A</td>
+<td>Select the whole math document</td>
+</tr>
+<tr>
+<td>Active input</td>
+<td>Cmd/Ctrl+A</td>
+<td>Select the current token text</td>
+</tr>
+<tr>
+<td>Preview surface</td>
+<td>Enter / F2</td>
+<td>Enter editing</td>
+</tr>
+<tr>
+<td>Model selection</td>
+<td>Cmd/Ctrl+C / X / V</td>
+<td>Copy / cut / replace with clipboard contents</td>
+</tr>
+<tr>
+<td>Model selection</td>
+<td>Backspace / Delete</td>
+<td>Delete selection</td>
+</tr>
+<tr>
+<td>Editor</td>
+<td>Cmd/Ctrl+Z / Cmd/Ctrl+Shift+Z</td>
+<td>Undo / redo</td>
+</tr>
+</tbody>
+</table></div><h2 id="selection-and-clipboard-boundaries">Selection and clipboard boundaries</h2>
+<p>A range within one row preserves partial text and balanced structures. Selecting across a numerator and denominator expands to their common fraction; selecting across matrix cells expands to their common matrix. This is not a spreadsheet-style rectangular cell selection. Multiple document lines can be copied, replaced or deleted, but cannot be wrapped into a single structure.</p>
+<p>Internal copies include <code>application/x-barocss-math+json</code> and plain-text LaTeX. Paste validates the custom payload and generates fresh IDs. Plain external text is inserted literally; newlines become top-level rows. Multiple-line paste into a nested slot is rejected without changing the document. If a destination strips custom clipboard formats, pasting back provides text rather than reconstructed math.</p>
+<p>The demo's <strong>Copy</strong> button exports LaTeX only. General LaTeX import is not implemented.</p>
+<h2 id="model-and-package-boundaries">Model and package boundaries</h2>
+<p><code>MathDocument</code> stores <code>version: 1</code>, a <code>root</code> row and optional <code>additionalLines</code>. Rows alternate text boundaries and structures; even an empty boundary is a valid caret address. LaTeX is an export format, not the editing source.</p>
+<ul>
+<li>Main export: model, React editor, navigation, matrices, range/clipboard operations, tokens, suggestions, templates, symbols and localization.</li>
+<li><code>@barocss/math-editor/core</code>: all framework-free model helpers, sessions, suggestions and locale registration; no React dependency.</li>
+<li><code>@barocss/math-editor/style.css</code>: explicit UI stylesheet using <code>me-</code> classes.</li>
+<li>KaTeX is a demo runtime dependency and a package test dependency; the library renderer does not require it.</li>
+</ul>
+<p>Only pass trusted, well-formed saved documents to <code>defaultValue</code>. <code>parseFragment</code> validates clipboard fragments; it is not a saved-document validation API. Locale is host UI state and is not serialized in the math document.</p>
+<h2 id="source-maintenance">Source maintenance</h2>
+<p>Source, tests and CSS use the package Prettier configuration. <code>pnpm --filter @barocss/math-editor format:check</code> checks readability conventions. Toolbar presentation, output views, locale data and host Enter policy are separate modules; caret/IME invariants are documented at the event boundaries.</p>
+<h2 id="verification-and-next-steps">Verification and next steps</h2>
+<pre><code class="language-sh">pnpm --filter @barocss/math-editor test:run
+pnpm --filter @barocss/math-editor type-check
+pnpm --filter @barocss/math-editor build
+pnpm --filter @barocss/math-demo type-check
+pnpm exec tsc --noEmit -p apps/math-demo/tsconfig.tests.json
+pnpm --filter @barocss/math-demo build
+pnpm --filter @barocss/math-demo test:e2e
+</code></pre>
+<p>The demo consumes package exports from <code>dist</code>; rebuild the package before browser tests. Browser tests use Playwright Chromium and start port 5184 if needed. Actual OS Korean IME tests remain deferred at the user's request.</p>
+<ul>
+<li><a href="/docs/symbols.html">Symbol / English / Korean name table</a></li>
+<li><a href="/docs/support.html">Supported formulas, templates and full symbol catalog</a></li>
+<li><a href="/docs/implementation.html">Implementation guide</a></li>
+<li><a href="/docs/validation.html">Validation evidence and limitations</a></li>
+<li><a href="/docs/roadmap.html">Roadmap and acceptance criteria</a></li>
+</ul>
+</article><nav class="adjacent" aria-label="Previous and next document"><span></span><a href="/docs/adapters.html"><small>Next</small>API & framework adapters →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#quick-start">Quick start</a><a class="h2" href="#suggestion-ordering">Suggestion ordering</a><a class="h2" href="#editing-flows">Editing flows</a><a class="h2" href="#keyboard-reference">Keyboard reference</a><a class="h2" href="#selection-and-clipboard-boundaries">Selection and clipboard boundaries</a><a class="h2" href="#model-and-package-boundaries">Model and package boundaries</a><a class="h2" href="#source-maintenance">Source maintenance</a><a class="h2" href="#verification-and-next-steps">Verification and next steps</a></nav></aside></div></body></html>

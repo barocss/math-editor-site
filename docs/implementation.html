@@ -1,0 +1,140 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Implementation · Barocss Math Editor</title><meta name="description" content="Implementation for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" aria-current="page">Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="implementation-guide">Implementation guide</h1>
+<h2 id="ownership-and-data-flow">Ownership and data flow</h2>
+<p>The host owns document persistence, placement and outer focus. <code>MathEditor</code> owns an editing session, its caret, composition draft, model range and up to 100 previous history states. Do not record each internal change into a second host undo stack without a session adapter.</p>
+<p>A typical edit follows:</p>
+<ol>
+<li>A native input event supplies text and UTF-16 selection offsets.</li>
+<li>The editor maps those offsets from the active lexical token to its logical <code>MathText</code> run.</li>
+<li>A pure model operation returns the next document and caret.</li>
+<li><code>commit</code> records the prior state; <code>publish</code> updates React and calls <code>onChange</code> for committed document changes.</li>
+<li>A layout effect focuses the new active input and restores its local selection.</li>
+</ol>
+<p>Navigation does not create a document history entry. Locale changes do not remount the editor. <code>defaultValue</code> is deliberately mount-only.</p>
+<h2 id="source-map">Source map</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Module</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model.ts</code></td>
+<td>Serializable types, constructors, basic insertion/unwrapping, text traversal, history and LaTeX export</td>
+</tr>
+<tr>
+<td><code>tokens.ts</code></td>
+<td>Lexical variable/numeric/symbol segmentation and boundary affinity</td>
+</tr>
+<tr>
+<td><code>math-editor.tsx</code></td>
+<td>Native input lifecycle, IME, pointer hit testing, selection UI, keyboard routing and portal</td>
+</tr>
+<tr>
+<td><code>range.ts</code></td>
+<td>Endpoint ordering, balanced selection resolution, slicing, insertion, wrapping and clipboard validation</td>
+</tr>
+<tr>
+<td><code>matrix.ts</code></td>
+<td>Innermost grid lookup, row/column changes, delimiters and grid navigation</td>
+</tr>
+<tr>
+<td><code>lines.ts</code></td>
+<td>Top-level line split/join and vertical navigation</td>
+</tr>
+<tr>
+<td><code>suggestions.ts</code></td>
+<td>Longest symbolic triggers, bilingual aliases, candidates and acceptance</td>
+</tr>
+<tr>
+<td><code>symbols.ts</code></td>
+<td>Glyph, message key, search aliases, symbolic triggers and LaTeX mapping</td>
+</tr>
+<tr>
+<td><code>templates.ts</code></td>
+<td>Fresh editable template trees and insertion through the range model</td>
+</tr>
+<tr>
+<td><code>math-editor-toolbar.tsx</code></td>
+<td>Rich React toolbar presentation and host action slot; no history ownership</td>
+</tr>
+<tr>
+<td><code>dom/toolbar.ts</code>, <code>dom/elements.ts</code></td>
+<td>Native command toolbar and safe element construction</td>
+</tr>
+<tr>
+<td><code>outputs.ts</code></td>
+<td>Independent LaTeX/preview subscriptions and cleanup</td>
+</tr>
+<tr>
+<td><code>enter-policy.ts</code></td>
+<td>Suggestion/grid/newline/host completion precedence</td>
+</tr>
+<tr>
+<td><code>locales/*.json</code></td>
+<td>Built-in translation data and parameterized message templates</td>
+</tr>
+<tr>
+<td><code>i18n.ts</code>, <code>editor-labels.ts</code></td>
+<td>Keyed dictionary lookup, fallback, interpolation and shared accessible editor paths</td>
+</tr>
+<tr>
+<td><code>symbol-browser.tsx</code></td>
+<td>Browse/search the shared catalog, preserve the math caret, isolate search clipboard/keyboard events</td>
+</tr>
+<tr>
+<td><code>style.css</code></td>
+<td>Mathematical layout, token colors, focus, range marks and tools</td>
+</tr>
+<tr>
+<td><code>apps/math-demo</code></td>
+<td>Language selector, examples, LaTeX text, copy action and KaTeX verification view</td>
+</tr>
+</tbody>
+</table></div><h2 id="presentation-tree-invariants">Presentation tree invariants</h2>
+<ul>
+<li>Every row starts and ends with a text node. Structures have text boundaries on both sides.</li>
+<li>IDs address rows, structures and logical text runs. Clipboard insertion regenerates IDs; never reuse IDs for a pasted instance.</li>
+<li>Fractions have two slots; roots one; powers/subscripts two; delimiters one; large operators three (lower, upper, body).</li>
+<li>Matrices have a row-major slots array, a column count and one of six delimiter environments. Both dimensions are 1–20.</li>
+<li>Aligned equations and cases use the same grid machinery but always have two columns and 1–20 rows.</li>
+<li><code>additionalLines</code> is a document-level concept. A nested <code>MathRow</code> is a horizontal expression, not a multiline document.</li>
+</ul>
+<p><code>structuredClone</code> is used for model changes. This is intentionally simple and has not been benchmarked for very large documents.</p>
+<h2 id="active-input-rendering-and-composition">Active-input rendering and composition</h2>
+<p>Passive tokens render as spans. Only the active token renders an input. A hidden text mirror supplies browser-shaped width and pointer offset measurements. Variable, numeric constant and symbol colors do not change the stored text. Logical text runs remain intact when the UI displays several tokens.</p>
+<p>During composition, the token partition and input element are held stable. Suggestions are visible but disabled. Enter and arrows remain with the IME; parent handlers do not receive editing keystrokes. On composition end, the complete text is committed as one history change and tokenization resumes. Synthetic composition tests are not a substitute for actual OS input-method validation.</p>
+<h2 id="ranges-and-transformations">Ranges and transformations</h2>
+<p><code>MathRange</code> has anchor/focus points identified by logical text ID and UTF-16 offset. <code>resolveRange</code> orders them in document traversal order and finds the deepest shared row. Endpoints in different slots expand to a balanced common structure; endpoints on different document lines produce multiple row slices.</p>
+<p>Pointer hit testing uses token rectangles and mirror text ranges. A drag inside the current input stays native until it leaves that field. A model selection suppresses the active input. Partial token marks reflect the actual selected substring.</p>
+<p><code>wrapRange</code> accepts one selected row and one of the supported wrapper kinds. It copies that balanced fragment into the new structure and replaces the range through <code>pasteFragment</code>. Fraction/power/subscript operations focus their empty second slot. Other wrappers leave the caret after the inserted structure. Power bases receive parentheses unless they are a simple name/number or an already grouped structure. This rule is not a precedence parser and does not infer algebraic equivalence.</p>
+<p>The UI disables unsupported structural insertion while a model range is selected. Template insertion explicitly replaces the selection. Contextual wrap tools appear below the surface so their appearance does not move the expression during a drag.</p>
+<h2 id="clipboard-boundary">Clipboard boundary</h2>
+<p>Copies write a versioned <code>MathFragment</code> and plain-text LaTeX. <code>parseFragment</code> rejects oversized payloads (&gt;200,000 characters), too many nodes (&gt;10,000), excessive nesting (&gt;40), more than 200 rows, invalid slot arities and invalid grid geometry. Valid insertion creates fresh IDs and preserves the destination prefix/suffix. Malformed custom data falls back to plain text when available.</p>
+<p>External text is literal input, not executable HTML and not parsed LaTeX. Newlines produce top-level rows; a multiline insertion in a nested slot is rejected. Whole saved documents still require a future validator and version-migration policy.</p>
+<h2 id="localization">Localization</h2>
+<p><code>locale</code> defaults to <code>ko</code> and is propagated through toolbar labels, slot accessible names, token descriptions, suggestions, matrix controls, status text and wrap tools. The portal has its own <code>lang</code> attribute. The demo separately translates surrounding copy and updates the HTML language/title.</p>
+<p>Catalog labels and details are English message keys with explicit interpolation parameters. <code>translate</code> resolves JSON dictionaries with regional/base/English fallback. Accessible line, grid and slot paths are built by <code>editor-labels.ts</code>, shared by both renderers. <code>findSuggestions(text, caret, locale)</code> returns localized labels/details while preserving stable IDs, aliases and insertion payloads. English/Korean aliases remain available; localized names and registered aliases add discovery in the selected language. Never translate user-authored formula text or persist locale in the math tree.</p>
+<p>To add a locale, register a JSON pack with message values and search aliases; no type union or renderer changes are needed. Translate host page copy separately, then test the full catalog and accessible names. See <a href="/docs/localization.html">LOCALIZATION.md</a> for supported scope and examples. Custom host labels are translated by the host. A composition in progress must not be remounted when locale changes.</p>
+<h2 id="adding-a-symbol-template-or-structure">Adding a symbol, template or structure</h2>
+<p><strong>Symbol:</strong> add a catalog tuple with glyph, label, aliases, optional trigger and valid LaTeX. The catalog powers discovery and export. Prefer unambiguous triggers; existing <code>/</code>, <code>^</code> and <code>_</code> stay opt-in. Test longest-trigger ordering, alias acceptance, undo, and KaTeX output.</p>
+<p><strong>Template:</strong> construct fresh model rows, preserve text boundaries, register an ID/label/aliases, and insert through <code>pasteFragment</code>. Do not embed opaque LaTeX. Test ID independence, editing, clipboard validation, insertion/replacement and renderer output. The quadratic template is a presentation of the formula; it does not enforce <code>a ≠ 0</code> or compute roots.</p>
+<p><strong>Structure:</strong> extend <code>StructureKind</code>, constructors, slot labels, rendering/CSS, LaTeX export and clipboard arity validation together. Decide cursor order, deletion, range normalization and nested layout before exposing a button. Add model tests and browser input/undo tests. A new symbol glyph alone does not implement a new structural editing capability.</p>
+<h2 id="integration-and-testing">Integration and testing</h2>
+<p>Use package exports in consumers, not source-path imports. Mount with a new key only when changing documents. Integrators must implement persistence, trusted-data validation, outer focus, and an explicit host/internal undo ownership contract.</p>
+<p>Unit tests cover deterministic transformations and export. Browser tests exercise the active-input transition, navigation, drag ranges, clipboard events, wrapping, language switches and templates. Clipboard automation uses synthetic DataTransfer payloads; separate manual in-app checks exercised real copy/paste shortcuts. See <a href="/docs/validation.html">VALIDATION.md</a> for evidence and remaining platform limits.</p>
+<h2 id="line-gutter-and-symbol-discovery">Line gutter and symbol discovery</h2>
+<p>The line gutter renders only for multiple top-level rows when <code>showLineNumbers</code> is enabled. Numbers are outside <code>MathRow</code> rendering, hidden from accessibility and unselectable; pointer events on the gutter do not start math selection. Deleting/joining rows derives the updated numbering from document order.</p>
+<p>The symbol browser is a localized, searchable section, not a modal. It opens with search focus and lists the shared catalog in a scrollable grid. Native search input copy/cut/paste and keyboard events stop propagation to the editor. Choosing a glyph inserts through <code>pasteFragment</code> at the saved caret/range and closes the browser as one undoable change. Escape closes without changing the formula.</p>
+<h2 id="framework-neutral-integration-layer-2026-09-07">Framework-neutral integration layer (2026-09-07)</h2>
+<p><code>session.ts</code> owns immutable history snapshots, model ranges, command dispatch, locale and block/inline policy. It reports document mutations separately from caret or configuration notifications. <code>dom.ts</code> mounts a native view and one active logical-run input; the standalone toolbar subscribes to the same session. Destroy removes DOM, portal, event listeners and subscriptions. Framework wrappers only connect mount/update/cleanup; custom elements retain their session across disconnect/reconnect.</p>
+<p>The existing React renderer still owns its original history and token-level input behavior. Shared document transformations do not yet imply shared renderer behavior. See <a href="/docs/adapters.html">ADAPTERS.md</a> for exact lifecycle contracts, parity gaps and distribution entries, and <a href="/docs/localization.html">LOCALIZATION.md</a> for external dictionaries. Inline policy is enforced at session mutations, load, paste and undo/redo boundaries, so a toolbar cannot accidentally introduce a second top-level row.</p>
+<h2 id="composition-refactor--2026-09-08">Composition refactor — 2026-09-08</h2>
+<p>The math package and demo source/CSS are consistently formatted. The React toolbar and native toolbar were extracted without moving caret/history ownership. Comments explain composition identity, publication/save notifications and structural clipboard boundaries. Formatting is intentionally separate from changing the selection algorithms: the two renderer implementations are still present.</p>
+<p>Output views subscribe to one session and skip caret-only redraws. Host completion is explicit (<code>onCommit</code>, <code>onCancel</code>, <code>onExit</code>) and independent of the single-top-level-line model policy. Popup drafts apply through a transaction, not a history-resetting load. See <a href="/docs/embedding.html">Embedding</a> for the layouts, product-specific data mismatches and the next integration gates.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/latex-scope.html"><small>Previous</small>LaTeX support </a><a href="/docs/validation.html"><small>Next</small>Testing & validation →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#ownership-and-data-flow">Ownership and data flow</a><a class="h2" href="#source-map">Source map</a><a class="h2" href="#presentation-tree-invariants">Presentation tree invariants</a><a class="h2" href="#active-input-rendering-and-composition">Active-input rendering and composition</a><a class="h2" href="#ranges-and-transformations">Ranges and transformations</a><a class="h2" href="#clipboard-boundary">Clipboard boundary</a><a class="h2" href="#localization">Localization</a><a class="h2" href="#adding-a-symbol-template-or-structure">Adding a symbol, template or structure</a><a class="h2" href="#integration-and-testing">Integration and testing</a><a class="h2" href="#line-gutter-and-symbol-discovery">Line gutter and symbol discovery</a><a class="h2" href="#framework-neutral-integration-layer-2026-09-07">Framework-neutral integration layer (2026-09-07)</a><a class="h2" href="#composition-refactor--2026-09-08">Composition refactor — 2026-09-08</a></nav></aside></div></body></html>

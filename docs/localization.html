@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Localization · Barocss Math Editor</title><meta name="description" content="Localization for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" aria-current="page">Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="localization-and-suggestion-languages">Localization and suggestion languages</h1>
+<h2 id="support-policy">Support policy</h2>
+<p>Locale identifies UI language and regional wording, not a country restriction. The library accepts custom language tags such as <code>fr</code>, <code>ja</code>, <code>zh-CN</code> and <code>pt-BR</code>; it does not maintain an allowlist of countries.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Level</th>
+<th>Available now</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Complete bundled UI packs</td>
+<td><code>en</code>, <code>ko</code></td>
+<td>All library message keys are present, including toolbars, suggestions, symbol names, slot labels and accessibility text. The main demo has separate matching page packs.</td>
+</tr>
+<tr>
+<td>Custom language packs</td>
+<td>Host-registered JSON</td>
+<td>Translate messages and supply search aliases. Missing messages fall back to English. No limit to two languages is imposed by the API.</td>
+</tr>
+<tr>
+<td>Working example</td>
+<td>Partial <code>fr</code> pack in <code>examples/locales/fr.json</code></td>
+<td>Demonstrates localized fraction/symbol/matrix discovery in the adapter demo. It is not a complete French translation.</td>
+</tr>
+<tr>
+<td>Search regression coverage</td>
+<td>French, Japanese, Chinese, Arabic, Hindi, German</td>
+<td>Tests exercise localized labels, aliases and combining marks. These fixtures are not bundled translations or native-speaker certification.</td>
+</tr>
+<tr>
+<td>RTL UI</td>
+<td><code>direction: &quot;rtl&quot;</code> option</td>
+<td>Formula layout remains LTR. Full RTL interaction, screen-reader and OS IME validation remain release work.</td>
+</tr>
+</tbody>
+</table></div><p>We will add complete bundled languages when all messages, symbol names, aliases and interpolation parameters are translated and reviewed, with browser tests. There is no committed date or claim that every locale is fully supported. A new language should not require editing renderer logic.</p>
+<h2 id="register-a-json-pack">Register a JSON pack</h2>
+<p>Start from <code>src/locales/en.json</code> for a complete translation. All message keys are stable English identifiers; translate values only. A partial pack is also valid:</p>
+<pre><code class="language-json">{
+  &quot;direction&quot;: &quot;ltr&quot;,
+  &quot;messages&quot;: {
+    &quot;structure.fraction&quot;: &quot;Fraction&quot;,
+    &quot;structure.fractionDetail&quot;: &quot;Modifier le numérateur et le dénominateur&quot;,
+    &quot;slot.numerator&quot;: &quot;Numérateur&quot;,
+    &quot;slot.denominator&quot;: &quot;Dénominateur&quot;,
+    &quot;expression.line&quot;: &quot;Expression ligne {line}&quot;,
+    &quot;matrix.size&quot;: &quot;Matrice {rows}×{columns}&quot;,
+    &quot;symbol.elementOf&quot;: &quot;Appartient à&quot;,
+    &quot;suggestion.create&quot;: &quot;Créer à partir de « {query} »&quot;
+  },
+  &quot;aliases&quot;: {
+    &quot;fraction&quot;: [&quot;rapport&quot;],
+    &quot;matrix&quot;: [&quot;matrice&quot;],
+    &quot;symbol-∈&quot;: [&quot;appartient&quot;, &quot;élément&quot;]
+  }
+}
+</code></pre>
+<pre><code class="language-ts">import french from './fr.json';
+import { registerMathLocale, createMathSession } from '@barocss/math-editor/core';
+import { mountMathEditor } from '@barocss/math-editor/dom';
+
+registerMathLocale('fr', french);
+const session = createMathSession({ locale: 'fr-CA' });
+const editor = mountMathEditor(host, { session });
+// Uses fr-CA overrides if registered, otherwise fr, then en.
+session.configure({ locale: 'ko' }); // Retains formula and undo history.
+</code></pre>
+<p>Register before mounting. Use the <code>locale</code> prop on React <code>MathEditor</code>, the shared DOM options on framework adapters, or the Web Component's locale attribute. A host may load packs with its own JSON imports, fetch, or i18n framework. The editor performs no fetching or automatic translation.</p>
+<p>The complete configuration is <code>messages</code>, optional <code>aliases</code>, and optional <code>direction</code>. Message values use named placeholders such as <code>{line}</code>, <code>{rows}</code> and <code>{columns}</code>. Keep their names unchanged. There are no source-text keys or custom formatting callbacks.</p>
+<h2 id="how-discovery-works">How discovery works</h2>
+<p><code>findSuggestions(text, caret, locale)</code> uses the same language registry as the renderer. It returns localized candidate labels and descriptions while preserving insertion IDs and formula content.</p>
+<ul>
+<li>Search accepts the localized label, locale-pack aliases and existing English/Korean catalog aliases.</li>
+<li>Symbol triggers such as <code>/</code>, <code>^</code>, <code>E/</code> and <code>-&gt;</code> are language-independent. Matching literal symbols appear before structures.</li>
+<li>Word matching is case-insensitive prefix matching on the trailing word, optionally preceded by <code>\</code>. Unicode letters and combining marks are accepted; NFC normalization handles composed/decomposed accents without changing replacement offsets.</li>
+<li>Supply single-word aliases for multiword names. Space-separated phrases, transliteration, fuzzy matching, accent removal and language-specific word segmentation are not implemented.</li>
+<li>Symbol-browser search also includes translated names, aliases, glyphs and LaTeX spellings. It uses substring matching.</li>
+</ul>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Alias key</th>
+<th>Applies to</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Structure ID</td>
+<td>A structure candidate</td>
+<td><code>fraction</code>, <code>root</code>, <code>cases</code>, <code>aligned</code></td>
+</tr>
+<tr>
+<td><code>matrix</code></td>
+<td>All standard matrix size presets</td>
+<td><code>&quot;matrix&quot;: [&quot;matrice&quot;]</code></td>
+</tr>
+<tr>
+<td><code>identity</code></td>
+<td>All identity matrix size presets</td>
+<td><code>&quot;identity&quot;: [&quot;identité&quot;]</code></td>
+</tr>
+<tr>
+<td>Exact preset ID</td>
+<td>One size only</td>
+<td><code>matrix-3</code>, <code>identity-4</code></td>
+</tr>
+<tr>
+<td><code>symbol-</code> + glyph</td>
+<td>One literal symbol</td>
+<td><code>symbol-α</code>, <code>symbol-∈</code></td>
+</tr>
+<tr>
+<td><code>template-</code> + template ID</td>
+<td>One editable template</td>
+<td><code>template-quadratic</code>, <code>template-zero-2</code>, <code>template-vector-3</code></td>
+</tr>
+</tbody>
+</table></div><p>Message keys and suggestion IDs have different jobs: <code>structure.fraction</code> selects display text; <code>fraction</code> selects an insertion candidate's aliases. See <code>mathStructures</code>, <code>mathSymbols</code> and <code>mathTemplates</code> from <code>/core</code> for catalog entries, and <a href="/docs/symbols.html">SYMBOLS.md</a> for symbol names.</p>
+<h2 id="resolution-and-ownership">Resolution and ownership</h2>
+<p>The small <code>translate(locale, key, parameters)</code> helper performs dictionary lookup, fallback and literal interpolation. It has no dependency on a UI framework.</p>
+<ol>
+<li>Look up an exact locale override, then its base language, then English. Tags are trimmed and case-normalized. Only the first language subtag is used as the base: <code>zh-Hant-TW</code> falls back to <code>zh</code>, not <code>zh-Hant</code>.</li>
+<li>Resolve named parameters once. <code>$</code> and braces in parameter values stay literal. Missing parameters remain visible as placeholders; unknown keys remain visible as keys.</li>
+<li>Merge search aliases from the exact locale and base pack. Registering a custom tag again replaces its definition; built-in <code>ko</code> and <code>en</code> cannot be overwritten.</li>
+</ol>
+<p>Registration is startup configuration and does not notify mounted views on its own. Change a locale prop or session option to refresh the UI. No ICU plurals, dates, number formatting or locale-dependent decimal parsing are provided. Locale never rewrites user math, document IDs, clipboard content or LaTeX.</p>
+<p>The main demo's heading/help/footer copy lives separately in <code>apps/math-demo/src/locales</code>. Registering a library pack does not translate the surrounding Site/Word/Slide/Note interface. To expose a third language throughout a host, add both its page translations and its library pack, then select the same locale for each. The main demo currently exposes only its complete English and Korean page translations.</p>
+<p>Raw built-in packs are exported as <code>@barocss/math-editor/locales/en.json</code> and <code>/locales/ko.json</code>. <code>mathEnglishMessages</code> exposes the canonical key/value dictionary for tooling. The build emits equivalent ESM data modules so runtime imports do not require JSON import attributes. Edit JSON, never generated <code>dist</code> files.</p>
+<h2 id="verify-a-new-pack">Verify a new pack</h2>
+<p>Compare its message keys and placeholder names against English. Exercise translated labels and aliases for a literal symbol, a structure, a matrix size and a template. Check nested slot names, language switching without data loss, and missing-message fallback. For a complete release, also review wording with a fluent speaker and test keyboard, screen-reader and relevant IME/RTL behavior in target browsers.</p>
+<p>See <a href="/docs/validation.html">VALIDATION.md</a> for current test coverage and <a href="/docs/roadmap.html">ROADMAP.md</a> for remaining renderer and accessibility work.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/symbols.html"><small>Previous</small>Symbol reference </a><a href="/docs/latex-scope.html"><small>Next</small>LaTeX support →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#support-policy">Support policy</a><a class="h2" href="#register-a-json-pack">Register a JSON pack</a><a class="h2" href="#how-discovery-works">How discovery works</a><a class="h2" href="#resolution-and-ownership">Resolution and ownership</a><a class="h2" href="#verify-a-new-pack">Verify a new pack</a></nav></aside></div></body></html>

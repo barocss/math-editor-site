@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Testing &amp; validation · Barocss Math Editor</title><meta name="description" content="Testing &amp; validation for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" aria-current="page">Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="validation-report">Validation report</h1>
+<p>Updated: 2026-09-07. Scope: independent math editor prototype, Korean/English UI, active-input rendering, model selection, wrapping and editable templates.</p>
+<p><strong>Result:</strong> 71 unit tests and 61 Chromium tests passed (132 total, no skipped tests). Package/demo builds and package/demo/browser-test type checks passed.</p>
+<h2 id="automated-coverage">Automated coverage</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Suite</th>
+<th style="text-align:right">Cases</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td style="text-align:right">7</td>
+<td>Structural insertion, operand boundaries, nested content, navigation, history and export</td>
+</tr>
+<tr>
+<td>Suggestions</td>
+<td style="text-align:right">16</td>
+<td>Longest symbolic triggers, bilingual aliases, replacements, degree symbols and grid presets</td>
+</tr>
+<tr>
+<td>Matrix</td>
+<td style="text-align:right">13</td>
+<td>Geometry, limits, row/column editing, nested slots, delimiters and KaTeX</td>
+</tr>
+<tr>
+<td>Lines</td>
+<td style="text-align:right">8</td>
+<td>Split/join, top-level navigation, aligned equations and cases</td>
+</tr>
+<tr>
+<td>Tokens</td>
+<td style="text-align:right">5</td>
+<td>Lexical roles, Unicode offsets and boundary affinity</td>
+</tr>
+<tr>
+<td>Grid deletion</td>
+<td style="text-align:right">4</td>
+<td>Empty/filled deletion, preserved content and undo</td>
+</tr>
+<tr>
+<td>Ranges</td>
+<td style="text-align:right">8</td>
+<td>Partial/reversed/multiline selection, clipboard validation, fresh IDs and wrapping</td>
+</tr>
+<tr>
+<td>Locales/templates/catalog</td>
+<td style="text-align:right">10</td>
+<td>Complete catalog label translation, bilingual candidate IDs, 7 template trees and all 90 symbols rendered with KaTeX</td>
+</tr>
+<tr>
+<td>Chromium browser</td>
+<td style="text-align:right">61</td>
+<td>Existing input flows plus language switching, translated controls, new template editing, nested wrapping and live preview</td>
+</tr>
+</tbody>
+</table></div><p>Commands and setup are documented in the <a href="/docs/index.html">README</a>. The package must be built before the demo/browser checks because the demo consumes <code>dist</code> exports. Type checks cover the package, demo and browser test sources. Production builds cover the package and demo.</p>
+<p>The test helper activates passive tokens by clicking them before typing; it does not bypass the editor model. Pointer selection tests use real mouse movement. Most automated clipboard tests dispatch ClipboardEvent with DataTransfer payloads; they do not claim OS clipboard compatibility across applications.</p>
+<h2 id="manual-in-app-checks">Manual in-app checks</h2>
+<p>Earlier checks in the current development session verified:</p>
+<ul>
+<li>Matrix input, row/column changes, deletion and undo with caret restoration.</li>
+<li>Multiline equations, aligned equations and cases with exported/live-rendered output.</li>
+<li>Fraction creation followed by actual Cmd+C/Cmd+V structured duplication and undo.</li>
+<li>Selecting <code>a+b</code>, wrapping as <code>(a+b)²</code>, wrapping the result into a fraction, and entering <code>30degree</code> in the denominator.</li>
+</ul>
+<p>The in-app browser also verified the complete English demo/editor UI, quadratic-template insertion and live rendering, then a Korean-to-English switch preserving the inserted formula. Automated tests additionally verified undo retention, translated matrix controls and Korean aliases in English mode.</p>
+<h2 id="explicit-limits">Explicit limits</h2>
+<ul>
+<li>Real OS Korean IME testing is deferred at the user's request. Synthetic composition events verify guarding and draft handling only.</li>
+<li>Automated browser coverage is Chromium on macOS. Narrow viewport checks are not mobile-browser or touch validation.</li>
+<li>Full screen-reader math navigation, high contrast, and every theme are not certified.</li>
+<li>There is no saved-document validator, persistence/restart-recovery test, migration path or host-wide undo integration.</li>
+<li>Rectangular matrix selections, keyboard model range extension, general LaTeX import and symbolic computation are not implemented.</li>
+<li>Deep nesting and very large expressions have no agreed performance budget yet.</li>
+</ul>
+<h2 id="integration-gates">Integration gates</h2>
+<p>Before shipping inside a host product, test actual input methods and target browsers, establish a single undo owner, validate saved documents, verify focus across host/math boundaries, and define recoverable clipboard/import failures. Every new structure must have localized labels, deterministic transformations, one-step structural undo, browser interaction coverage and supported LaTeX output.</p>
+<h2 id="line-numbers-and-symbol-discovery">Line numbers and symbol discovery</h2>
+<p>Three browser tests verify the UI-only line gutter through split/join/undo, its exclusion from LaTeX and model clipboard, the complete 90-symbol grid, bilingual search, insertion before typing, range replacement, undo, Escape and clipboard isolation in the search field. A native Home key did not move the caret in the macOS test environment; the test uses the supported Left arrow to reach the line start. The in-app browser visually confirmed the full symbol grid with names and search focus.</p>
+<h2 id="framework-neutral-integration--2026-09-07">Framework-neutral integration — 2026-09-07</h2>
+<ul>
+<li><strong>76 unit tests passed</strong>, including session snapshot isolation, navigation versus document notifications, atomic selection wrapping, inline rejection without data loss, and custom locale alias/fallback/direction behavior.</li>
+<li><strong>73 Chromium tests passed</strong>: the previous 61 tests plus 12 native/adapter tests. The added cases mount real Vue and React components, a compiled Svelte 5 component, a Solid owner/directive, a Web Component and pure DOM surfaces. They verify fraction input, suggestion acceptance, undo, teardown, reconnect persistence, inline policy, external toolbar wrapping, custom French discovery and matrix row changes.</li>
+<li>Package and demo TypeScript checks, browser test type checking and both production builds passed. The adapter lab is also included in the production build.</li>
+<li>A packed tarball was extracted into a temporary directory. Five entry points (<code>core</code>, <code>dom</code>, <code>web-component</code>, <code>vue</code>, <code>svelte</code>) imported without framework peers or browser globals; main/React/Solid entries imported after installing links to only their relevant local peers. All eight JS export paths and declared CSS/type targets exist. This is a local packaging smoke test, not publication or an exhaustive downstream TypeScript/bundler matrix.</li>
+<li>The in-app browser visually verified the adapter lab and actual pure-JS <code>x/ → ↓ → Enter → 2</code> input, producing <code>\frac{x}{2}</code>. Inline mode displays without the block editor's large surface and toolbar.</li>
+</ul>
+<p>Remaining adapter gates: exact range highlighting, active-input cross-structure dragging, token-level edit colors, composition preview parity, native all-symbol/context toolbars, reactive-option/version matrix and accessibility/browser coverage. Native <code>MathEditorSurface</code> is not advertised as complete rich React parity. OS IME testing remains deferred.</p>
+<h2 id="composition-source-readability-and-json-locales--2026-09-08">Composition, source readability and JSON locales — 2026-09-08</h2>
+<ul>
+<li>81 unit tests pass. New coverage checks host Enter precedence, inline grid row editing, JSON key/parameter parity, JSON-only dynamic translations and regional fallback. The JSON registration example also passes a strict TypeScript check without a direction cast.</li>
+<li>The complete 77-case Chromium suite passed after the toolbar extraction, source/CSS formatting, locale migration and first four layout tests. The final layout suite adds English JSON page/editor coverage and passes all five cases (78 distinct browser cases across the suites).</li>
+<li>Package/demo build and type checks, browser-test type checking and the package <code>format:check</code> pass. The package build emits plain ESM locale modules from canonical JSON for runtime compatibility.</li>
+<li>Browser coverage verifies removal of the sample title strip, reset inside the toolbar, independent panel toggles without content loss or spurious onChange, inline completion, next-block creation, popup draft cancellation, mouse selection inside a modal and undoing popup apply as one source edit.</li>
+<li>The in-app browser visually confirmed the reduced sample header and the inline/Note-style layout examples. These examples do not claim installation into the actual Note/Word/Site/Slide products; their data/undo bridges and real OS IME coverage remain open.</li>
+</ul>
+<h2 id="english-message-keys-and-literal-symbol-ordering--2026-09-08">English message keys and literal-symbol ordering — 2026-09-08</h2>
+<p>83 unit tests pass, including an invariant that every library/demo locale message key is an English semantic identifier and both languages have matching keys. Literal-symbol ordering is covered for <code>/</code>, <code>^</code>, <code>*</code>, <code>sum</code> and <code>division</code> in Korean and English; uppercase Greek and matrix preset ordering are preserved.</p>
+<p>All 78 distinct Chromium scenarios pass across the full run and corrected editing-suite rerun. The initial full run had one test-locator failure: the new assertion selected the page's language option instead of the suggestion list. Scoping it to the math listbox resolved that failure. Keyboard tests now explicitly choose Fraction after the leading ÷ candidate, and shared-adapter tests verify the same order. Build, type, formatting and packed export checks pass.</p>
+<p>Earlier validation entries describe their historical default ordering. Current fraction input is <code>x/ → Down → Enter → 2</code>, or type <code>frac</code> / <code>분수</code> to find the structure directly.</p>
+<h2 id="key-only-localization-and-external-language-discovery--2026-09-08">Key-only localization and external-language discovery — 2026-09-08</h2>
+<p>91 unit tests pass. New cases cover JSON-provided labels/details/aliases, matrix-family aliases, French regional fallback, shared localized slot paths, Japanese/Chinese/Arabic/Hindi/German queries, decomposed accents and template dimensions. Removed source-label conversion and formatting hooks are no longer part of the API.</p>
+<p>79 distinct Chromium scenarios pass across the full suite and the five-case locale-suite rerun. The full run passed 78 cases; the new empty-fraction test initially expected denominator focus instead of the intended numerator-first behavior. The corrected test verifies both localized slots via Tab and converts a decomposed French query to a symbol. An earlier adapter-example variable-name collision was also fixed before this run.</p>
+<p>Package/demo builds, package and browser-test type checks, formatting, and packed runtime/type/CSS exports pass. Built output is cleaned before compilation so removed modules cannot remain in the package. Language search fixtures are not complete translations or OS IME/RTL validation.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/implementation.html"><small>Previous</small>Implementation </a><a href="/docs/roadmap.html"><small>Next</small>Roadmap →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#automated-coverage">Automated coverage</a><a class="h2" href="#manual-in-app-checks">Manual in-app checks</a><a class="h2" href="#explicit-limits">Explicit limits</a><a class="h2" href="#integration-gates">Integration gates</a><a class="h2" href="#line-numbers-and-symbol-discovery">Line numbers and symbol discovery</a><a class="h2" href="#framework-neutral-integration--2026-09-07">Framework-neutral integration — 2026-09-07</a><a class="h2" href="#composition-source-readability-and-json-locales--2026-09-08">Composition, source readability and JSON locales — 2026-09-08</a><a class="h2" href="#english-message-keys-and-literal-symbol-ordering--2026-09-08">English message keys and literal-symbol ordering — 2026-09-08</a><a class="h2" href="#key-only-localization-and-external-language-discovery--2026-09-08">Key-only localization and external-language discovery — 2026-09-08</a></nav></aside></div></body></html>

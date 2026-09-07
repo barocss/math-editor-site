@@ -1,0 +1,974 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Supported features · Barocss Math Editor</title><meta name="description" content="Supported features for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" aria-current="page">Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="supported-math-and-editing-features">Supported math and editing features</h1>
+<p>This is a presentation and editing scope, not a claim of full LaTeX or computer-algebra support. Blank slots remain editable and export as empty groups. All catalog symbols are exercised against KaTeX in unit tests.</p>
+<h2 id="structural-notation">Structural notation</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Family</th>
+<th>Implemented input / structure</th>
+<th>LaTeX output</th>
+<th>Limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fractions</td>
+<td>Two editable slots; wrap a selection as numerator</td>
+<td><code>\frac{a}{b}</code></td>
+<td>No automatic algebraic simplification</td>
+</tr>
+<tr>
+<td>Square roots</td>
+<td>Editable radicand; selection wrapping</td>
+<td><code>\sqrt{x}</code></td>
+<td>Indexed roots not yet implemented</td>
+</tr>
+<tr>
+<td>Powers</td>
+<td>Base and superscript; automatic parentheses when wrapping a compound base</td>
+<td><code>{x}^{2}</code></td>
+<td>No combined sub/superscript structure</td>
+</tr>
+<tr>
+<td>Subscripts</td>
+<td>Base and lower script</td>
+<td><code>{x}_{i}</code></td>
+<td>No declaration or index semantics</td>
+</tr>
+<tr>
+<td>Parentheses</td>
+<td>Editable group</td>
+<td><code>\left(x\right)</code></td>
+<td>Generic group; no function-argument semantics</td>
+</tr>
+<tr>
+<td>Brackets</td>
+<td>Editable group</td>
+<td><code>\left[x\right]</code></td>
+<td>Not an interval data type</td>
+</tr>
+<tr>
+<td>Absolute value</td>
+<td>Editable group</td>
+<td><code>\left&amp;#124;x\right&amp;#124;</code></td>
+<td>No evaluation</td>
+</tr>
+<tr>
+<td>Sum</td>
+<td>Lower limit, upper limit, body</td>
+<td><code>\sum_{i=1}^{n}x</code></td>
+<td>No bound-variable resolution</td>
+</tr>
+<tr>
+<td>Product</td>
+<td>Lower limit, upper limit, body</td>
+<td><code>\prod_{i=1}^{n}x</code></td>
+<td>No evaluation</td>
+</tr>
+<tr>
+<td>Integral</td>
+<td>Lower limit, upper limit, integrand</td>
+<td><code>\int_{a}^{b}x</code></td>
+<td>Differential entered as text; no integration engine</td>
+</tr>
+<tr>
+<td>Matrices / vectors</td>
+<td>Editable nested cells; row/column changes</td>
+<td><code>matrix</code>, <code>pmatrix</code>, <code>bmatrix</code>, <code>Bmatrix</code>, <code>vmatrix</code>, <code>Vmatrix</code></td>
+<td>1–20 rows and columns; no rectangular cell clipboard</td>
+</tr>
+<tr>
+<td>Aligned equations</td>
+<td>Two columns, left side right-aligned and right side left-aligned</td>
+<td><code>aligned</code></td>
+<td>1–20 rows, one alignment point; type the relation explicitly</td>
+</tr>
+<tr>
+<td>Cases</td>
+<td>Expression and condition columns, left brace</td>
+<td><code>cases</code></td>
+<td>1–20 rows; conditions are math, not a dedicated text mode</td>
+</tr>
+<tr>
+<td>Multiple document lines</td>
+<td>Split/join top-level rows</td>
+<td><code>gathered</code></td>
+<td>No wrapping several document lines into one structure</td>
+</tr>
+</tbody>
+</table></div><h2 id="editing-discovery-and-integration">Editing, discovery and integration</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Area</th>
+<th>Supported</th>
+<th>Remaining boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Languages</td>
+<td>Korean and English UI, demo, accessible names, hints and suggestions</td>
+<td>Custom host labels require host translation</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>All-symbol grid with English/Korean/glyph/LaTeX search, click to insert</td>
+<td>Scroll through the complete 90-symbol catalog</td>
+</tr>
+<tr>
+<td>Line numbers</td>
+<td>UI gutter for multiple top-level rows, optional prop</td>
+<td>Excluded from math output and clipboard</td>
+</tr>
+<tr>
+<td>Aliases</td>
+<td>English and Korean in both locales; longest symbolic trigger first</td>
+<td>Prefix search, not natural-language parsing</td>
+</tr>
+<tr>
+<td>Native input</td>
+<td>Active token only; composition draft held stable</td>
+<td>Real OS IME validation deferred</td>
+</tr>
+<tr>
+<td>Roles</td>
+<td>Variables, numeric literals, symbols, spaces</td>
+<td>Lexical colors are not semantic declarations</td>
+</tr>
+<tr>
+<td>Selection</td>
+<td>Partial text, drag across tokens/structures, whole document in preview</td>
+<td>No keyboard Shift-arrow model expansion or rectangular cell selection</td>
+</tr>
+<tr>
+<td>Wrapping</td>
+<td>Fraction, root, power, subscript, parentheses, brackets, absolute value</td>
+<td>One balanced row; cross-slot range expands to common structure</td>
+</tr>
+<tr>
+<td>Clipboard</td>
+<td>Structured internal fragment plus LaTeX text; cut/paste replacement</td>
+<td>External LaTeX is literal text; nested multiline paste rejected</td>
+</tr>
+<tr>
+<td>History</td>
+<td>Undo/redo of model changes and caret, up to 100 prior states</td>
+<td>No shared host undo adapter yet</td>
+</tr>
+<tr>
+<td>Deletion</td>
+<td>Text boundaries, line join, structure unwrap, two-step filled-grid deletion</td>
+<td>General structural deletion rules are still limited</td>
+</tr>
+<tr>
+<td>Serialization</td>
+<td>Version-1 JSON document and change callback</td>
+<td>No persistence service, saved-document validator or migrations</td>
+</tr>
+<tr>
+<td>Preview</td>
+<td>Demo-only KaTeX view</td>
+<td>Library renders its own editable presentation</td>
+</tr>
+<tr>
+<td>Accessibility</td>
+<td>Localized labels, combobox suggestions, keyboard slot navigation</td>
+<td>Not a complete mathematical screen-reader implementation</td>
+</tr>
+<tr>
+<td>Computation</td>
+<td>None</td>
+<td>No solving, simplification, units engine or collaboration</td>
+</tr>
+</tbody>
+</table></div><h2 id="editable-templates-and-presets">Editable templates and presets</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Template / preset</th>
+<th>Sizes</th>
+<th>Discovery</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Empty matrix</td>
+<td>2×2, 3×3, 4×4</td>
+<td><code>matrix</code>, <code>행</code>, <code>행렬</code>; matrix menu</td>
+<td>Editable empty cells</td>
+</tr>
+<tr>
+<td>Identity matrix</td>
+<td>2×2, 3×3, 4×4</td>
+<td><code>identity</code>, <code>단위</code>, <code>단위행렬</code>; matrix menu</td>
+<td>Diagonal 1, other entries 0</td>
+</tr>
+<tr>
+<td>Zero matrix</td>
+<td>2×2, 3×3, 4×4</td>
+<td><code>zero</code>, <code>영행렬</code>; template menu</td>
+<td>All entries 0, editable</td>
+</tr>
+<tr>
+<td>Column vector</td>
+<td>2×1, 3×1</td>
+<td><code>vector</code>, <code>column</code>, <code>벡터</code>, <code>열벡터</code>; template menu</td>
+<td>Empty editable column; existing generic matrix candidates may also match</td>
+</tr>
+<tr>
+<td>Quadratic formula</td>
+<td>One expression</td>
+<td><code>quadratic</code>, <code>근의공식</code>; template menu</td>
+<td><code>x=(-b±√(b²−4ac))/(2a)</code> using fraction/root/power nodes; assumes a≠0 mathematically, does not enforce it</td>
+</tr>
+<tr>
+<td>Pythagorean theorem</td>
+<td>One expression</td>
+<td><code>pythagorean</code>, <code>피타고라스</code>; template menu</td>
+<td><code>a²+b²=c²</code> using editable power nodes</td>
+</tr>
+</tbody>
+</table></div><p>Template insertion uses fresh IDs and is undoable. Template search aliases do not include spaces as a complete multiword query parser: use the compact aliases shown above. A template is not a solver.</p>
+<h2 id="symbol-catalog">Symbol catalog</h2>
+<p>For the compact three-column reference, see <a href="/docs/symbols.html">Symbol names</a>.</p>
+<p>The table below is generated from <code>src/symbols.ts</code>. Aliases are space-separated alternative names. Korean labels are also searchable. LaTeX control words receive separating whitespace during export. Literal Latin names and numbers remain ordinary text; typing a LaTeX command does not imply general LaTeX parsing.</p>
+<p>Catalog size: <strong>90 symbols</strong>.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Glyph</th>
+<th>English label</th>
+<th>Korean label</th>
+<th>English aliases</th>
+<th>Symbolic triggers</th>
+<th>LaTeX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>∋</td>
+<td>Contains as an element</td>
+<td>원소를 포함</td>
+<td>ni contains</td>
+<td>—</td>
+<td><code>\ni</code></td>
+</tr>
+<tr>
+<td>⊃</td>
+<td>Superset</td>
+<td>상위집합</td>
+<td>supset superset</td>
+<td>—</td>
+<td><code>\supset</code></td>
+</tr>
+<tr>
+<td>⊇</td>
+<td>Superset or equal</td>
+<td>상위집합 또는 같음</td>
+<td>supseteq</td>
+<td>—</td>
+<td><code>\supseteq</code></td>
+</tr>
+<tr>
+<td>⊈</td>
+<td>Not a subset or equal</td>
+<td>부분집합 아님</td>
+<td>nsubseteq</td>
+<td>—</td>
+<td><code>\nsubseteq</code></td>
+</tr>
+<tr>
+<td>∖</td>
+<td>Set difference</td>
+<td>차집합</td>
+<td>setminus difference</td>
+<td>—</td>
+<td><code>\setminus</code></td>
+</tr>
+<tr>
+<td>ℕ</td>
+<td>Natural numbers</td>
+<td>자연수 집합</td>
+<td>naturals natural</td>
+<td>—</td>
+<td><code>\mathbb{N}</code></td>
+</tr>
+<tr>
+<td>ℤ</td>
+<td>Integers</td>
+<td>정수 집합</td>
+<td>integers integer</td>
+<td>—</td>
+<td><code>\mathbb{Z}</code></td>
+</tr>
+<tr>
+<td>ℚ</td>
+<td>Rational numbers</td>
+<td>유리수 집합</td>
+<td>rationals rational</td>
+<td>—</td>
+<td><code>\mathbb{Q}</code></td>
+</tr>
+<tr>
+<td>ℝ</td>
+<td>Real numbers</td>
+<td>실수 집합</td>
+<td>reals real</td>
+<td>—</td>
+<td><code>\mathbb{R}</code></td>
+</tr>
+<tr>
+<td>ℂ</td>
+<td>Complex numbers</td>
+<td>복소수 집합</td>
+<td>complexes complex</td>
+<td>—</td>
+<td><code>\mathbb{C}</code></td>
+</tr>
+<tr>
+<td>⊥</td>
+<td>Perpendicular</td>
+<td>수직</td>
+<td>perp perpendicular</td>
+<td>—</td>
+<td><code>\perp</code></td>
+</tr>
+<tr>
+<td>∥</td>
+<td>Parallel</td>
+<td>평행</td>
+<td>parallel</td>
+<td>—</td>
+<td><code>\parallel</code></td>
+</tr>
+<tr>
+<td>≅</td>
+<td>Congruent</td>
+<td>합동</td>
+<td>cong congruent</td>
+<td>—</td>
+<td><code>\cong</code></td>
+</tr>
+<tr>
+<td>∼</td>
+<td>Similar</td>
+<td>닮음</td>
+<td>sim similar</td>
+<td>—</td>
+<td><code>\sim</code></td>
+</tr>
+<tr>
+<td>↦</td>
+<td>Maps to</td>
+<td>대응</td>
+<td>mapsto maps</td>
+<td>|-&gt;</td>
+<td><code>\mapsto</code></td>
+</tr>
+<tr>
+<td>…</td>
+<td>Ellipsis</td>
+<td>말줄임표</td>
+<td>ldots ellipsis</td>
+<td>—</td>
+<td><code>\ldots</code></td>
+</tr>
+<tr>
+<td>⋯</td>
+<td>Centered dots</td>
+<td>가로 점</td>
+<td>cdots</td>
+<td>—</td>
+<td><code>\cdots</code></td>
+</tr>
+<tr>
+<td>⋮</td>
+<td>Vertical dots</td>
+<td>세로 점</td>
+<td>vdots</td>
+<td>—</td>
+<td><code>\vdots</code></td>
+</tr>
+<tr>
+<td>⋱</td>
+<td>Diagonal dots</td>
+<td>대각 점</td>
+<td>ddots</td>
+<td>—</td>
+<td><code>\ddots</code></td>
+</tr>
+<tr>
+<td>°</td>
+<td>Degree</td>
+<td>도</td>
+<td>degree degrees 각도</td>
+<td>—</td>
+<td><code>{}^{\circ}</code></td>
+</tr>
+<tr>
+<td>∠</td>
+<td>Angle</td>
+<td>각 기호</td>
+<td>angle</td>
+<td>—</td>
+<td><code>\angle</code></td>
+</tr>
+<tr>
+<td>+</td>
+<td>Plus</td>
+<td>더하기</td>
+<td>plus sum</td>
+<td>+</td>
+<td><code>+</code></td>
+</tr>
+<tr>
+<td>−</td>
+<td>Minus</td>
+<td>빼기</td>
+<td>minus</td>
+<td>-</td>
+<td><code>-</code></td>
+</tr>
+<tr>
+<td>±</td>
+<td>Plus or minus</td>
+<td>플러스 마이너스</td>
+<td>plusminus sum</td>
+<td>+- +</td>
+<td><code>\pm</code></td>
+</tr>
+<tr>
+<td>∓</td>
+<td>Minus or plus</td>
+<td>마이너스 플러스</td>
+<td>minusplus</td>
+<td>-+ -</td>
+<td><code>\mp</code></td>
+</tr>
+<tr>
+<td>×</td>
+<td>Times</td>
+<td>곱하기</td>
+<td>times multiply</td>
+<td>*</td>
+<td><code>\times</code></td>
+</tr>
+<tr>
+<td>·</td>
+<td>Dot</td>
+<td>가운데 점</td>
+<td>dot multiply</td>
+<td>*</td>
+<td><code>\cdot</code></td>
+</tr>
+<tr>
+<td>÷</td>
+<td>Divide</td>
+<td>나누기</td>
+<td>divide division</td>
+<td>/</td>
+<td><code>\div</code></td>
+</tr>
+<tr>
+<td>=</td>
+<td>Equal</td>
+<td>같음</td>
+<td>equal</td>
+<td>=</td>
+<td><code>=</code></td>
+</tr>
+<tr>
+<td>≠</td>
+<td>Not equal</td>
+<td>같지 않음</td>
+<td>neq unequal</td>
+<td>!= /= =</td>
+<td><code>\ne</code></td>
+</tr>
+<tr>
+<td>≈</td>
+<td>Approximately equal</td>
+<td>근삿값</td>
+<td>approx</td>
+<td>~ ~~ =</td>
+<td><code>\approx</code></td>
+</tr>
+<tr>
+<td>≡</td>
+<td>Equivalent</td>
+<td>동치</td>
+<td>equiv</td>
+<td>=== =</td>
+<td><code>\equiv</code></td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>Less than</td>
+<td>작음</td>
+<td>less</td>
+<td>&lt;</td>
+<td><code>&lt;</code></td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>Greater than</td>
+<td>큼</td>
+<td>greater</td>
+<td>&gt;</td>
+<td><code>&gt;</code></td>
+</tr>
+<tr>
+<td>≤</td>
+<td>Less than or equal</td>
+<td>작거나 같음</td>
+<td>leq less</td>
+<td>&lt;= &lt;- &lt;</td>
+<td><code>\le</code></td>
+</tr>
+<tr>
+<td>≥</td>
+<td>Greater than or equal</td>
+<td>크거나 같음</td>
+<td>geq greater</td>
+<td>&gt;= &gt;- &gt;</td>
+<td><code>\ge</code></td>
+</tr>
+<tr>
+<td>∝</td>
+<td>Proportional</td>
+<td>비례</td>
+<td>proportional</td>
+<td>~</td>
+<td><code>\propto</code></td>
+</tr>
+<tr>
+<td>→</td>
+<td>Right arrow</td>
+<td>오른쪽 화살표</td>
+<td>rightarrow arrow</td>
+<td>-&gt; -</td>
+<td><code>\to</code></td>
+</tr>
+<tr>
+<td>←</td>
+<td>Left arrow</td>
+<td>왼쪽 화살표</td>
+<td>leftarrow arrow</td>
+<td>&lt;- &lt;</td>
+<td><code>\leftarrow</code></td>
+</tr>
+<tr>
+<td>↔</td>
+<td>Left-right arrow</td>
+<td>양방향 화살표</td>
+<td>leftrightarrow arrow</td>
+<td>&lt;-&gt;</td>
+<td><code>\leftrightarrow</code></td>
+</tr>
+<tr>
+<td>⇒</td>
+<td>Implies</td>
+<td>함의</td>
+<td>implies arrow</td>
+<td>=&gt; =</td>
+<td><code>\Rightarrow</code></td>
+</tr>
+<tr>
+<td>⇔</td>
+<td>If and only if</td>
+<td>필요충분</td>
+<td>iff arrow</td>
+<td>&lt;=&gt;</td>
+<td><code>\Leftrightarrow</code></td>
+</tr>
+<tr>
+<td>∈</td>
+<td>Element of</td>
+<td>원소</td>
+<td>in element</td>
+<td>E</td>
+<td><code>\in</code></td>
+</tr>
+<tr>
+<td>∉</td>
+<td>Not an element of</td>
+<td>원소 아님</td>
+<td>notin element</td>
+<td>E/</td>
+<td><code>\notin</code></td>
+</tr>
+<tr>
+<td>∀</td>
+<td>For all</td>
+<td>모든</td>
+<td>forall</td>
+<td>A</td>
+<td><code>\forall</code></td>
+</tr>
+<tr>
+<td>∃</td>
+<td>There exists</td>
+<td>존재</td>
+<td>exists</td>
+<td>E</td>
+<td><code>\exists</code></td>
+</tr>
+<tr>
+<td>∪</td>
+<td>Union</td>
+<td>합집합</td>
+<td>union</td>
+<td>U</td>
+<td><code>\cup</code></td>
+</tr>
+<tr>
+<td>∩</td>
+<td>Intersection</td>
+<td>교집합</td>
+<td>intersection</td>
+<td>—</td>
+<td><code>\cap</code></td>
+</tr>
+<tr>
+<td>⊂</td>
+<td>Subset</td>
+<td>부분집합</td>
+<td>subset</td>
+<td>&lt;</td>
+<td><code>\subset</code></td>
+</tr>
+<tr>
+<td>⊆</td>
+<td>Subset or equal</td>
+<td>부분집합 또는 같음</td>
+<td>subseteq</td>
+<td>&lt;=</td>
+<td><code>\subseteq</code></td>
+</tr>
+<tr>
+<td>∅</td>
+<td>Empty set</td>
+<td>공집합</td>
+<td>emptyset</td>
+<td>—</td>
+<td><code>\emptyset</code></td>
+</tr>
+<tr>
+<td>∞</td>
+<td>Infinity</td>
+<td>무한대</td>
+<td>infinity infty</td>
+<td>—</td>
+<td><code>\infty</code></td>
+</tr>
+<tr>
+<td>∂</td>
+<td>Partial derivative</td>
+<td>편미분</td>
+<td>partial derivative</td>
+<td>—</td>
+<td><code>\partial</code></td>
+</tr>
+<tr>
+<td>∇</td>
+<td>Nabla</td>
+<td>나블라</td>
+<td>nabla gradient</td>
+<td>—</td>
+<td><code>\nabla</code></td>
+</tr>
+<tr>
+<td>∧</td>
+<td>Logical and</td>
+<td>논리곱</td>
+<td>and wedge</td>
+<td>^</td>
+<td><code>\wedge</code></td>
+</tr>
+<tr>
+<td>∨</td>
+<td>Logical or</td>
+<td>논리합</td>
+<td>or vee</td>
+<td>—</td>
+<td><code>\vee</code></td>
+</tr>
+<tr>
+<td>¬</td>
+<td>Logical not</td>
+<td>부정</td>
+<td>not neg</td>
+<td>!</td>
+<td><code>\neg</code></td>
+</tr>
+<tr>
+<td>α</td>
+<td>Alpha</td>
+<td>알파</td>
+<td>alpha</td>
+<td>—</td>
+<td><code>\alpha</code></td>
+</tr>
+<tr>
+<td>β</td>
+<td>Beta</td>
+<td>베타</td>
+<td>beta</td>
+<td>—</td>
+<td><code>\beta</code></td>
+</tr>
+<tr>
+<td>γ</td>
+<td>Gamma</td>
+<td>감마</td>
+<td>gamma</td>
+<td>—</td>
+<td><code>\gamma</code></td>
+</tr>
+<tr>
+<td>δ</td>
+<td>Delta</td>
+<td>델타</td>
+<td>delta</td>
+<td>—</td>
+<td><code>\delta</code></td>
+</tr>
+<tr>
+<td>ε</td>
+<td>Epsilon</td>
+<td>엡실론</td>
+<td>epsilon</td>
+<td>—</td>
+<td><code>\epsilon</code></td>
+</tr>
+<tr>
+<td>ζ</td>
+<td>Zeta</td>
+<td>제타</td>
+<td>zeta</td>
+<td>—</td>
+<td><code>\zeta</code></td>
+</tr>
+<tr>
+<td>η</td>
+<td>Eta</td>
+<td>에타</td>
+<td>eta</td>
+<td>—</td>
+<td><code>\eta</code></td>
+</tr>
+<tr>
+<td>θ</td>
+<td>Theta</td>
+<td>세타</td>
+<td>theta</td>
+<td>—</td>
+<td><code>\theta</code></td>
+</tr>
+<tr>
+<td>ι</td>
+<td>Iota</td>
+<td>이오타</td>
+<td>iota</td>
+<td>—</td>
+<td><code>\iota</code></td>
+</tr>
+<tr>
+<td>κ</td>
+<td>Kappa</td>
+<td>카파</td>
+<td>kappa</td>
+<td>—</td>
+<td><code>\kappa</code></td>
+</tr>
+<tr>
+<td>λ</td>
+<td>Lambda</td>
+<td>람다</td>
+<td>lambda</td>
+<td>—</td>
+<td><code>\lambda</code></td>
+</tr>
+<tr>
+<td>μ</td>
+<td>Mu</td>
+<td>뮤</td>
+<td>mu</td>
+<td>—</td>
+<td><code>\mu</code></td>
+</tr>
+<tr>
+<td>ν</td>
+<td>Nu</td>
+<td>뉴</td>
+<td>nu</td>
+<td>—</td>
+<td><code>\nu</code></td>
+</tr>
+<tr>
+<td>ξ</td>
+<td>Xi</td>
+<td>크시</td>
+<td>xi</td>
+<td>—</td>
+<td><code>\xi</code></td>
+</tr>
+<tr>
+<td>π</td>
+<td>Pi</td>
+<td>파이</td>
+<td>pi</td>
+<td>—</td>
+<td><code>\pi</code></td>
+</tr>
+<tr>
+<td>ρ</td>
+<td>Rho</td>
+<td>로</td>
+<td>rho</td>
+<td>—</td>
+<td><code>\rho</code></td>
+</tr>
+<tr>
+<td>σ</td>
+<td>Sigma</td>
+<td>시그마</td>
+<td>sigma</td>
+<td>—</td>
+<td><code>\sigma</code></td>
+</tr>
+<tr>
+<td>τ</td>
+<td>Tau</td>
+<td>타우</td>
+<td>tau</td>
+<td>—</td>
+<td><code>\tau</code></td>
+</tr>
+<tr>
+<td>υ</td>
+<td>Upsilon</td>
+<td>입실론</td>
+<td>upsilon</td>
+<td>—</td>
+<td><code>\upsilon</code></td>
+</tr>
+<tr>
+<td>φ</td>
+<td>Phi</td>
+<td>파이 / 피</td>
+<td>phi</td>
+<td>—</td>
+<td><code>\phi</code></td>
+</tr>
+<tr>
+<td>χ</td>
+<td>Chi</td>
+<td>카이</td>
+<td>chi</td>
+<td>—</td>
+<td><code>\chi</code></td>
+</tr>
+<tr>
+<td>ψ</td>
+<td>Psi</td>
+<td>프사이</td>
+<td>psi</td>
+<td>—</td>
+<td><code>\psi</code></td>
+</tr>
+<tr>
+<td>ω</td>
+<td>Omega</td>
+<td>오메가</td>
+<td>omega</td>
+<td>—</td>
+<td><code>\omega</code></td>
+</tr>
+<tr>
+<td>Γ</td>
+<td>Uppercase Gamma</td>
+<td>대문자 감마</td>
+<td>Gamma</td>
+<td>—</td>
+<td><code>\Gamma</code></td>
+</tr>
+<tr>
+<td>Δ</td>
+<td>Uppercase Delta</td>
+<td>대문자 델타</td>
+<td>Delta</td>
+<td>—</td>
+<td><code>\Delta</code></td>
+</tr>
+<tr>
+<td>Θ</td>
+<td>Uppercase Theta</td>
+<td>대문자 세타</td>
+<td>Theta</td>
+<td>—</td>
+<td><code>\Theta</code></td>
+</tr>
+<tr>
+<td>Λ</td>
+<td>Uppercase Lambda</td>
+<td>대문자 람다</td>
+<td>Lambda</td>
+<td>—</td>
+<td><code>\Lambda</code></td>
+</tr>
+<tr>
+<td>Ξ</td>
+<td>Uppercase Xi</td>
+<td>대문자 크시</td>
+<td>Xi</td>
+<td>—</td>
+<td><code>\Xi</code></td>
+</tr>
+<tr>
+<td>Π</td>
+<td>Uppercase Pi</td>
+<td>대문자 파이</td>
+<td>Pi</td>
+<td>—</td>
+<td><code>\Pi</code></td>
+</tr>
+<tr>
+<td>Σ</td>
+<td>Uppercase Sigma</td>
+<td>대문자 시그마</td>
+<td>Sigma</td>
+<td>—</td>
+<td><code>\Sigma</code></td>
+</tr>
+<tr>
+<td>Φ</td>
+<td>Uppercase Phi</td>
+<td>대문자 파이 / 피</td>
+<td>Phi</td>
+<td>—</td>
+<td><code>\Phi</code></td>
+</tr>
+<tr>
+<td>Ψ</td>
+<td>Uppercase Psi</td>
+<td>대문자 프사이</td>
+<td>Psi</td>
+<td>—</td>
+<td><code>\Psi</code></td>
+</tr>
+<tr>
+<td>Ω</td>
+<td>Uppercase Omega</td>
+<td>대문자 오메가</td>
+<td>Omega</td>
+<td>—</td>
+<td><code>\Omega</code></td>
+</tr>
+</tbody>
+</table></div><h2 id="renderer-availability">Renderer availability</h2>
+<p>This formula catalog describes the shared model and the existing rich React editor. New native DOM/framework surfaces share the notation model but have a smaller interaction UI. See the <a href="/docs/adapters.html#current-renderer-parity">renderer parity table</a> before choosing an adapter.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/embedding.html"><small>Previous</small>Embedding & layouts </a><a href="/docs/symbols.html"><small>Next</small>Symbol reference →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#structural-notation">Structural notation</a><a class="h2" href="#editing-discovery-and-integration">Editing, discovery and integration</a><a class="h2" href="#editable-templates-and-presets">Editable templates and presets</a><a class="h2" href="#symbol-catalog">Symbol catalog</a><a class="h2" href="#renderer-availability">Renderer availability</a></nav></aside></div></body></html>

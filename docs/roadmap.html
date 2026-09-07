@@ -1,0 +1,249 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Roadmap · Barocss Math Editor</title><meta name="description" content="Roadmap for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" aria-current="page">Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="math-editor-roadmap">Math editor roadmap</h1>
+<p>This roadmap describes priorities, not release promises. The current package is an independent editing prototype. Production integration requires the reliability work below even if additional notation is implemented first.</p>
+<h2 id="locale-extension-and-cleanup--2026-09-08">Locale extension and cleanup — 2026-09-08</h2>
+<ul>
+<li>Completed key-only translation lookup and shared editor path labels; removed source-text conversion and custom formatting callbacks.</li>
+<li>Added JSON French example, matrix-family aliases and NFC/combining-mark search. Language tests cover French, Japanese, Chinese, Arabic, Hindi and German without claiming complete language packs.</li>
+<li>Documented bundled en/ko versus host-supplied translations in <a href="/docs/localization.html">LOCALIZATION.md</a>. Complete reviewed third-language packs, RTL interaction and native OS IME testing remain open.</li>
+<li>Build now cleans its generated directory so deleted modules are excluded from packages.</li>
+</ul>
+<h2 id="locale-keys-and-suggestion-ranking--2026-09-08">Locale keys and suggestion ranking — 2026-09-08</h2>
+<ul>
+<li>Completed English semantic keys in all library/demo JSON packs and static UI call sites. Catalogs and renderers now use keyed messages and named parameters; source-text conversion and formatting hooks have been removed.</li>
+<li>Matching literal symbols now precede structural/template candidates. <code>/</code> selects <code>÷</code> by default; choose the following Fraction candidate to create a fraction. Relative ordering and uppercase Greek preference remain stable.</li>
+</ul>
+<h2 id="composition-and-maintainability--2026-09-08">Composition and maintainability — 2026-09-08</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Work</th>
+<th>Status</th>
+<th>Next gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source/CSS formatting and behavioral comments</td>
+<td>Implemented</td>
+<td>Continue splitting renderer internals when their behavior is unified</td>
+</tr>
+<tr>
+<td>React/native toolbar extraction and host action slot</td>
+<td>Implemented</td>
+<td>Contextual tool catalog shared across both renderers</td>
+</tr>
+<tr>
+<td>JSON locale packs, named templates, regional fallback</td>
+<td>Implemented</td>
+<td>English semantic JSON keys completed; complete third-language packs</td>
+</tr>
+<tr>
+<td>Independently mounted editor/toolbar/LaTeX/preview</td>
+<td>Implemented</td>
+<td>Framework component conveniences only if real hosts need them</td>
+</tr>
+<tr>
+<td>Host Enter/commit/cancel contract and modal suggestions</td>
+<td>Implemented</td>
+<td>Product selection/undo integration and real IME/browser matrix</td>
+</tr>
+<tr>
+<td>Layout lab: inline, next-block flow, popup draft/cancel/apply</td>
+<td>Implemented</td>
+<td>Integrate the actual Note node view first</td>
+</tr>
+<tr>
+<td>Note/Word/Site/Slide persistence adapters</td>
+<td>Not implemented</td>
+<td>Versioned math payload, tex-only fallback, OMML conversion and host transactions</td>
+</tr>
+<tr>
+<td>Downloadable SVG/PNG output</td>
+<td>Not implemented</td>
+<td>Dedicated renderer/export contract, fonts and scaling</td>
+</tr>
+</tbody>
+</table></div><p>See <a href="/docs/embedding.html">Embedding</a> for existing Note/Word model boundaries. The next concrete target is one real Note integration with a preserved host caret and one coherent undo path, not simultaneous schema replacement in all four products.</p>
+<h2 id="integration-progress--2026-09-07">Integration progress — 2026-09-07</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Work</th>
+<th>Status</th>
+<th>Remaining gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Framework-free session / public commands</td>
+<td>Implemented</td>
+<td>Host-wide undo integration, performance and document validation</td>
+</tr>
+<tr>
+<td>Native DOM surface / pure JS entry</td>
+<td>Integration preview</td>
+<td>Rich React selection, catalog and composition parity</td>
+</tr>
+<tr>
+<td>Web Component / Vue / Svelte / Solid / React native wrappers</td>
+<td>Implemented</td>
+<td>Wider framework-version matrix and SSR/hydration strategy</td>
+</tr>
+<tr>
+<td>Optional and separately mounted toolbar</td>
+<td>Implemented in native surface</td>
+<td>Context-sensitive professional toolbar and symbol browser</td>
+</tr>
+<tr>
+<td>Inline single-top-level-line policy</td>
+<td>Implemented in native surface</td>
+<td>Real product prose integration, baseline/keyboard exit UX</td>
+</tr>
+<tr>
+<td>External locale dictionary / aliases / fallback / direction</td>
+<td>Implemented</td>
+<td>Complete extra language packs and RTL audit</td>
+</tr>
+<tr>
+<td>ESM subpath distribution / optional framework peers</td>
+<td>Implemented</td>
+<td>Release approval, registry publication, bundle budgets</td>
+</tr>
+<tr>
+<td>Rich React renderer remains available</td>
+<td>Preserved</td>
+<td>Move main export only after measured parity</td>
+</tr>
+</tbody>
+</table></div><p>Next: finish the native symbol panel and precise range highlights; unify token editing/composition behavior; add keyboard structural selection. Then integrate one real inline host and measure load/typing cost. Do not add new notation to both renderers independently before shared behavior is stable. See <a href="/docs/adapters.html">adapter parity and API</a>.</p>
+<h2 id="delivered-baseline">Delivered baseline</h2>
+<ul>
+<li>Korean/English library UI and demo; bilingual search aliases in both modes.</li>
+<li>Native input at the active token, passive expression rendering, lexical role colors and composition-aware suggestions.</li>
+<li>Thirteen structure kinds, multiline documents, aligned equations, cases and editable matrices.</li>
+<li>Model ranges, balanced copy/cut/paste, wrapping, undo/redo and LaTeX export.</li>
+<li>Identity/zero matrix presets, column vectors and editable formula templates.</li>
+<li>A demo-only KaTeX rendering view and automated model/Chromium regression tests.</li>
+</ul>
+<h2 id="priority-1--reliable-editing-and-integration">Priority 1 — Reliable editing and integration</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Work</th>
+<th>Acceptance criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Real input-method matrix</td>
+<td>macOS and Windows Korean composition, cancellation, blur and locale change preserve text and commit once; currently deferred by user request</td>
+</tr>
+<tr>
+<td>Keyboard model ranges</td>
+<td>Shift+arrows extend/collapse across tokens and structures; typing replaces selection; undo restores a predictable caret</td>
+</tr>
+<tr>
+<td>Structural navigation</td>
+<td>Predictable up/down movement in fractions, roots and scripts; direction and selection affinity covered by tests</td>
+</tr>
+<tr>
+<td>Saved-document validation</td>
+<td>Reject malformed shapes and duplicate IDs; version migration and recoverable failure behavior</td>
+</tr>
+<tr>
+<td>Host session adapter</td>
+<td>Enter/exit and save work in one target product; a single coherent undo path across host and formula</td>
+</tr>
+<tr>
+<td>Browser/accessibility coverage</td>
+<td>Safari, Firefox and Windows Chromium; screen-reader names and suggestion announcements; touch selection and narrow layouts</td>
+</tr>
+<tr>
+<td>Performance budget</td>
+<td>Agree supported document size/depth; benchmark typing, selection, paste and 100-step undo before optimizing</td>
+</tr>
+</tbody>
+</table></div><h2 id="priority-2--more-notation">Priority 2 — More notation</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Feature</th>
+<th>Acceptance criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Combined superscript/subscript</td>
+<td>One shared base, consistent script order, cursor navigation, clipboard and LaTeX round trip</td>
+</tr>
+<tr>
+<td>Indexed roots and binomials</td>
+<td>Editable root index / upper-lower entries; nested sizing, wrapping and deletion rules</td>
+</tr>
+<tr>
+<td>Functions and logarithms</td>
+<td>Named operators with proper LaTeX spacing and editable arguments; distinguish variable names from operators</td>
+</tr>
+<tr>
+<td>Limits and derivatives</td>
+<td>Explicit slots and approach notation; distinguish derivative structures from the existing ∂ symbol</td>
+</tr>
+<tr>
+<td>Text in formulas and cases</td>
+<td>Dedicated natural-language mode, escaping, localization-independent content, IME and clipboard support</td>
+</tr>
+<tr>
+<td>Accents and annotations</td>
+<td>Vectors, bars, hats and over/under braces with editable children</td>
+</tr>
+<tr>
+<td>More templates</td>
+<td>Deterministic model builders, localized discovery, one-step undo; no hidden computed values or false solver claims</td>
+</tr>
+</tbody>
+</table></div><h2 id="priority-3--interchange-and-richer-grids">Priority 3 — Interchange and richer grids</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Feature</th>
+<th>Acceptance criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subset LaTeX import</td>
+<td>Define a grammar and supported environments; preserve unsupported input visibly instead of silently dropping it</td>
+</tr>
+<tr>
+<td>Rectangular cell selection</td>
+<td>Row/column geometry, copy/paste shape rules, partial destination handling and undo</td>
+</tr>
+<tr>
+<td>Matrix transformations</td>
+<td>Transpose and delimiter changes preserve all cell contents and caret; no implicit numeric computation</td>
+</tr>
+<tr>
+<td>Drag matrix size picker</td>
+<td>Accessible keyboard equivalent, touch behavior, 1–20 bounds and one-step insertion</td>
+</tr>
+<tr>
+<td>Multi-alignment and multiline wrapping</td>
+<td>Explicit grouping semantics; do not flatten lines or move relation signs unexpectedly</td>
+</tr>
+<tr>
+<td>External clipboard compatibility</td>
+<td>Verify custom-format survival and LaTeX fallback across target browsers and applications</td>
+</tr>
+</tbody>
+</table></div><h2 id="later-only-with-product-requirements">Later, only with product requirements</h2>
+<p>Declared variables/constants, stable symbol references, binding scopes, computation, collaborative editing, and server persistence are distinct systems. Do not infer that lexical colors or a quadratic formula template already provide these capabilities.</p>
+<h2 id="definition-of-done-for-each-addition">Definition of done for each addition</h2>
+<ol>
+<li>State the supported input and its exact output/caret behavior.</li>
+<li>Preserve IDs outside edits, regenerate inserted identities and support one-step undo for structural actions.</li>
+<li>Cover Korean/English UI, aliases, accessibility labels and composition interaction.</li>
+<li>Verify deterministic model transformations and representative real browser interaction.</li>
+<li>Render the supported LaTeX and document unsupported cases.</li>
+<li>Update the support table, README and implementation notes with actual behavior.</li>
+</ol>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/validation.html"><small>Previous</small>Testing & validation </a><a href="/docs/changelog.html"><small>Next</small>Changelog →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#locale-extension-and-cleanup--2026-09-08">Locale extension and cleanup — 2026-09-08</a><a class="h2" href="#locale-keys-and-suggestion-ranking--2026-09-08">Locale keys and suggestion ranking — 2026-09-08</a><a class="h2" href="#composition-and-maintainability--2026-09-08">Composition and maintainability — 2026-09-08</a><a class="h2" href="#integration-progress--2026-09-07">Integration progress — 2026-09-07</a><a class="h2" href="#delivered-baseline">Delivered baseline</a><a class="h2" href="#priority-1--reliable-editing-and-integration">Priority 1 — Reliable editing and integration</a><a class="h2" href="#priority-2--more-notation">Priority 2 — More notation</a><a class="h2" href="#priority-3--interchange-and-richer-grids">Priority 3 — Interchange and richer grids</a><a class="h2" href="#later-only-with-product-requirements">Later, only with product requirements</a><a class="h2" href="#definition-of-done-for-each-addition">Definition of done for each addition</a></nav></aside></div></body></html>

@@ -1,0 +1,230 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>API &amp; framework adapters · Barocss Math Editor</title><meta name="description" content="API &amp; framework adapters for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" aria-current="page">API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="framework-adapters-and-embedding">Framework adapters and embedding</h1>
+<h2 id="distribution-architecture">Distribution architecture</h2>
+<p>One ESM npm package exposes independent entry points. This keeps document types, commands and clipboard formats on one version. Six separate npm packages are unnecessary until independently versioned adapters are useful.</p>
+<pre><code class="language-text">model / range / grids / suggestions / locale
+                    ↓
+               MathSession
+                    ↓
+          native DOM surface + toolbar
+       ↙       ↓       ↓      ↓       ↘
+ Web Component Vue   Svelte   Solid   React surface
+
+Rich React MathEditor → same model operations, its own renderer/history
+</code></pre>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Import</th>
+<th>Purpose</th>
+<th>Runtime dependency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@barocss/math-editor</code></td>
+<td>Existing rich React editor and public model helpers</td>
+<td>React + React DOM</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/core</code></td>
+<td>All pure helpers, commands, sessions and locale registration</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/dom</code></td>
+<td>Native surface and independent toolbar</td>
+<td>Browser DOM</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/web-component</code></td>
+<td>Explicit custom-element registration</td>
+<td>Browser DOM</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/react</code></td>
+<td>Existing <code>MathEditor</code> and native <code>MathEditorSurface</code></td>
+<td>React + React DOM</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/vue</code></td>
+<td>Vue 3 directive <code>vMathEditor</code></td>
+<td>Vue host; type-only import</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/svelte</code></td>
+<td>Svelte action <code>mathEditor</code></td>
+<td>Svelte host; type-only import</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/solid</code></td>
+<td>Solid directive <code>mathEditor</code></td>
+<td>Solid</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor/style.css</code></td>
+<td>Shared presentation styles</td>
+<td>None</td>
+</tr>
+</tbody>
+</table></div><p>Framework peers are optional: install only the framework you import. Importing <code>core</code>, <code>dom</code> or <code>web-component</code> does not load React. DOM mounting and element registration are client-only; module import safety is not SSR rendering or hydration support. Use your framework's client lifecycle. The package is ESM-only and unbundled; use a bundler or browser import map. No CDN global/IIFE build is provided.</p>
+<h2 id="pure-javascript-inline-mode-and-external-toolbars">Pure JavaScript, inline mode and external toolbars</h2>
+<pre><code class="language-ts">import { createMathSession } from '@barocss/math-editor/core';
+import { mountMathEditor, mountMathToolbar } from '@barocss/math-editor/dom';
+import '@barocss/math-editor/style.css';
+
+const session = createMathSession({ locale: 'en', mode: 'inline' });
+const editor = mountMathEditor(document.querySelector('#formula'), {
+  session,
+  toolbar: false,
+  onChange(document, latex) { save(document, latex); },
+  onExit(direction) { restoreHostCaret(direction); },
+});
+const tools = mountMathToolbar(document.querySelector('#tools'), session, {
+  kinds: ['fraction', 'root', 'superscript'],
+  onExecute: () =&gt; editor.focus(),
+});
+// A custom button, floating menu or professional toolbar uses the same API.
+session.execute({ type: 'text', value: 'α' });
+session.execute({ type: 'structure', kind: 'fraction' });
+session.execute({ type: 'template', id: 'quadratic' });
+
+// On host teardown:
+tools.destroy();
+editor.destroy();
+session.destroy();
+</code></pre>
+<p>Use real non-null HTMLElements for the mount hosts. <code>toolbar</code> accepts <code>false</code>, <code>true</code>, or a list of structure kinds. By default block mode shows tools and inline mode hides them. <code>mountMathToolbar</code> may live anywhere in the page and retains the session's last caret/range. Custom tools can use <code>session.getSnapshot()</code> and <code>session.subscribe()</code> for context and disabled states, then call <code>execute</code>, <code>apply</code>, or <code>paste</code>. For example, <code>session.apply(resizeMatrix(session.getSnapshot().state, 'row', 'delete'))</code> reuses the grid command. Avoid replacing the session on each framework render.</p>
+<p><code>inline</code> means <strong>one top-level equation row</strong>, not a fixed-height text glyph. Fractions, matrices, aligned blocks and cases may still be tall. Top-level newline commands and multiline paste return <code>false</code> without altering the document. Loading a multiline document or changing such a document to inline throws an error. Enter first accepts a visible suggestion. Shift+Enter inside a grid edits that grid. Otherwise inline Enter calls <code>onCommit(snapshot)</code>, or <code>onExit(1)</code> when no commit callback is supplied. Tab navigates slots and calls <code>onExit</code> at an outer boundary when provided. The host owns the surrounding prose, focus restoration and its own undo integration. No automatic <code>contenteditable</code> host binding is included.</p>
+<p>Session snapshots are copies. <code>subscribe((snapshot, documentChanged) =&gt; ...)</code> also reports caret/locale changes with <code>false</code>; save only document changes. <code>load()</code> opens a trusted document and resets undo. <code>defaultValue</code>, <code>session</code> and <code>menuHost</code> are mount-only; call <code>session.load()</code> to open another document. Options passed to <code>update()</code> merge with existing options; explicitly pass <code>toolbar: false</code> or another concrete value to change them. Externally supplied sessions survive renderer teardown; internally created sessions are owned by the renderer. Use one editing surface per session; multiple synchronized simultaneous editors are not a supported collaboration feature.</p>
+<h2 id="react">React</h2>
+<pre><code class="language-tsx">import { MathEditorSurface } from '@barocss/math-editor/react';
+&lt;MathEditorSurface locale=&quot;en&quot; mode=&quot;inline&quot; toolbar={false} onChange={save} /&gt;
+</code></pre>
+<p>Keep <code>MathEditor</code> for the existing full editor, including the symbol browser and richer selection UI. <code>MathEditorSurface</code> uses the new native renderer and options. They share document formats, not a live history instance. Do not assume feature parity; see below.</p>
+<h2 id="web-component">Web Component</h2>
+<pre><code class="language-ts">import { defineMathEditor, type MathEditorElement } from '@barocss/math-editor/web-component';
+defineMathEditor(); // once; repeated calls for the same tag return its constructor
+const element = document.querySelector('barocss-math-editor') as MathEditorElement;
+element.value = savedDocument;
+element.addEventListener('math-change', event =&gt; {
+  const { document, latex } = (event as CustomEvent).detail;
+  save(document, latex);
+});
+</code></pre>
+<pre><code class="language-html">&lt;barocss-math-editor locale=&quot;en&quot; mode=&quot;inline&quot; toolbar=&quot;false&quot;&gt;&lt;/barocss-math-editor&gt;
+</code></pre>
+<p>The element uses light DOM, so import the shared CSS in the page. Attributes: <code>locale</code>, <code>mode</code>, <code>toolbar</code>, <code>line-numbers</code>, <code>enter-behavior</code>. Use the <code>value</code> property for a document, not a JSON attribute. <code>session</code> is available for custom toolbar commands; <code>focusEditor()</code> activates the caret. <code>math-change</code>, <code>math-commit</code>, <code>math-cancel</code> and <code>math-exit</code> bubble across boundaries. Disconnect removes the DOM and subscriptions; reconnect restores the same document and history. Set the mode before loading documents to apply its policy. Do not reuse a custom-element tag already owned by another library.</p>
+<h2 id="vue-3">Vue 3</h2>
+<pre><code class="language-vue">&lt;script setup lang=&quot;ts&quot;&gt;
+import { vMathEditor } from '@barocss/math-editor/vue';
+import '@barocss/math-editor/style.css';
+const options = { locale: 'en', toolbar: false };
+&lt;/script&gt;
+&lt;template&gt;&lt;div v-math-editor=&quot;options&quot; /&gt;&lt;/template&gt;
+</code></pre>
+<p>The directive mounts, updates options and destroys through Vue's directive hooks. Keep its host empty: the editor owns the children. <a href="https://vuejs.org/guide/reusability/custom-directives.html">Vue directive lifecycle</a>.</p>
+<h2 id="svelte">Svelte</h2>
+<pre><code class="language-svelte">&lt;script&gt;
+  import { mathEditor } from '@barocss/math-editor/svelte';
+  import '@barocss/math-editor/style.css';
+&lt;/script&gt;
+&lt;div use:mathEditor={{ locale: 'en', mode: 'inline' }}&gt;&lt;/div&gt;
+</code></pre>
+<p>The action returns <code>update</code> and <code>destroy</code>. Svelte 5 was used for the browser integration test; Svelte 4 is allowed by the peer range but not separately tested. No compiler or Svelte runtime is shipped in the action. <a href="https://svelte.dev/docs/svelte/use">Svelte actions</a>.</p>
+<h2 id="solid">Solid</h2>
+<pre><code class="language-tsx">import { mathEditor } from '@barocss/math-editor/solid';
+import '@barocss/math-editor/style.css';
+// Keep the directive import as a value in TypeScript builds.
+void mathEditor;
+&lt;div use:mathEditor={{ locale: 'en', toolbar: false }} /&gt;
+</code></pre>
+<p>The directive reads its accessor in a reactive effect and cleans up with <code>onCleanup</code>. Do not also render children into its host. <a href="https://docs.solidjs.com/reference/jsx-attributes/use">Solid directives</a>.</p>
+<h2 id="current-renderer-parity">Current renderer parity</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Capability</th>
+<th>Existing React <code>MathEditor</code></th>
+<th>Native surface and all wrappers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13 structure kinds / 90 symbol suggestions / templates</td>
+<td>Yes</td>
+<td>Same model and suggestion catalog</td>
+</tr>
+<tr>
+<td>Multiline block, grids and grid keyboard commands</td>
+<td>Yes</td>
+<td>Implemented; representative Chromium coverage</td>
+</tr>
+<tr>
+<td>Single top-level row inline policy</td>
+<td>No dedicated prop</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Separately mounted/custom toolbar</td>
+<td>Not a session API</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>English/Korean/custom locale registry</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Active input granularity</td>
+<td>Lexical token</td>
+<td>Whole logical text run</td>
+</tr>
+<tr>
+<td>Variable/constant/symbol colors</td>
+<td>Editing and preview</td>
+<td>Preview segments; active run uses one color</td>
+</tr>
+<tr>
+<td>Pointer range, structural clipboard, wrapping</td>
+<td>Rich implementation</td>
+<td>Initial implementation; whole-run visual highlight</td>
+</tr>
+<tr>
+<td>Drag starting inside the active input across structures</td>
+<td>Yes</td>
+<td>Pending; start in preview</td>
+</tr>
+<tr>
+<td>Searchable all-symbol panel, matrix context toolbar</td>
+<td>Yes</td>
+<td>Pending; suggestions/core commands available</td>
+</tr>
+<tr>
+<td>Composition candidate preview</td>
+<td>Disabled choices while composing</td>
+<td>Menu hidden while composing</td>
+</tr>
+<tr>
+<td>Keyboard model ranges / OS IME matrix / full accessibility audit</td>
+<td>Pending</td>
+<td>Pending</td>
+</tr>
+</tbody>
+</table></div><p>The native renderer is an integration preview, not a replacement of the rich React editor. Completing parity before switching the main entry is the next release gate. Trusted document loading still needs schema/ID validation. LaTeX is export-only; plain-text paste is not a LaTeX parser.</p>
+<h2 id="local-verification-and-packaging">Local verification and packaging</h2>
+<p>The demo's <code>/adapters.html</code> mounts pure JS, inline, custom French, Web Component, Vue, Svelte, Solid and React surfaces. Its checked-in Svelte harness is generated with <code>node packages/math-editor/examples/compile-svelte.mjs</code>; this fixture tooling is not part of the published API.</p>
+<pre><code class="language-sh">pnpm --filter @barocss/math-editor build
+pnpm --filter @barocss/math-editor test
+pnpm --filter @barocss/math-demo test:e2e
+pnpm --filter @barocss/math-demo build
+# Inspect a tarball locally; this does not publish:
+pnpm --dir packages/math-editor pack --pack-destination /tmp/math-editor-package
+node packages/math-editor/scripts/check-package.mjs /tmp/math-editor-package/barocss-math-editor-0.1.0.tgz
+</code></pre>
+<p>Release work still includes package ownership/versioning, an explicit release decision, supported-browser and framework-version CI, bundle budgets and renderer parity. No registry publication has been performed.</p>
+<h2 id="independent-outputs-and-host-completion">Independent outputs and host completion</h2>
+<p>The DOM entry also exports <code>mountMathLatex</code> and <code>mountMathPreview</code>. See <a href="/docs/embedding.html">Embedding</a> for the four-surface composition contract, native <code>enterBehavior</code>/<code>onCommit</code>/<code>onCancel</code>, popup draft handling and Note-style next-block creation. The rich React editor adds <code>toolbar</code>, <code>toolbarEnd</code> and <code>showTokenLegend</code>; its dedicated single-line/host-completion API remains the native <code>MathEditorSurface</code>.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/index.html"><small>Previous</small>Introduction </a><a href="/docs/embedding.html"><small>Next</small>Embedding & layouts →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#distribution-architecture">Distribution architecture</a><a class="h2" href="#pure-javascript-inline-mode-and-external-toolbars">Pure JavaScript, inline mode and external toolbars</a><a class="h2" href="#react">React</a><a class="h2" href="#web-component">Web Component</a><a class="h2" href="#vue-3">Vue 3</a><a class="h2" href="#svelte">Svelte</a><a class="h2" href="#solid">Solid</a><a class="h2" href="#current-renderer-parity">Current renderer parity</a><a class="h2" href="#local-verification-and-packaging">Local verification and packaging</a><a class="h2" href="#independent-outputs-and-host-completion">Independent outputs and host completion</a></nav></aside></div></body></html>

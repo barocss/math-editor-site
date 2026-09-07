@@ -1,0 +1,162 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Embedding &amp; layouts · Barocss Math Editor</title><meta name="description" content="Embedding &amp; layouts for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" aria-current="page">Embedding & layouts</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="composable-math-editing-and-host-integration">Composable math editing and host integration</h1>
+<p>The unit of integration is a <strong>math session</strong>, not a fixed editor panel. The host chooses where four independent surfaces live and what happens when editing ends. The package owns the math tree and caret; it does not create Note blocks, move slide objects, save a Site page or issue API requests.</p>
+<h2 id="four-surfaces">Four surfaces</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Surface</th>
+<th>API</th>
+<th>Ownership</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Editing</td>
+<td><code>mountMathEditor(host, options)</code></td>
+<td>Native input, math selection, suggestions, math undo</td>
+</tr>
+<tr>
+<td>Toolbar</td>
+<td><code>mountMathToolbar(host, session, options)</code></td>
+<td>Optional command UI; may be elsewhere in the page</td>
+</tr>
+<tr>
+<td>LaTeX</td>
+<td><code>mountMathLatex(host, session)</code></td>
+<td>Read-only generated text; preserves browser selection on caret-only changes</td>
+</tr>
+<tr>
+<td>Preview</td>
+<td><code>mountMathPreview(host, session, { render })</code></td>
+<td>Subscription and lifetime; host provides rendering implementation</td>
+</tr>
+</tbody>
+</table></div><p>All four APIs are exported by <code>@barocss/math-editor/dom</code>. Toolbar, LaTeX and preview are optional. They do not recreate or reset the session when mounted/unmounted. Destroy each view when its host disappears. An externally supplied session outlives its views and must be destroyed by its owner.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Composition</th>
+<th>Suggested use</th>
+<th>Completion policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Editor only</td>
+<td>Embedded form field / API input</td>
+<td><code>onChange(document, latex)</code></td>
+</tr>
+<tr>
+<td>Toolbar + editor</td>
+<td>Dedicated formula tool</td>
+<td>Internal multiline editing</td>
+</tr>
+<tr>
+<td>Editor + LaTeX, optional toolbar</td>
+<td>LaTeX generator</td>
+<td>Exported source; no arbitrary LaTeX import</td>
+</tr>
+<tr>
+<td>Editor + preview, optional toolbar</td>
+<td>WYSIWYG verification</td>
+<td>Render through a host-selected engine</td>
+</tr>
+<tr>
+<td>Editor + LaTeX + preview</td>
+<td>Authoring/debugging lab</td>
+<td>Same session for all views</td>
+</tr>
+<tr>
+<td>Inline editor</td>
+<td>Formula in prose or a constrained field</td>
+<td>Single top-level row, <code>onCommit</code>/<code>onExit</code></td>
+</tr>
+<tr>
+<td>Popup editor</td>
+<td>Draft an expression away from the host canvas</td>
+<td>Apply once or discard the separate draft</td>
+</tr>
+<tr>
+<td>One editor per math block</td>
+<td>Note-style consecutive formulas</td>
+<td>Host creates the next block after <code>onCommit</code></td>
+</tr>
+</tbody>
+</table></div><p>Preview is not synonymous with a downloadable image. The sample uses KaTeX HTML/MathML. An SVG/PNG renderer, font embedding, image sizing and export are separate adapters still to be implemented. Keep the editable <code>MathDocument</code> even if a host also stores an image or LaTeX cache.</p>
+<h2 id="minimal-composition">Minimal composition</h2>
+<pre><code class="language-ts">import { createMathSession } from '@barocss/math-editor/core';
+import { mountMathEditor, mountMathToolbar, mountMathLatex, mountMathPreview } from '@barocss/math-editor/dom';
+import '@barocss/math-editor/style.css';
+
+const session = createMathSession({ locale: 'en' });
+const editor = mountMathEditor(editorHost, { session, toolbar: false, onChange: saveDraft });
+const toolbar = mountMathToolbar(toolbarHost, session, { onExecute: () =&gt; editor.focus() });
+const latex = mountMathLatex(latexHost, session);
+const preview = mountMathPreview(previewHost, session, {
+  render(element, snapshot) {
+    // Example only: the host imports/configures its renderer and handles errors.
+    katex.render(snapshot.latex, element, { displayMode: snapshot.mode === 'block', trust: false });
+  },
+});
+</code></pre>
+<p>Hosts may arrange these in a column, side panel, floating toolbar or popup. No layout preset forces a markup hierarchy. <code>render</code> can return cleanup for resources/listeners; it runs again when LaTeX, mode or locale changes, not when only the caret moves. Handle rendering errors inside the supplied renderer. Dispose in reverse ownership order: preview/LaTeX/toolbar/editor, then the externally created session.</p>
+<p>React's rich <code>MathEditor</code> additionally accepts <code>toolbar={false}</code>, <code>showTokenLegend={false}</code> and <code>toolbarEnd={&lt;HostActions /&gt;}</code>. The sample's reset action uses this slot. React's native <code>MathEditorSurface</code> and the Vue/Svelte/Solid adapters accept the shared DOM options. The rich React renderer still has its own history; sharing a document format does not make it a live session view.</p>
+<h2 id="enter-escape-and-host-focus">Enter, Escape and host focus</h2>
+<p><code>mode</code> and <code>enterBehavior</code> answer different questions:</p>
+<ul>
+<li><code>mode: 'inline'</code> enforces one <strong>top-level</strong> row at every session mutation boundary. Nested matrices, cases and fractions may still be tall. It is not a fixed-height guarantee.</li>
+<li><code>mode: 'block'</code> permits multiple top-level rows.</li>
+<li><code>enterBehavior: 'newline'</code> uses internal block editing (default in block mode).</li>
+<li><code>enterBehavior: 'commit'</code> reports completion to the host. Inline mode always completes instead of adding a top-level row, even if <code>newline</code> was requested.</li>
+</ul>
+<p>Keyboard precedence is deliberate:</p>
+<ol>
+<li>An unmodified Enter accepts a visible suggestion.</li>
+<li>Shift+Enter inside a grid adds an internal row, including in inline or host-commit mode.</li>
+<li>Inline/commit mode invokes <code>onCommit(snapshot)</code>; without it, the existing <code>onExit(1)</code> fallback is used.</li>
+<li>Normal block mode splits an outer row; aligned/cases Enter adds a row; matrix Enter alone does nothing.</li>
+</ol>
+<p><code>onCommit</code> does not mutate the formula or create a host block. The snapshot includes the document, LaTeX and caret. A Note adapter can save the current node, insert a sibling math block and focus a new editor. A form can move focus to the next field. A popup can apply the draft and close. Treat this as a completion request, not proof that an asynchronous save succeeded.</p>
+<p>Escape first dismisses suggestions or a selected grid. A subsequent Escape exits active editing and invokes <code>onCancel</code> if present. The host decides whether cancellation closes a popup and whether its draft is discarded. Tab/outer arrows use <code>onExit(-1 | 1)</code> for host focus restoration. The host must retain an outer selection bookmark before editing begins.</p>
+<p>Web Components expose <code>enter-behavior=&quot;commit&quot;</code>, <code>math-commit</code>, <code>math-cancel</code> and <code>math-exit</code> using the same policy. Native suggestions mount inside the nearest <code>&lt;dialog&gt;</code> by default so the browser's modal inertness does not block their mouse interaction. A mount-only <code>menuHost</code> override supports other overlay systems.</p>
+<h2 id="drafts-persistence-and-undo">Drafts, persistence and undo</h2>
+<p>For popup editing, clone the source into a <strong>separate</strong> session. Cancel destroys the draft without touching the original. Apply commits the draft through the host's transaction API once. The layout demo uses <code>sourceSession.apply(draftSnapshot.state)</code> so applying the popup is one undoable math edit; <code>load()</code> would incorrectly reset the source's history.</p>
+<p>For direct inline editing, decide whether host persistence observes each <code>onChange</code> or only completion. Saving each update to an API is possible, but debounce/network state belongs to the host. Do not put every keystroke in both host and math undo stacks. A production bridge must define one user-visible undo path and handle undo across the math/host boundary.</p>
+<h2 id="existing-product-boundaries-found-in-this-repository">Existing product boundaries found in this repository</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Product</th>
+<th>Current evidence / required bridge</th>
+<th>Recommended first integration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Note</td>
+<td><code>office-note/src/note-schema.ts</code> defines <code>mathInline</code> and <code>mathBlock</code> with <code>tex</code>; <code>office-text/src/latex.ts</code> owns insertion/source commands. Markdown exchange also preserves <code>tex</code>. This editor uses a different <code>MathDocument</code> tree.</td>
+<td>A versioned editable payload alongside the LaTeX cache, a node-view mount, and Enter-to-sibling-block transactions. Keep existing source editing for tex-only content until supported import exists.</td>
+</tr>
+<tr>
+<td>Word</td>
+<td><code>office-word/src/math-schema.ts</code> uses named OMML-style slots, with existing buildup/navigation/commands. Its document model is not interchangeable with this package.</td>
+<td>Explicit supported-subset conversion and round-trip tests. Preserve unsupported OMML nodes and current DOCX behavior; do not replace them with LaTeX strings.</td>
+</tr>
+<tr>
+<td>Slide</td>
+<td>The host controls object selection, position, scale and document transactions. This change has not connected its canvas objects to a math session.</td>
+<td>Start with a popup draft/apply path, then test direct editing under canvas scaling and host focus restoration.</td>
+</tr>
+<tr>
+<td>Site</td>
+<td>The host controls authoring versus published output. This change has not connected its document nodes to a math session.</td>
+<td>A dedicated math node/view; persist editable data, publish rendered output without toolbars, caret slots or development controls.</td>
+</tr>
+</tbody>
+</table></div><p>The layout lab demonstrates the interaction contracts; it is not installation into these four products. A shared host bridge can consolidate data conversion, selection bookmarks, completion and transaction policy, while each product keeps its own placement/schema adapter. No general LaTeX parser, OMML converter, saved-document validator or host-wide undo bridge is included yet.</p>
+<h2 id="try-and-verify">Try and verify</h2>
+<p>Open <code>/layouts.html</code> in the math demo. Toggle each optional surface, edit the independent inline example, press Enter to create another host block, and open/cancel/apply the popup. Existing React UI and all framework adapters remain on <code>/</code> and <code>/adapters.html</code>.</p>
+<p>The browser tests cover panel synchronization without extra change events, single-row completion, separate next-block creation, modal mouse suggestions, popup cancellation and one-step undo after applying a draft. OS IME testing remains deferred; this is not a full product integration certification.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/adapters.html"><small>Previous</small>API & framework adapters </a><a href="/docs/support.html"><small>Next</small>Supported features →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#four-surfaces">Four surfaces</a><a class="h2" href="#minimal-composition">Minimal composition</a><a class="h2" href="#enter-escape-and-host-focus">Enter, Escape and host focus</a><a class="h2" href="#drafts-persistence-and-undo">Drafts, persistence and undo</a><a class="h2" href="#existing-product-boundaries-found-in-this-repository">Existing product boundaries found in this repository</a><a class="h2" href="#try-and-verify">Try and verify</a></nav></aside></div></body></html>

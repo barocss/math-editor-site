@@ -1,0 +1,130 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>React · Barocss Math Editor</title><meta name="description" content="React for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" aria-current="page">React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="react-api-guide">React API guide</h1>
+<p>React offers two components. Choose intentionally: they share document structure, but do not share a live session or renderer.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Component</th>
+<th>Use it for</th>
+<th>State ownership</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MathEditor</code></td>
+<td>Rich symbol browser, token editing and selection tools</td>
+<td>Internal React history; <code>defaultValue</code> is mount-only</td>
+</tr>
+<tr>
+<td><code>MathEditorSurface</code></td>
+<td>Native inline mode, external session/tools, host commit/cancel</td>
+<td>DOM renderer with optional host-owned <code>MathSession</code></td>
+</tr>
+</tbody>
+</table></div><h2 id="install">Install</h2>
+<pre><code class="language-sh">npm install @barocss/math-editor@0.1.0 react react-dom
+</code></pre>
+<h2 id="rich-editor">Rich editor</h2>
+<pre><code class="language-tsx">import { MathEditor } from '@barocss/math-editor/react';
+import { createMathDocument, type MathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+export function Formula({ id, saved, onSave }: {
+  id: string;
+  saved?: MathDocument;
+  onSave: (document: MathDocument, latex: string) =&gt; void;
+}) {
+  return &lt;MathEditor
+    key={id}
+    locale=&quot;en&quot;
+    defaultValue={saved ?? createMathDocument()}
+    onChange={onSave}
+    showTokenLegend={false}
+    label=&quot;Formula editor&quot;
+  /&gt;;
+}
+</code></pre>
+<p>Changing <code>saved</code> alone does not replace the document. Change <code>key</code> when opening a different document; do not change it on every save. There is no controlled <code>value</code> prop or <code>session</code> prop on this component. <code>onChange</code> reports committed model edits, not IME drafts.</p>
+<h2 id="rich-component-props-in-npm-010">Rich component props in npm 0.1.0</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Prop</th>
+<th>Default / behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>defaultValue</code></td>
+<td>Optional <code>MathDocument</code>, read once</td>
+</tr>
+<tr>
+<td><code>locale</code></td>
+<td><code>ko</code>; locale changes preserve history</td>
+</tr>
+<tr>
+<td><code>toolbar</code></td>
+<td><code>true</code>; hides/shows all rich toolbar panels</td>
+</tr>
+<tr>
+<td><code>toolbarEnd</code></td>
+<td>Optional React content appended to tools</td>
+</tr>
+<tr>
+<td><code>showTokenLegend</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>showLineNumbers</code></td>
+<td><code>true</code>; UI-only multiline gutter</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Localized default accessible group label</td>
+</tr>
+<tr>
+<td><code>onChange(document, latex)</code></td>
+<td>Save the document; LaTeX is derived</td>
+</tr>
+<tr>
+<td><code>onExit(direction)</code></td>
+<td>Host focus restoration request, <code>-1</code> or <code>1</code></td>
+</tr>
+</tbody>
+</table></div><p>Workspace development also adds <code>excludedStructures</code> and <code>multiline</code> to the rich component. These are <strong>not part of the published 0.1.0 API</strong>. For single-row behavior with 0.1.0, use <code>MathEditorSurface</code> with <code>mode=&quot;inline&quot;</code>.</p>
+<h2 id="native-surface">Native surface</h2>
+<pre><code class="language-tsx">import { MathEditorSurface } from '@barocss/math-editor/react';
+import type { MathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+export function InlineFormula({ onSave, onExit }: {
+  onSave: (document: MathDocument, latex: string) =&gt; void;
+  onExit: (direction: -1 | 1) =&gt; void;
+}) {
+  return &lt;MathEditorSurface
+    locale=&quot;en&quot;
+    mode=&quot;inline&quot;
+    toolbar={false}
+    onChange={onSave}
+    onCommit={() =&gt; onExit(1)}
+    onExit={onExit}
+  /&gt;;
+}
+</code></pre>
+<p><code>MathEditorSurface</code> accepts <a href="/docs/api-session.html">DOM options</a>, plus <code>className</code>. It mounts/destroys through React effects and updates mutable options. <code>defaultValue</code>, <code>session</code> and <code>menuHost</code> remain mount-only. For external commands, provide one stable session; <code>session.load(document)</code> opens a different trusted document and resets history. The host must clean up its own subscriptions and external toolbar/session. Avoid sharing a session across simultaneous surfaces.</p>
+<h2 id="ssr-and-popup-behavior">SSR and popup behavior</h2>
+<p>The native surface mounts on the client through an effect. Keep browser storage and DOM access in client lifecycle code. In server-component frameworks, put the integration in a client component; package import safety does not imply server-rendered editable content or hydration support.</p>
+<p>For a popup, hold a draft in component state or a draft session. <code>onChange</code> should update that draft, not persist to the host document. Apply commits it; Cancel unmounts it. Use a fresh <code>key</code> each time a new original is opened. Keep host undo separate and create one host transaction on Apply.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul>
+<li>Passing <code>value</code>, <code>onCommit</code>, <code>mode</code> or <code>session</code> to rich <code>MathEditor</code>: use the native surface for those native options.</li>
+<li>Mirroring each <code>onChange</code> into a new component key, destroying undo and IME state.</li>
+<li>Assuming rich and native components have identical symbol/selection tools.</li>
+</ul>
+<h2 id="persistence-and-ownership">Persistence and ownership</h2>
+<p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
+<p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
+<p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-javascript.html"><small>Previous</small>Pure JavaScript </a><a href="/docs/api-web-component.html"><small>Next</small>Web Component →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#rich-editor">Rich editor</a><a class="h2" href="#rich-component-props-in-npm-010">Rich component props in npm 0.1.0</a><a class="h2" href="#native-surface">Native surface</a><a class="h2" href="#ssr-and-popup-behavior">SSR and popup behavior</a><a class="h2" href="#common-mistakes">Common mistakes</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

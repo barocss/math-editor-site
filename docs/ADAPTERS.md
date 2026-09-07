@@ -1,5 +1,10 @@
 # Framework adapters and embedding
 
+## Framework-specific API guides
+
+[Pure JavaScript](API-JAVASCRIPT.md) · [React](API-REACT.md) · [Web Component](API-WEB-COMPONENT.md) · [Vue 3](API-VUE.md) · [Svelte](API-SVELTE.md) · [Solid](API-SOLID.md) · [Session and DOM API](API-SESSION.md)
+
+
 ## Distribution architecture
 
 One ESM npm package exposes independent entry points. This keeps document types, commands and clipboard formats on one version. Six separate npm packages are unnecessary until independently versioned adapters are useful.

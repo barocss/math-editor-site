@@ -1,0 +1,176 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Session &amp; DOM API · Barocss Math Editor</title><meta name="description" content="Session &amp; DOM API for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" aria-current="page">Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="session-and-native-dom-api-reference">Session and native DOM API reference</h1>
+<p>This reference applies to pure JavaScript, <code>MathEditorSurface</code>, Web Component, Vue, Svelte and Solid native integrations in npm 0.1.0. Rich React <code>MathEditor</code> owns separate history and has its own <a href="/docs/api-react.html">props</a>.</p>
+<h2 id="imports">Imports</h2>
+<pre><code class="language-ts">import { createMathSession, createMathDocument } from '@barocss/math-editor/core';
+import { mountMathEditor, mountMathToolbar, mountMathLatex, mountMathPreview }
+  from '@barocss/math-editor/dom';
+import '@barocss/math-editor/style.css';
+</code></pre>
+<h2 id="createmathsessionoptions">createMathSession(options)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>document</code></td>
+<td>Trusted <code>MathDocument</code></td>
+<td>Empty document</td>
+</tr>
+<tr>
+<td><code>locale</code></td>
+<td>Registered locale string</td>
+<td><code>ko</code></td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>block</code> or <code>inline</code></td>
+<td><code>block</code></td>
+</tr>
+</tbody>
+</table></div><div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Method</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getSnapshot()</code></td>
+<td>Copy containing <code>state</code>, optional <code>range</code>, <code>locale</code>, <code>mode</code>, <code>canUndo</code>, <code>canRedo</code>, <code>latex</code></td>
+</tr>
+<tr>
+<td><code>subscribe(listener)</code></td>
+<td>Listener receives <code>(snapshot, documentChanged)</code>; returns unsubscribe</td>
+</tr>
+<tr>
+<td><code>execute(command)</code></td>
+<td>Boolean result; text/structure/template/newline/undo/redo</td>
+</tr>
+<tr>
+<td><code>apply(state)</code></td>
+<td>Apply <code>MathState</code>; returns false for invalid inline multiline state</td>
+</tr>
+<tr>
+<td><code>select(caret)</code></td>
+<td>Set <code>MathCaret</code>, clear structural range, emit non-document change</td>
+</tr>
+<tr>
+<td><code>selectRange(range?)</code></td>
+<td>Set/clear <code>MathRange</code>, emit non-document change</td>
+</tr>
+<tr>
+<td><code>configure({ locale?, mode? })</code></td>
+<td>Keep document/history; throws on multiline-to-inline change</td>
+</tr>
+<tr>
+<td><code>load(document)</code></td>
+<td>Open trusted document and reset history/range; emits document change</td>
+</tr>
+<tr>
+<td><code>copy()</code></td>
+<td><code>MathFragment</code> for structural range, or undefined</td>
+</tr>
+<tr>
+<td><code>paste(fragment)</code></td>
+<td>Boolean result; rejects multiline in inline mode</td>
+</tr>
+<tr>
+<td><code>destroy()</code></td>
+<td>Release subscribers; host must also destroy renderers/tools</td>
+</tr>
+</tbody>
+</table></div><p>A snapshot's <code>state</code> contains <code>document</code> and <code>caret</code>. Never mutate a snapshot expecting it to affect the session. Use a command or <code>apply</code> instead. <code>false</code> is also returned for undo/redo when no history change occurs; it is not always an error.</p>
+<h2 id="commands">Commands</h2>
+<pre><code class="language-ts">session.execute({ type: 'text', value: 'x + α' });
+session.execute({ type: 'structure', kind: 'fraction' });
+session.execute({ type: 'template', id: 'quadratic' });
+session.execute({ type: 'newline' });
+session.execute({ type: 'undo' });
+session.execute({ type: 'redo' });
+</code></pre>
+<p>These examples assume an existing session. Structure kinds: <code>fraction</code>, <code>root</code>, <code>superscript</code>, <code>subscript</code>, <code>parentheses</code>, <code>brackets</code>, <code>absolute</code>, <code>sum</code>, <code>product</code>, <code>integral</code>, <code>matrix</code>, <code>aligned</code>, <code>cases</code>. A selected structural range can only wrap in supported wrapping kinds. Use exported grid helpers plus <code>apply()</code> for grid resizing; there is no <code>execute({ type: 'resizeMatrix' })</code> command.</p>
+<h2 id="mountmatheditorhost-options">mountMathEditor(host, options)</h2>
+<p><code>host</code> must be a real HTMLElement. Mount on the client, once per surface.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Option</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session</code></td>
+<td>Host session; mount-only; survives renderer destruction</td>
+</tr>
+<tr>
+<td><code>defaultValue</code></td>
+<td>Trusted document for an internally created session; mount-only</td>
+</tr>
+<tr>
+<td><code>menuHost</code></td>
+<td>Suggestion portal HTMLElement; mount-only; nearest native dialog or body by default</td>
+</tr>
+<tr>
+<td><code>locale</code>, <code>mode</code></td>
+<td>Configure locale/mode; same defaults as session</td>
+</tr>
+<tr>
+<td><code>toolbar</code></td>
+<td>Boolean or readonly structure kind list; block defaults on, inline off</td>
+</tr>
+<tr>
+<td><code>showLineNumbers</code></td>
+<td>Whether UI-only multiline gutter is displayed</td>
+</tr>
+<tr>
+<td><code>enterBehavior</code></td>
+<td><code>newline</code> or <code>commit</code>; block defaults newline, inline commit</td>
+</tr>
+<tr>
+<td><code>onChange(document, latex)</code></td>
+<td>Committed document changes</td>
+</tr>
+<tr>
+<td><code>onCommit(snapshot)</code></td>
+<td>Host completion request; no automatic save or block creation</td>
+</tr>
+<tr>
+<td><code>onCancel()</code></td>
+<td>Escape after dismissing suggestions/grid state; host decides whether to close</td>
+</tr>
+<tr>
+<td><code>onExit(direction)</code></td>
+<td>Host caret handoff, <code>-1</code> before or <code>1</code> after</td>
+</tr>
+</tbody>
+</table></div><p>Return value: <code>{ session, focus(), update(options), destroy() }</code>. <code>update</code> accepts mutable options only and merges them. Locale updates preserve history. Do not pass a fresh session to <code>update</code>; recreate the renderer if changing ownership.</p>
+<p>Inline mode means one top-level row, not a fixed visual height. It rejects newline commands and multiline paste and throws when loading multiline documents. Enter accepts suggestions first; grid keyboard operations have their own priority. CSS alone cannot establish these model constraints.</p>
+<h2 id="saving-without-caret-only-writes">Saving without caret-only writes</h2>
+<pre><code class="language-ts">const unsubscribe = session.subscribe((snapshot, documentChanged) =&gt; {
+  if (!documentChanged) return;
+  localStorage.setItem('formula', JSON.stringify(snapshot.state.document));
+});
+// On teardown: unsubscribe(); editor.destroy(); session.destroy();
+</code></pre>
+<p>If a server persists changes asynchronously, debounce/serialize writes and handle failed saves in your host. The library does not resolve write races or validate arbitrary documents returned by a server.</p>
+<h2 id="independent-toolbar-and-outputs">Independent toolbar and outputs</h2>
+<p><code>mountMathToolbar(host, session, { kinds?, onExecute? })</code> exposes <code>destroy()</code>. Use <code>onExecute: () =&gt; editor.focus()</code> to return keyboard focus after choosing a tool. <code>mountMathLatex(host, session)</code> renders derived LaTeX and returns <code>destroy()</code>.</p>
+<p><code>mountMathPreview(host, session, { render(host, snapshot) })</code> delegates rendering to your application. <code>render</code> may return a cleanup function. The math-editor package does not ship KaTeX as a runtime requirement; import your chosen renderer separately. All output handles must be destroyed when their hosts are removed.</p>
+<h2 id="failure-and-compatibility-boundaries">Failure and compatibility boundaries</h2>
+<ul>
+<li>All adapters are ESM; no CommonJS/global-script API is promised.</li>
+<li>Loading expects trusted structured JSON; arbitrary LaTeX parsing and evaluation are not supported.</li>
+<li>Native and rich React editing UX differ; see <a href="/docs/adapters.html#current-renderer-parity">the parity table</a>.</li>
+<li>One session is not a concurrent multi-user collaboration engine.</li>
+<li>Host UI, permissions, persistence, clipboard environment restrictions and SSR boundaries remain the integrator's responsibility.</li>
+</ul>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-solid.html"><small>Previous</small>Solid </a><a href="/docs/support.html"><small>Next</small>Supported features →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#imports">Imports</a><a class="h2" href="#createmathsessionoptions">createMathSession(options)</a><a class="h2" href="#commands">Commands</a><a class="h2" href="#mountmatheditorhost-options">mountMathEditor(host, options)</a><a class="h2" href="#saving-without-caret-only-writes">Saving without caret-only writes</a><a class="h2" href="#independent-toolbar-and-outputs">Independent toolbar and outputs</a><a class="h2" href="#failure-and-compatibility-boundaries">Failure and compatibility boundaries</a></nav></aside></div></body></html>

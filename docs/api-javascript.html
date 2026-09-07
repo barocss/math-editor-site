@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pure JavaScript · Barocss Math Editor</title><meta name="description" content="Pure JavaScript for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" aria-current="page">Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="pure-javascript-api-guide">Pure JavaScript API guide</h1>
+<p>Use this integration for vanilla JavaScript, custom application shells and imperative editor hosts. Neither <code>/core</code> nor <code>/dom</code> imports React. Examples assume an ESM bundler such as Vite; the package does not provide a global script/IIFE build.</p>
+<h2 id="install">Install</h2>
+<pre><code class="language-sh">npm install @barocss/math-editor@0.1.0
+</code></pre>
+<h2 id="mount-a-complete-editor">Mount a complete editor</h2>
+<p>Create <code>&lt;div id=&quot;formula&quot;&gt;&lt;/div&gt;&lt;pre id=&quot;latex&quot;&gt;&lt;/pre&gt;</code> in your page, then run this module after those elements exist:</p>
+<pre><code class="language-js">import { createMathSession } from '@barocss/math-editor/core';
+import { mountMathEditor } from '@barocss/math-editor/dom';
+import '@barocss/math-editor/style.css';
+
+const host = document.querySelector('#formula');
+const output = document.querySelector('#latex');
+if (!(host instanceof HTMLElement) || !output) throw new Error('Missing editor host');
+
+const session = createMathSession({ locale: 'en', mode: 'block' });
+const editor = mountMathEditor(host, {
+  session,
+  toolbar: true,
+  onChange(document, latex) {
+    localStorage.setItem('formula', JSON.stringify(document));
+    output.textContent = latex;
+  },
+});
+editor.focus();
+
+// Call when your route/component is removed.
+function dispose() {
+  editor.destroy();
+  session.destroy();
+}
+</code></pre>
+<p>Creating a session is optional: without <code>session</code>, the renderer creates and owns one, accessible as <code>editor.session</code>. In that case <code>editor.destroy()</code> also releases the owned session.</p>
+<h2 id="open-update-and-execute">Open, update and execute</h2>
+<pre><code class="language-js">// savedDocument must have been validated by your host.
+session.load(savedDocument); // resets undo history
+editor.update({ locale: 'ko', toolbar: false });
+session.execute({ type: 'text', value: 'α' });
+session.execute({ type: 'structure', kind: 'fraction' });
+session.execute({ type: 'undo' });
+const snapshot = session.getSnapshot();
+console.log(snapshot.latex, snapshot.canUndo);
+</code></pre>
+<p>These snippets continue the mounted example. <code>defaultValue</code>, <code>session</code> and <code>menuHost</code> are read at mount; use <code>load()</code> rather than changing <code>defaultValue</code>. <code>update()</code> merges options: pass <code>false</code> explicitly to hide a toolbar.</p>
+<h2 id="external-toolbar">External toolbar</h2>
+<p>Create a separate <code>#tools</code> element. It can sit beside the document or in a floating panel:</p>
+<pre><code class="language-js">import { mountMathToolbar } from '@barocss/math-editor/dom';
+const toolsHost = document.querySelector('#tools');
+if (!(toolsHost instanceof HTMLElement)) throw new Error('Missing toolbar host');
+const tools = mountMathToolbar(toolsHost, session, {
+  kinds: ['fraction', 'root', 'superscript'],
+  onExecute: () =&gt; editor.focus(),
+});
+// Include this in dispose(), before destroying editor/session:
+// tools.destroy();
+</code></pre>
+<p>A toolbar kind list controls the visible buttons, not which structures may exist in a document. Validate the final model if your product supports only a subset.</p>
+<h2 id="inline-and-popup-hosting">Inline and popup hosting</h2>
+<p>Set <code>mode: 'inline'</code> for a single top-level row and <code>toolbar: false</code> for an editor-only surface. Inline equations may still be tall, for example fractions or matrices. Inline Enter first accepts a suggestion; otherwise it invokes <code>onCommit(snapshot)</code> or <code>onExit(1)</code>. <code>onExit(-1 | 1)</code> asks your host to restore its caret before/after the equation.</p>
+<p>For a popup, create a draft session from a copy of the original document. Commit <code>session.getSnapshot().state.document</code> only after Apply. Cancel destroys the draft without modifying the original. Set <code>menuHost</code> to your modal element if your modal's focus trap needs suggestion menus inside it. See the complete <a href="/docs/embedding.html">popup composition</a>.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul>
+<li>Importing the package root in a React-free application: use <code>/core</code> and <code>/dom</code> instead.</li>
+<li>Mounting before an element exists or re-mounting on each keystroke.</li>
+<li>Saving every <code>subscribe</code> callback: caret and locale changes also emit; check <code>documentChanged</code>.</li>
+<li>Treating LaTeX output as a source document or a computation API.</li>
+</ul>
+<h2 id="persistence-and-ownership">Persistence and ownership</h2>
+<p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
+<p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
+<p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/embedding.html"><small>Previous</small>Embedding & layouts </a><a href="/docs/api-react.html"><small>Next</small>React →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#mount-a-complete-editor">Mount a complete editor</a><a class="h2" href="#open-update-and-execute">Open, update and execute</a><a class="h2" href="#external-toolbar">External toolbar</a><a class="h2" href="#inline-and-popup-hosting">Inline and popup hosting</a><a class="h2" href="#common-mistakes">Common mistakes</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

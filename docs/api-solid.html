@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Solid · Barocss Math Editor</title><meta name="description" content="Solid for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" aria-current="page">Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="solid-api-guide">Solid API guide</h1>
+<p>The <code>mathEditor</code> directive mounts the native editor, updates options in a reactive effect and tears down through Solid's owner cleanup.</p>
+<h2 id="install">Install</h2>
+<pre><code class="language-sh">npm install @barocss/math-editor@0.1.0 solid-js
+</code></pre>
+<h2 id="complete-component">Complete component</h2>
+<pre><code class="language-tsx">import { createSignal } from 'solid-js';
+import { mathEditor } from '@barocss/math-editor/solid';
+import '@barocss/math-editor/style.css';
+
+// Preserve the value import used by the JSX directive transform.
+void mathEditor;
+export function Formula() {
+  const [locale, setLocale] = createSignal('en');
+  const [latex, setLatex] = createSignal('');
+  return &lt;&gt;
+    &lt;button onClick={() =&gt; setLocale(locale() === 'en' ? 'ko' : 'en')}&gt;Language&lt;/button&gt;
+    &lt;div use:mathEditor={{
+      locale: locale(),
+      mode: 'inline',
+      toolbar: false,
+      onChange(document, output) {
+        setLatex(output);
+        // Persist document through your application here.
+      },
+    }} /&gt;
+    &lt;pre&gt;{latex()}&lt;/pre&gt;
+  &lt;/&gt;;
+}
+</code></pre>
+<p>The adapter augments Solid's JSX <code>Directives</code> type. Keep the directive import as a runtime value, and compile this with Solid's JSX transform, not the React transform.</p>
+<h2 id="reactive-options-and-sessions">Reactive options and sessions</h2>
+<p>The directive reads an accessor in <code>createEffect</code>, so a signal read in its options updates the renderer. It mounts once; <code>defaultValue</code>, <code>session</code> and <code>menuHost</code> stay mount-only. There is no controlled document prop.</p>
+<p>Create an external <code>createMathSession()</code> once in the component body when you need commands, undo state or an external toolbar. Pass it as <code>session</code>, use <code>session.load(validatedDocument)</code> to open another document, and register your own subscription/session cleanup with <code>onCleanup</code>. Do not create sessions in reactive option expressions.</p>
+<h2 id="host-lifecycle">Host lifecycle</h2>
+<p>The directive calls <code>editor.destroy()</code> on cleanup. It cannot clean up arbitrary host event listeners or save subscriptions. Its host must remain an empty DOM element in your JSX because the editor owns descendants. DOM mounting is client-only; use the framework's client-only boundary when integrating into an SSR route.</p>
+<p>For inline or popup integration, use the native <code>mode</code>, <code>enterBehavior</code>, <code>onCommit</code>, <code>onCancel</code> and <code>onExit</code> options described in the shared API. Those notifications do not automatically create the next prose block or close a modal.</p>
+<h2 id="persistence-and-ownership">Persistence and ownership</h2>
+<p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
+<p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
+<p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-svelte.html"><small>Previous</small>Svelte </a><a href="/docs/api-session.html"><small>Next</small>Session & DOM API →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#complete-component">Complete component</a><a class="h2" href="#reactive-options-and-sessions">Reactive options and sessions</a><a class="h2" href="#host-lifecycle">Host lifecycle</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

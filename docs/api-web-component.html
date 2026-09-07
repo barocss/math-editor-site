@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Web Component · Barocss Math Editor</title><meta name="description" content="Web Component for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" aria-current="page">Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="web-component-api-guide">Web Component API guide</h1>
+<p>Use the custom element with plain HTML or a framework that can pass DOM properties and listen to native events. It uses the native renderer and light DOM, with no React dependency.</p>
+<h2 id="install-and-register">Install and register</h2>
+<pre><code class="language-sh">npm install @barocss/math-editor@0.1.0
+</code></pre>
+<pre><code class="language-js">import { defineMathEditor } from '@barocss/math-editor/web-component';
+import '@barocss/math-editor/style.css';
+defineMathEditor();
+</code></pre>
+<pre><code class="language-html">&lt;barocss-math-editor locale=&quot;en&quot; mode=&quot;inline&quot; toolbar=&quot;false&quot;&gt;&lt;/barocss-math-editor&gt;
+</code></pre>
+<p>Call registration on the client. The default tag is <code>barocss-math-editor</code>; <code>defineMathEditor('my-formula')</code> registers a custom name. Repeated registration returns the existing constructor. Do not choose a tag another library owns.</p>
+<h2 id="properties-and-commands">Properties and commands</h2>
+<pre><code class="language-ts">import type { MathEditorElement } from '@barocss/math-editor/web-component';
+import { createMathDocument } from '@barocss/math-editor/core';
+
+const editor = document.querySelector&lt;MathEditorElement&gt;('barocss-math-editor');
+if (!editor) throw new Error('Missing math element');
+editor.value = createMathDocument('x'); // trusted MathDocument, resets undo
+editor.session.execute({ type: 'structure', kind: 'superscript' });
+editor.focusEditor();
+const documentToSave = editor.value; // snapshot copy
+</code></pre>
+<p>Use the <code>value</code> <strong>property</strong>, not a JSON HTML attribute. Assigning it opens a new document and resets undo. The <code>session</code> property is readonly but its methods are available for commands, subscription and loading.</p>
+<h2 id="attributes">Attributes</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Attribute</th>
+<th>Values / default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>locale</code></td>
+<td>Registered locale code, default <code>ko</code></td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>inline</code> or <code>block</code>; default block</td>
+</tr>
+<tr>
+<td><code>toolbar</code></td>
+<td><code>false</code> hides it; otherwise present means visible; absent follows mode</td>
+</tr>
+<tr>
+<td><code>line-numbers</code></td>
+<td><code>false</code> hides UI line numbers; otherwise visible</td>
+</tr>
+<tr>
+<td><code>enter-behavior</code></td>
+<td><code>commit</code> overrides block newline behavior; otherwise follows mode</td>
+</tr>
+</tbody>
+</table></div><p>Set inline mode before loading a document. Inline mode rejects multiple top-level rows. Presence-only <code>toolbar</code> is true, whereas <code>toolbar=&quot;false&quot;</code> is false.</p>
+<h2 id="events">Events</h2>
+<pre><code class="language-js">const save = event =&gt; {
+  const { document, latex } = event.detail;
+  console.log(document, latex);
+};
+editor.addEventListener('math-change', save);
+editor.addEventListener('math-commit', event =&gt; console.log(event.detail.state.document));
+editor.addEventListener('math-exit', event =&gt; console.log(event.detail.direction));
+editor.addEventListener('math-cancel', () =&gt; console.log('Host decides whether to close'));
+// On host teardown, remove your own listeners:
+// editor.removeEventListener('math-change', save);
+</code></pre>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Event</th>
+<th><code>detail</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>math-change</code></td>
+<td><code>{ document, latex }</code></td>
+</tr>
+<tr>
+<td><code>math-commit</code></td>
+<td>Full <code>MathSessionSnapshot</code></td>
+</tr>
+<tr>
+<td><code>math-exit</code></td>
+<td>`{ direction: -1</td>
+</tr>
+<tr>
+<td><code>math-cancel</code></td>
+<td>No detail payload</td>
+</tr>
+</tbody>
+</table></div><p>Events bubble and are composed. Disconnect destroys the renderer; reconnect restores the same session/document/history. Permanent removal should also release host-owned subscriptions. Shared styles must be loaded in the page because this is light DOM, not a shadow-root widget.</p>
+<h2 id="persistence-and-ownership">Persistence and ownership</h2>
+<p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
+<p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
+<p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-react.html"><small>Previous</small>React </a><a href="/docs/api-vue.html"><small>Next</small>Vue 3 →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install-and-register">Install and register</a><a class="h2" href="#properties-and-commands">Properties and commands</a><a class="h2" href="#attributes">Attributes</a><a class="h2" href="#events">Events</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

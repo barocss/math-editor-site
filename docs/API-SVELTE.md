@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install @barocss/math-editor@0.1.0 svelte
+npm install @barocss/math-editor@0.2.0 svelte
 ```
 
 ## Complete component

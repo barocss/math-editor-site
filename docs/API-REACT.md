@@ -10,7 +10,7 @@ React offers two components. Choose intentionally: they share document structure
 ## Install
 
 ```sh
-npm install @barocss/math-editor@0.1.0 react react-dom
+npm install @barocss/math-editor@0.2.0 react react-dom
 ```
 
 ## Rich editor
@@ -38,7 +38,7 @@ export function Formula({ id, saved, onSave }: {
 
 Changing `saved` alone does not replace the document. Change `key` when opening a different document; do not change it on every save. There is no controlled `value` prop or `session` prop on this component. `onChange` reports committed model edits, not IME drafts.
 
-## Rich component props in npm 0.1.0
+## Rich component props in 0.2.0
 
 | Prop | Default / behavior |
 |---|---|
@@ -52,7 +52,7 @@ Changing `saved` alone does not replace the document. Change `key` when opening 
 | `onChange(document, latex)` | Save the document; LaTeX is derived |
 | `onExit(direction)` | Host focus restoration request, `-1` or `1` |
 
-Workspace development also adds `excludedStructures` and `multiline` to the rich component. These are **not part of the published 0.1.0 API**. For single-row behavior with 0.1.0, use `MathEditorSurface` with `mode="inline"`.
+Version 0.2.0 supports `excludedStructures` and `multiline` on the rich component, plus configurable `toolbar` kinds and `toolbarMaxItems`.
 
 ## Native surface
 
@@ -92,7 +92,7 @@ For a popup, hold a draft in component state or a draft session. `onChange` shou
 
 ## Complete React modal with an isolated rich-editor draft
 
-The parent supplies a trusted document and receives one Apply callback. Typing and Cancel never call `onApply`. Render a fresh instance for each editing request (for example, a monotonically increasing request key). This uses published 0.1.0 props only.
+The parent supplies a trusted document and receives one Apply callback. Typing and Cancel never call `onApply`. Render a fresh instance for each editing request (for example, a monotonically increasing request key). This uses the supported component API.
 
 ```tsx
 import { useEffect, useRef } from 'react';
@@ -167,8 +167,36 @@ export function SessionFormula({ source }: { source: MathDocument }) {
 
 ## Persistence and ownership
 
-Persist the `MathDocument` passed to `onChange`; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.
+Persist the `MathDocument` passed to `onChange`; LaTeX is derived output; the bounded loader supports the documented round-trip subset. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.
 
 Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.
 
 See [session and DOM API](API-SESSION.md) for exact options, commands, events and cleanup, and [renderer differences](ADAPTERS.md#current-renderer-parity) before choosing a native wrapper over the rich React editor.
+
+
+## Undoable LaTeX import (0.2.0)
+
+```tsx
+import { useRef } from 'react';
+import { MathEditor, type MathEditorHandle } from '@barocss/math-editor';
+
+function Editor() {
+  const api = useRef<MathEditorHandle>(null);
+  return <>
+    <button onClick={() => {
+      const result = api.current?.importLatex(String.raw`\frac{a}{b}`);
+      if (result && !result.ok) console.log(result.diagnostics);
+    }}>Load example</button>
+    <MathEditor apiRef={api} />
+  </>;
+}
+```
+
+Import validates the whole expression and host `multiline`/`excludedStructures` restrictions before committing. Success fires `onChange` and creates one undo step; failure leaves content and history unchanged. It refuses replacement during active composition. `MathEditorSurface` uses `session.importLatex` instead. See [LaTeX scope](LATEX-SCOPE.md) for supported grammar and limits.
+
+
+## Rich editor embedded in a document (workspace)
+
+Use `autoFocus`, `toolbar={false}`, `showTokenLegend={false}`, `showLineNumbers={false}` and `enterBehavior="commit"` for an in-place rich editor. Keep `onChange` in a local draft, commit that draft in `onCommit`, and discard it in `onCancel`. Suggestions and selection wrapping take priority over Enter; Escape closes suggestions before requesting cancellation. IME composition reserves its keys. `Shift+Enter` retains normal line/grid behavior subject to `multiline`.
+
+Wrap the editor in a non-editable island when embedding inside contenteditable. The host must exclude nested events, selections and renderer mutations from its own text pipeline. Do not save a host transaction for every math keystroke. Set `--me-font-size` on the wrapper to scale token previews and inputs together; its default is22px.

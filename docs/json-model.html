@@ -1,0 +1,959 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>JSON model specification · Barocss Math Editor</title><meta name="description" content="JSON model specification for Barocss Math Editor 0.2.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" aria-current="page">JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="json-model-specification--version-1">JSON model specification — version 1</h1>
+<p>This document defines the persisted <code>MathDocument</code> used by math-editor. The TypeScript declarations live in <code>src/model.ts</code>; external JSON is checked by <code>parseMathDocument</code> in <code>src/document-codec.ts</code>, using the structural validator in <code>src/range.ts</code>.</p>
+<p>This is a <strong>presentation tree</strong>: it records how a formula is arranged and edited. It is not an algebraic expression tree. For example, <code>a+b</code> is text, not an <code>Add</code> operation. For syntax conversion, see <a href="/docs/latex-model.html">LaTeX → JSON mapping</a>. This specification describes version 0.2.0, including validated JSON and bounded LaTeX import.</p>
+<h2 id="1-document-envelope">1. Document envelope</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>JSON type</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>version</code></td>
+<td>Yes</td>
+<td>Number</td>
+<td>Exactly <code>1</code>, not the package version and not the string <code>&quot;1&quot;</code></td>
+</tr>
+<tr>
+<td><code>root</code></td>
+<td>Yes</td>
+<td><code>MathRow</code> object</td>
+<td>The first top-level formula line; always exists, even for an empty formula</td>
+</tr>
+<tr>
+<td><code>additionalLines</code></td>
+<td>No</td>
+<td>Array of <code>MathRow</code> objects</td>
+<td>Second and subsequent top-level lines, in display order; omit when unused</td>
+</tr>
+</tbody>
+</table></div><p>A document is always an object, not a bare node or array. All rows and nodes are embedded objects; IDs are addresses, not references that replace the objects.</p>
+<pre><code class="language-ts">interface MathDocument {
+  version: 1;
+  root: MathRow;
+  additionalLines?: MathRow[];
+}
+</code></pre>
+<p>Minimal valid empty document:</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: 1,
+  &quot;root&quot;: {
+    &quot;id&quot;: &quot;row-root&quot;,
+    &quot;children&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;text-root&quot;, &quot;text&quot;: &quot;&quot; }]
+  }
+}
+</code></pre>
+<p><code>root: null</code>, <code>children: []</code> and a missing <code>root</code> are invalid. <code>additionalLines: []</code> is accepted and omitted from the validated return value. <code>additionalLines: null</code> is invalid.</p>
+<h2 id="2-rows-and-child-ordering">2. Rows and child ordering</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>JSON type</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Yes</td>
+<td>String</td>
+<td>Unique throughout this document, including both rows and nodes</td>
+</tr>
+<tr>
+<td><code>children</code></td>
+<td>Yes</td>
+<td>Nonempty array of <code>MathNode</code></td>
+<td>Left-to-right formula content</td>
+</tr>
+</tbody>
+</table></div><pre><code class="language-ts">interface MathRow {
+  id: string;
+  children: MathNode[];
+}
+
+type MathNode = MathText | MathStructure;
+</code></pre>
+<p>A row has <strong>no <code>type</code> field</strong>. The root, each additional line and every structure slot all use this same row shape.</p>
+<p>The first and last children must be text nodes. Every structure must have a text sibling immediately before and after it. Examples of child sequences:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Sequence</th>
+<th>Valid?</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>Empty or ordinary text-only row</td>
+</tr>
+<tr>
+<td><code>text → fraction → text</code></td>
+<td>Yes</td>
+<td>Both outside caret boundaries exist</td>
+</tr>
+<tr>
+<td><code>text → root → text → superscript → text</code></td>
+<td>Yes</td>
+<td>Text separates structures</td>
+</tr>
+<tr>
+<td><code>text → text</code></td>
+<td>Accepted</td>
+<td>The validator permits adjacent text; generated edits normally merge them</td>
+</tr>
+<tr>
+<td><code>fraction → text</code></td>
+<td>No</td>
+<td>Missing initial text boundary</td>
+</tr>
+<tr>
+<td><code>text → fraction</code></td>
+<td>No</td>
+<td>Missing final text boundary</td>
+</tr>
+<tr>
+<td><code>text → fraction → root → text</code></td>
+<td>No</td>
+<td>Missing text between structures</td>
+</tr>
+</tbody>
+</table></div><p>Empty text nodes are meaningful <strong>caret positions</strong>, not padding. Do not delete them to reduce JSON size. <code>text: &quot;&quot;</code> differs from <code>text: &quot; &quot;</code>: the latter contains an actual space that exports as an escaped LaTeX space.</p>
+<h2 id="3-text-nodes">3. Text nodes</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>JSON type</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>Yes</td>
+<td>String</td>
+<td>Exactly <code>&quot;text&quot;</code></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Yes</td>
+<td>String</td>
+<td>Unique document address</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>String</td>
+<td>Actual characters, including empty text and Unicode symbol glyphs</td>
+</tr>
+</tbody>
+</table></div><pre><code class="language-ts">interface MathText {
+  type: 'text';
+  id: string;
+  text: string;
+}
+</code></pre>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Formula content</th>
+<th>Stored text</th>
+<th>Not stored</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A variable</td>
+<td><code>&quot;x&quot;</code></td>
+<td>No variable declaration, inferred type or value</td>
+</tr>
+<tr>
+<td>A number</td>
+<td><code>&quot;123&quot;</code></td>
+<td>No numeric JSON value; do not write <code>text: 123</code></td>
+</tr>
+<tr>
+<td>A symbol</td>
+<td><code>&quot;α&quot;</code>, <code>&quot;≤&quot;</code>, <code>&quot;ℝ&quot;</code></td>
+<td>No LaTeX command name or translation key</td>
+</tr>
+<tr>
+<td>An ordinary expression</td>
+<td><code>&quot;a+b&quot;</code></td>
+<td>No implicit addition node</td>
+</tr>
+<tr>
+<td>A visible brace</td>
+<td><code>&quot;{&quot;</code></td>
+<td>No invisible LaTeX grouping</td>
+</tr>
+</tbody>
+</table></div><p>Variable/number/symbol colors are derived by tokenization at render time. They are not distinct JSON node types. Storing <code>&quot;\\alpha&quot;</code> in a text node means literal backslash text; use <code>parseLatex</code> when the source is LaTeX.</p>
+<h2 id="4-structures-and-exact-slot-order">4. Structures and exact slot order</h2>
+<p>Ordinary structures require <code>type</code>, <code>id</code> and <code>slots</code>. Every slot is a complete <code>MathRow</code>, never a string, nullable value or node ID. Slot counts are exact, including empty slots.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th><code>type</code></th>
+<th style="text-align:right">Exact slots</th>
+<th><code>slots[0]</code></th>
+<th><code>slots[1]</code></th>
+<th><code>slots[2]</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fraction</code></td>
+<td style="text-align:right">2</td>
+<td>Numerator</td>
+<td>Denominator</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>root</code></td>
+<td style="text-align:right">1</td>
+<td>Radicand</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>vec</code>, <code>hat</code>, <code>overline</code></td>
+<td style="text-align:right">1</td>
+<td>Accented body</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>quad</code>, <code>qquad</code></td>
+<td style="text-align:right">0</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>roman</code></td>
+<td style="text-align:right">1</td>
+<td>Upright math body</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td style="text-align:right">2</td>
+<td>Approach condition</td>
+<td>Expression body</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>binomial</code></td>
+<td style="text-align:right">2</td>
+<td>Upper term (n)</td>
+<td>Lower term (k)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>indexedRoot</code></td>
+<td style="text-align:right">2</td>
+<td>Root index</td>
+<td>Radicand</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>textGroup</code></td>
+<td style="text-align:right">1</td>
+<td>Literal text row</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>operatorName</code></td>
+<td style="text-align:right">1</td>
+<td>Literal operator name row</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>superscript</code></td>
+<td style="text-align:right">2</td>
+<td>Base</td>
+<td>Exponent</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>subscript</code></td>
+<td style="text-align:right">2</td>
+<td>Base</td>
+<td>Subscript</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>scripts</code></td>
+<td style="text-align:right">3</td>
+<td>Shared base</td>
+<td>Subscript</td>
+<td>Superscript</td>
+</tr>
+<tr>
+<td><code>parentheses</code></td>
+<td style="text-align:right">1</td>
+<td>Enclosed content</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>brackets</code></td>
+<td style="text-align:right">1</td>
+<td>Enclosed content</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td style="text-align:right">1</td>
+<td>Enclosed content</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>sum</code></td>
+<td style="text-align:right">3</td>
+<td>Lower limit</td>
+<td>Upper limit</td>
+<td>Body</td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td style="text-align:right">3</td>
+<td>Lower limit</td>
+<td>Upper limit</td>
+<td>Body</td>
+</tr>
+<tr>
+<td><code>integral</code></td>
+<td style="text-align:right">3</td>
+<td>Lower limit</td>
+<td>Upper limit</td>
+<td>Body</td>
+</tr>
+</tbody>
+</table></div><p>The lower limit comes <strong>before</strong> the upper limit in JSON, regardless of visual position. <code>root</code> means square root. <code>indexedRoot</code> has exactly two slots: index first, then radicand. An empty index remains an editable slot; Backspace in that empty slot converts the node to <code>root</code> and preserves the radicand. <code>scripts</code> stores both scripts on one base; slot order is base, lower, upper. Tab follows that order. Empty script slots remain editable; Backspace in an empty script removes that side and converts the node to <code>superscript</code> or <code>subscript</code>.</p>
+<p>The following type makes the runtime slot rules explicit. The source TypeScript API currently uses the looser <code>MathRow[]</code>; runtime validation enforces these counts.</p>
+<pre><code class="language-ts">type OrdinaryStructure =
+  | { type: 'quad' | 'qquad'; id: string; slots: [] }
+  | { type: 'braces' | 'angle' | 'openClosed' | 'closedOpen' | 'roman' | 'root' | 'parentheses' | 'brackets' | 'absolute' | 'vec' | 'hat' | 'overline' | 'textGroup' | 'operatorName';
+      id: string; slots: [MathRow] }
+  | { type: 'overset' | 'underset' | 'fraction' | 'limit' | 'binomial' | 'superscript' | 'subscript' | 'indexedRoot';
+      id: string; slots: [MathRow, MathRow] }
+  | { type: 'sum' | 'product' | 'integral' | 'doubleIntegral' | 'scripts';
+      id: string; slots: [MathRow, MathRow, MathRow] };
+
+type MathStructure = OrdinaryStructure | MathMatrix | MathEquationGrid;
+</code></pre>
+<p>Slots can contain nested structures using the same child ordering rules. A fraction denominator can therefore contain a square root without a new node format.</p>
+<h2 id="5-grids-matrices-alignment-and-cases">5. Grids: matrices, alignment and cases</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Field</th>
+<th>Matrix</th>
+<th>Aligned / cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>&quot;matrix&quot;</code></td>
+<td><code>&quot;aligned&quot;</code> or <code>&quot;cases&quot;</code></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Required unique string</td>
+<td>Required unique string</td>
+</tr>
+<tr>
+<td><code>columns</code></td>
+<td>Required integer, 1–20</td>
+<td>Required integer, exactly <code>2</code></td>
+</tr>
+<tr>
+<td><code>slots</code></td>
+<td>Required flat array of cell rows</td>
+<td>Required flat array of cell rows</td>
+</tr>
+<tr>
+<td><code>environment</code></td>
+<td>Required allowed string below</td>
+<td>Not part of these node types</td>
+</tr>
+</tbody>
+</table></div><pre><code class="language-ts">type MatrixEnvironment =
+  | 'matrix' | 'pmatrix' | 'bmatrix'
+  | 'Bmatrix' | 'vmatrix' | 'Vmatrix';
+
+interface MathMatrix {
+  type: 'matrix';
+  id: string;
+  columns: number;
+  environment: MatrixEnvironment;
+  slots: MathRow[];
+}
+
+interface MathEquationGrid {
+  type: 'aligned' | 'cases';
+  id: string;
+  columns: 2;
+  slots: MathRow[];
+}
+</code></pre>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Environment</th>
+<th>Matrix delimiters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>matrix</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>pmatrix</code></td>
+<td>Parentheses</td>
+</tr>
+<tr>
+<td><code>bmatrix</code></td>
+<td>Square brackets</td>
+</tr>
+<tr>
+<td><code>Bmatrix</code></td>
+<td>Braces</td>
+</tr>
+<tr>
+<td><code>vmatrix</code></td>
+<td>Single vertical bars</td>
+</tr>
+<tr>
+<td><code>Vmatrix</code></td>
+<td>Double vertical bars</td>
+</tr>
+</tbody>
+</table></div><p>Rows are not stored as another matrix array. For zero-based cell coordinates <code>(r, c)</code>, the slot index is <code>r * columns + c</code>. The row count is <code>slots.length / columns</code>. A valid grid has 1–20 rows; slot count must be a positive multiple of <code>columns</code>.</p>
+<p>For <code>aligned</code>, left/right cells are arbitrary formula rows: an equals sign must be stored explicitly in the appropriate text. For <code>cases</code>, each pair is value then condition. The node does not evaluate the condition.</p>
+<p>Complete 2×2 identity-matrix document:</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: 1,
+  &quot;root&quot;: {
+    &quot;id&quot;: &quot;r0&quot;,
+    &quot;children&quot;: [
+      { &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;before&quot;, &quot;text&quot;: &quot;&quot; },
+      {
+        &quot;type&quot;: &quot;matrix&quot;,
+        &quot;id&quot;: &quot;matrix0&quot;,
+        &quot;columns&quot;: 2,
+        &quot;environment&quot;: &quot;bmatrix&quot;,
+        &quot;slots&quot;: [
+          { &quot;id&quot;: &quot;r00&quot;, &quot;children&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;t00&quot;, &quot;text&quot;: &quot;1&quot; }] },
+          { &quot;id&quot;: &quot;r01&quot;, &quot;children&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;t01&quot;, &quot;text&quot;: &quot;0&quot; }] },
+          { &quot;id&quot;: &quot;r10&quot;, &quot;children&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;t10&quot;, &quot;text&quot;: &quot;0&quot; }] },
+          { &quot;id&quot;: &quot;r11&quot;, &quot;children&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;t11&quot;, &quot;text&quot;: &quot;1&quot; }] }
+        ]
+      },
+      { &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;after&quot;, &quot;text&quot;: &quot;&quot; }
+    ]
+  }
+}
+</code></pre>
+<p>Identity matrices, zero matrices, vectors and formula templates do not have template node types or template IDs in the saved model. They produce ordinary editable cells/structures.</p>
+<h2 id="6-multiple-lines-versus-nested-rows">6. Multiple lines versus nested rows</h2>
+<pre><code class="language-json">{
+  &quot;version&quot;: 1,
+  &quot;root&quot;: {
+    &quot;id&quot;: &quot;line1&quot;,
+    &quot;children&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;text1&quot;, &quot;text&quot;: &quot;a=b&quot; }]
+  },
+  &quot;additionalLines&quot;: [
+    {
+      &quot;id&quot;: &quot;line2&quot;,
+      &quot;children&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;id&quot;: &quot;text2&quot;, &quot;text&quot;: &quot;c=d&quot; }]
+    }
+  ]
+}
+</code></pre>
+<p>This has two top-level lines and exports as <code>gathered</code>. A two-row matrix inside <code>root</code> still has only one top-level line. Inline mode forbids <code>additionalLines</code> containing rows; it does not forbid a matrix or cases node in the root. There is no <code>line</code>, <code>gathered</code> or line-number JSON node.</p>
+<h2 id="7-ids-state-and-persistence">7. IDs, state and persistence</h2>
+<ul>
+<li>IDs must be unique across all row and node objects within a document. They are opaque strings, not paths, source offsets or content hashes.</li>
+<li>Use library constructors/transformations to create IDs. Preserve IDs when saving and reopening the same tree; separate imports and pasted fragments receive fresh IDs.</li>
+<li>The current validator checks string type and uniqueness, but does not enforce UUID syntax or nonempty IDs. Producers should generate nonempty IDs and must not depend on a particular format.</li>
+<li><code>MathDocument</code> does not contain selection, focus, undo history, locale, toolbar settings, pixel sizes or the original LaTeX source.</li>
+</ul>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Object</th>
+<th>Purpose</th>
+<th>Part of persisted <code>MathDocument</code>?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MathCaret</code></td>
+<td>Text node <code>id</code>, UTF-16 <code>start</code>/<code>end</code>, optional affinity</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>MathState</code></td>
+<td><code>{ document, caret }</code> while editing</td>
+<td>No; save its <code>document</code></td>
+</tr>
+<tr>
+<td><code>MathRange</code></td>
+<td>Structural selection endpoints</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>MathHistory</code></td>
+<td>Past/present/future editing states</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>MathFragment</code></td>
+<td>Clipboard <code>{ version: 1, rows: MathRow[] }</code></td>
+<td>No; different envelope from a document</td>
+</tr>
+<tr>
+<td>Host <code>tex</code> / <code>mathDocument</code> attributes</td>
+<td>Product-specific storage container</td>
+<td>No; the host may store serialized document JSON alongside derived LaTeX</td>
+</tr>
+</tbody>
+</table></div><p>The model version is independent of npm versioning. Version 1 has no automatic migration from unknown future versions. Reject unsupported versions rather than guessing their structure.</p>
+<h2 id="8-validation-and-limits">8. Validation and limits</h2>
+<pre><code class="language-ts">import { parseMathDocument, toLatex } from '@barocss/math-editor/core';
+
+const document = parseMathDocument(savedJson);
+if (document) {
+  session.load(document); // Deliberately resets session history.
+  const latex = toLatex(document);
+} else {
+  // Keep existing content and report invalid saved data.
+}
+</code></pre>
+<p><code>parseMathDocument</code> returns a validated document or <code>undefined</code>; it does not return a diagnostic list. <code>parseLatex</code> has its own success/error result. Neither function mutates an editor.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Check</th>
+<th>Current bound / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serialized input</td>
+<td>At most 200,000 UTF-16 code units; not a byte limit</td>
+</tr>
+<tr>
+<td>Structural validation envelope</td>
+<td>The derived clipboard-shaped JSON must also fit the 200,000-unit bound</td>
+</tr>
+<tr>
+<td>Top-level rows</td>
+<td>1–200, counting root</td>
+</tr>
+<tr>
+<td>Nesting</td>
+<td>Root row depth is 0; each descent into a structure slot adds 1; at most 40</td>
+</tr>
+<tr>
+<td>Object count</td>
+<td>At most 10,000 row + node objects, including empty text boundaries</td>
+</tr>
+<tr>
+<td>Grid dimensions</td>
+<td>1–20 rows and columns; aligned/cases require 2 columns</td>
+</tr>
+<tr>
+<td>Node types and arity</td>
+<td>Only listed types and exact slot counts</td>
+</tr>
+<tr>
+<td>IDs</td>
+<td>String type and uniqueness across the document</td>
+</tr>
+<tr>
+<td>Text</td>
+<td>String type; empty strings allowed</td>
+</tr>
+</tbody>
+</table></div><p>The validator is <strong>not a general metadata sanitizer</strong>. Unknown properties are currently tolerated: the returned document envelope keeps only <code>version</code>, <code>root</code> and nonempty <code>additionalLines</code>, while nested row/node extras can remain. Extra properties have no defined semantics or preservation guarantee. Store application metadata outside this tree; do not use them to extend model behavior.</p>
+<h2 id="9-invalid-forms-to-avoid">9. Invalid forms to avoid</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Invalid form</th>
+<th>Correct representation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>root: [ ... ]</code></td>
+<td><code>root: { id, children: [...] }</code></td>
+</tr>
+<tr>
+<td><code>slots: [&quot;a&quot;, &quot;b&quot;]</code></td>
+<td>Two embedded row objects, each with text children</td>
+</tr>
+<tr>
+<td><code>type: &quot;variable&quot;</code> or <code>type: &quot;number&quot;</code></td>
+<td><code>type: &quot;text&quot;</code>, with a string value</td>
+</tr>
+<tr>
+<td><code>rows: [[a, b], [c, d]]</code> on a matrix</td>
+<td>Flat <code>slots</code> plus <code>columns</code></td>
+</tr>
+<tr>
+<td>One missing sum limit</td>
+<td>Keep the slot and give it an empty text row</td>
+</tr>
+<tr>
+<td>Reused row ID as a text node ID</td>
+<td>Generate different IDs for both objects</td>
+</tr>
+<tr>
+<td>A structure without surrounding text</td>
+<td>Add empty text boundaries</td>
+</tr>
+<tr>
+<td><code>version: &quot;1&quot;</code></td>
+<td>Numeric <code>version: 1</code></td>
+</tr>
+</tbody>
+</table></div><p>Use the <a href="/docs/latex-model.html">LaTeX mapping</a> for complete fraction and nested-expression examples, and <a href="/docs/support.html">support scope</a> for the corresponding editor features.</p>
+<h2 id="literal-text-and-operator-name-nodes-workspace">Literal text and operator-name nodes (workspace)</h2>
+<p>Both use the ordinary <code>{ type, id, slots }</code> structure shape with exactly one slot. Every child of that slot must be a <code>MathText</code>; nested structures are invalid. <code>textGroup</code> preserves text such as <code>&quot;if x &gt; 0&quot;</code> and exports <code>\text{if x &gt; 0}</code>. <code>operatorName</code> stores the name, for example <code>&quot;sin&quot;</code>, and exports <code>\sin </code>; a custom name exports <code>\operatorname{custom}</code>. Neither node stores an argument or evaluates a function. The following argument is a sibling in the containing math row. A superscript can wrap the entire operator-name node.</p>
+<p>Literal slots remain one editable input in React, including whitespace and punctuation. They do not trigger math suggestions. Escaping is applied during LaTeX export, not stored in <code>MathText.text</code>.</p>
+<p>Accents store one complete math row in <code>slots[0]</code>. The mark is determined by the structure type and is never stored as a combining character in the body text. Unwrapping preserves that row. Slanted relation glyphs <code>⩾</code> and <code>⩽</code> remain ordinary symbol text.</p>
+<h3 id="explicit-spacing-roman-style-and-limit-placement-workspace">Explicit spacing, roman style and limit placement (workspace)</h3>
+<p><code>quad</code> and <code>qquad</code> are zero-slot structures: <code>{ type: &quot;quad&quot;, id: &quot;…&quot;, slots: [] }</code>. They represent one and two em of math spacing. They still have surrounding text caret nodes, and can be copied, deleted and undone as model content. They are distinct from ordinary whitespace and empty caret hit areas.</p>
+<p><code>roman</code> has one editable math row and exports <code>\mathrm{…}</code>. Unlike <code>textGroup</code>, its content remains mathematical, with nested structures and mathematical whitespace rules. A parsed <code>\rm</code> declaration becomes a <code>roman</code> group that ends at the containing group or cell boundary.</p>
+<p>The limit family (<code>limit</code>, <code>limsup</code>, <code>liminf</code>), sum/product and all supported integral kinds may carry optional boolean <code>limits</code>. Omitted means default placement, <code>true</code> preserves <code>\limits</code>, and <code>false</code> preserves <code>\nolimits</code>. Other values or node kinds are rejected. The directive is emitted immediately after the operator command. Existing <code>true</code> data remains valid; older builds reject the new <code>false</code> value.</p>
+<h2 id="additional-fences-and-annotations-workspace">Additional fences and annotations (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Input</th>
+<th>Model</th>
+<th>Editing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\left\{x\right\}</code></td>
+<td><code>braces</code>, one body slot</td>
+<td>Search <code>braces</code> or <code>중괄호</code></td>
+</tr>
+<tr>
+<td><code>\langle u,v\rangle</code> or <code>\left\langle u,v\right\rangle</code></td>
+<td><code>angle</code>, one body slot</td>
+<td>Search <code>angle</code>, <code>내적</code> or <code>꺾쇠괄호</code></td>
+</tr>
+<tr>
+<td><code>\left(a,b\right]</code></td>
+<td><code>openClosed</code>, one body slot</td>
+<td>Search <code>openclosed</code> or <code>열린닫힌구간</code></td>
+</tr>
+<tr>
+<td><code>\left[a,b\right)</code></td>
+<td><code>closedOpen</code>, one body slot</td>
+<td>Search <code>closedopen</code> or <code>닫힌열린구간</code></td>
+</tr>
+<tr>
+<td>Other <code>\left…\right…</code> pairs, including `\left.x\right</td>
+<td>`</td>
+<td><code>fenced</code>, one body slot and independent <code>left</code>/<code>right</code></td>
+</tr>
+<tr>
+<td><code>\overset{a}{b}</code></td>
+<td><code>overset</code>, <code>[annotation, body]</code></td>
+<td>Search <code>overset</code> or <code>위주석</code>; Tab moves from annotation to body</td>
+</tr>
+<tr>
+<td><code>\underset{a}{b}</code></td>
+<td><code>underset</code>, <code>[annotation, body]</code></td>
+<td>Search <code>underset</code> or <code>아래주석</code>; Tab follows model order, even though the annotation is below</td>
+</tr>
+</tbody>
+</table></div><p>Select an expression and choose a fence or annotation in the regular suggestion menu. Fences wrap the expression and resume after it. Annotations keep the selected expression in the body and focus the empty annotation slot. Nested fractions, scripts and other editable structures are allowed in both annotation slots. Backspace after a structure removes its wrapper while preserving its content; Undo restores it.</p>
+<p>All structured fences scale with their contents. Short angle notation normalizes to scalable <code>\left\langle…\right\rangle</code> on export. Supported physical ends are <code>(</code>, <code>)</code>, <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code>, <code>⟨</code>, <code>⟩</code>, <code>|</code> and <code>.</code>. Plain punctuation stays literal unless imported with a structural command. Double norm bars, <code>\big</code>/<code>\Big</code> remain unsupported; brace annotations are implemented in the workspace.</p>
+<p>The generic fence shape is <code>{ type: &quot;fenced&quot;, id, slots: [body], left, right }</code>. <code>left</code> and <code>right</code> each use the physical-end set above. If supplied, both must be valid and may only appear on a <code>fenced</code> node. If omitted together, the pair defaults to <code>(</code> and <code>)</code>. The named preset nodes do not carry this metadata. Annotation slot order follows LaTeX argument order, not the visual top-to-bottom order of <code>underset</code>.</p>
+<h3 id="double-integrals-workspace">Double integrals (workspace)</h3>
+<p><code>\iint_R f(x,y)</code> imports as <code>doubleIntegral</code> with exactly three slots: <code>[lower/domain, upper, body]</code>, matching integral navigation. Missing bounds remain editable empty slots. <code>\iint\limits</code> preserves the explicit placement directive. Export uses <code>\iint_{lower}^{upper}{body}</code>. Search <code>iint</code>, <code>이중적분</code> or <code>∬</code> to insert; Tab visits the domain, upper bound and body in order. The reported expression with <code>\rm dx \rm dy</code>, <code>\xi</code>, <code>\eta</code> and <code>\text{Area}</code> is covered by import/round-trip and browser editing fixtures. This is notation support, not numerical integration. Triple and contour integrals are now implemented in the workspace; see the section below.</p>
+<h3 id="norm-node-workspace">Norm node (workspace)</h3>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Field / input</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>&quot;norm&quot;</code></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Unique structure ID</td>
+</tr>
+<tr>
+<td><code>slots</code></td>
+<td>Exactly one MathRow: <code>[body]</code>; nested math and empty content allowed</td>
+</tr>
+<tr>
+<td>LaTeX aliases</td>
+<td><code>\lVert…\rVert</code>, <code>\left|…\right|</code>, <code>\left\Vert…\right\Vert</code></td>
+</tr>
+<tr>
+<td>Canonical export</td>
+<td><code>\left\Vert …\right\Vert </code></td>
+</tr>
+<tr>
+<td>Generic fence metadata</td>
+<td><code>&quot;‖&quot;</code> is also a valid independent <code>left</code> / <code>right</code> value for <code>fenced</code></td>
+</tr>
+</tbody>
+</table></div><p>The document version remains 1. Older package builds do not understand this workspace node; validate saved documents against the consuming package's supported kinds.</p>
+<h2 id="triple-and-contour-integrals-workspace">Triple and contour integrals (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Input</th>
+<th>Model</th>
+<th>Slots / behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\iiint_a^b{f}</code></td>
+<td><code>tripleIntegral</code></td>
+<td><code>[lower, upper, body]</code></td>
+</tr>
+<tr>
+<td><code>\oint_C{f}</code></td>
+<td><code>contourIntegral</code></td>
+<td><code>[lower, upper, body]</code>; absent upper stays empty</td>
+</tr>
+</tbody>
+</table></div><p>Search <code>iiint</code> / <code>삼중적분</code> / <code>∭</code>, or <code>oint</code> / <code>폐곡선적분</code> / <code>∮</code>. Tab visits lower, upper and body. Backspace after the structure unwraps its contents; Undo restores it. Both accept and preserve <code>\limits</code> for stacked bounds; default editing places bounds alongside the slanted glyph. Unbraced input consumes one body atom, as for existing integrals. <code>\nolimits</code> is supported in the current workspace. These are editable notation, not integration or path analysis. Contour glyphs use the bundled KaTeX Size2-Regular U+222E directly, with its native ring and slant. No pseudo-element strokes are added.</p>
+<h2 id="brace-annotations-workspace">Brace annotations (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Input</th>
+<th>Model</th>
+<th>Slots</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\overbrace{a+b}^{n}</code></td>
+<td><code>overbrace</code></td>
+<td><code>[annotation, body]</code></td>
+</tr>
+<tr>
+<td><code>\underbrace{a+b}_{n}</code></td>
+<td><code>underbrace</code></td>
+<td><code>[annotation, body]</code></td>
+</tr>
+</tbody>
+</table></div><p>Type <code>overbrace</code> / <code>위중괄호</code> or <code>underbrace</code> / <code>아래중괄호</code>. The annotation is edited first; Tab moves into the body. Wrapping a selection preserves it in the body and focuses the empty annotation. Both slots allow nested math. The brace stretches across the body/annotation container. Backspace immediately after the structure unwraps its contents; Undo restores the structure.</p>
+<p>The parser accepts a bare brace body and creates an empty annotation. Export always includes the corresponding <code>^{…}</code> or <code>_{…}</code>, including an empty annotation. Repeated annotation markers fail. An opposite-side script is handled as an outer ordinary script, not a second brace annotation. Slot order is annotation then body even for underbraces; this matches overset/underset. This workspace addition retains document version 1; older consumers must reject unknown structure kinds during validation.</p>
+<h2 id="additional-accents-workspace">Additional accents (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Syntax</th>
+<th>Model / appearance</th>
+<th>Search</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\tilde{x}</code></td>
+<td><code>tilde</code>, fixed-width centered wave</td>
+<td><code>tilde</code>, <code>물결악센트</code></td>
+</tr>
+<tr>
+<td><code>\bar{x}</code></td>
+<td><code>bar</code>, short centered line</td>
+<td><code>bar</code>, <code>짧은윗줄</code></td>
+</tr>
+<tr>
+<td><code>\dot{x}</code></td>
+<td><code>dot</code>, one centered dot</td>
+<td><code>dot</code>, <code>위점</code></td>
+</tr>
+<tr>
+<td><code>\ddot{x}</code></td>
+<td><code>ddot</code>, two dots</td>
+<td><code>ddot</code>, <code>두점</code></td>
+</tr>
+<tr>
+<td><code>\widehat{AB}</code></td>
+<td><code>widehat</code>, body-width hat</td>
+<td><code>widehat</code>, <code>넓은모자</code></td>
+</tr>
+<tr>
+<td><code>\widetilde{AB}</code></td>
+<td><code>widetilde</code>, body-width wave</td>
+<td><code>widetilde</code>, <code>넓은물결</code></td>
+</tr>
+</tbody>
+</table></div><p>Each is a structure with a unique <code>id</code> and exactly one MathRow in <code>slots: [body]</code>. Empty and nested bodies are supported, including scripts and fractions. Import preserves the command spelling; export emits the same command with a braced body. Selection wrapping retains the original expression. Tab continues outside; Backspace after the wrapper preserves its body, and Undo restores it. <code>dot</code> can also match a multiplication symbol: choose Dot accent explicitly or search <code>위점</code>. <code>bar</code> remains distinct from the existing body-width <code>overline</code>. These additions are in 0.2.0 and do not evaluate derivatives or estimates.</p>
+<h2 id="limit-variants-and-placement-workspace">Limit variants and placement (workspace)</h2>
+<p><code>\limsup_{n}{x}</code> and <code>\liminf_{n}{x}</code> use <code>limsup</code> / <code>liminf</code> structures with exactly <code>[condition, body]</code> rows. Search <code>limsup</code> / <code>상극한</code> or <code>liminf</code> / <code>하극한</code>; Tab moves from condition to body. They do not evaluate sequence limits.</p>
+<p>All limit-family, sum/product and integral nodes accept a single <code>\limits</code> or <code>\nolimits</code> immediately after the command, before scripts. The optional <code>limits</code> field is now boolean: omitted means default, <code>true</code> is stacked placement, <code>false</code> is side placement. Both explicit values survive JSON validation, copying and LaTeX export. Repeated/conflicting directives are rejected. Existing <code>limits: true</code> remains valid; older package builds do not accept <code>false</code> or the new limit kinds.</p>
+<p>Placement is currently selected through imported LaTeX/model metadata, not a dedicated toolbar switch. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.</p>
+<h2 id="fine-mathematical-spacing-workspace">Fine mathematical spacing (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>LaTeX</th>
+<th>Node type</th>
+<th>Width</th>
+<th>Suggestion search</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\,</code></td>
+<td><code>thinSpace</code></td>
+<td>3mu / 1⁄6em</td>
+<td><code>thinspace</code>, <code>얇은간격</code></td>
+</tr>
+<tr>
+<td><code>\:</code></td>
+<td><code>mediumSpace</code></td>
+<td>4mu / 2⁄9em</td>
+<td><code>mediumspace</code>, <code>중간간격</code></td>
+</tr>
+<tr>
+<td><code>\;</code></td>
+<td><code>thickSpace</code></td>
+<td>5mu / 5⁄18em</td>
+<td><code>thickspace</code>, <code>두꺼운간격</code></td>
+</tr>
+<tr>
+<td><code>\!</code></td>
+<td><code>negativeThinSpace</code></td>
+<td>−3mu / −1⁄6em</td>
+<td><code>negativethinspace</code>, <code>간격줄이기</code></td>
+</tr>
+</tbody>
+</table></div><p>All four nodes have a unique ID and <code>slots: []</code>, like quad/qquad. Import/export preserve the exact command; ordinary source whitespace is still normalized. Insertion resumes immediately after the spacer. Backspace removes it and Undo restores it. Negative spacing uses a zero-width node with negative inline-end margin, not an overlay that intercepts pointer input. Click the adjoining text to edit; the spacer has no text slot. Plain punctuation remains literal and is not a spacing trigger.</p>
+<p>Editor dimensions scale in script/limit slots. These are explicit gaps added to the editor's own token clearance, not a complete TeX math-glue or script-style suppression engine. Arbitrary dimensions (<code>\hspace</code>, <code>\kern</code>) and rubber-glue stretch/shrink remain unsupported. This is 0.2.0 functionality.</p>
+<h2 id="explicit-fraction-and-binomial-sizes--workspace">Explicit fraction and binomial sizes — workspace</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>LaTeX</th>
+<th>JSON <code>type</code></th>
+<th><code>mathStyle</code></th>
+<th>Slots</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\frac{a}{b}</code></td>
+<td><code>fraction</code></td>
+<td>Omitted</td>
+<td>Numerator, denominator</td>
+</tr>
+<tr>
+<td><code>\dfrac{a}{b}</code></td>
+<td><code>fraction</code></td>
+<td><code>&quot;display&quot;</code></td>
+<td>Numerator, denominator</td>
+</tr>
+<tr>
+<td><code>\tfrac{a}{b}</code></td>
+<td><code>fraction</code></td>
+<td><code>&quot;text&quot;</code></td>
+<td>Numerator, denominator</td>
+</tr>
+<tr>
+<td><code>\binom{n}{k}</code></td>
+<td><code>binomial</code></td>
+<td>Omitted</td>
+<td>Upper term, lower term</td>
+</tr>
+<tr>
+<td><code>\dbinom{n}{k}</code></td>
+<td><code>binomial</code></td>
+<td><code>&quot;display&quot;</code></td>
+<td>Upper term, lower term</td>
+</tr>
+<tr>
+<td><code>\tbinom{n}{k}</code></td>
+<td><code>binomial</code></td>
+<td><code>&quot;text&quot;</code></td>
+<td>Upper term, lower term</td>
+</tr>
+</tbody>
+</table></div><p>The parser, validated JSON, copy/paste and exporter preserve this optional field. It is valid only on <code>fraction</code> and <code>binomial</code>; other values or node kinds are rejected. Omission retains the ordinary structure behavior. Nested explicit sizes override the enclosing explicit size.</p>
+<p>Both editing surfaces use larger display operands (22 px) and smaller text operands (16 px), retaining editable scripts and slots. This is a bounded editing presentation, not a complete TeX style cascade; <code>\displaystyle</code>, <code>\textstyle</code> and script-style declarations remain unsupported. KaTeX controls the final exported formula's typesetting.</p>
+<h2 id="mathematical-alphabets--020">Mathematical alphabets — 0.2.0</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Input</th>
+<th>Model kind</th>
+<th>Editable slots</th>
+<th>Intended glyph coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\mathbf{Ax+2}</code></td>
+<td><code>bold</code></td>
+<td>One math body</td>
+<td>Bold upright Latin letters and numerals</td>
+</tr>
+<tr>
+<td><code>\mathcal{ABC}</code></td>
+<td><code>calligraphic</code></td>
+<td>One math body</td>
+<td>Calligraphic Latin capitals</td>
+</tr>
+<tr>
+<td><code>\mathbb{ABH}</code></td>
+<td><code>blackboard</code></td>
+<td>One math body</td>
+<td>Double-struck Latin capitals</td>
+</tr>
+</tbody>
+</table></div><p>Type <code>mathbf</code>, <code>mathcal</code> or <code>mathbb</code> and select the suggestion, or import the LaTeX command. These structures can also wrap a selected expression. Their bodies remain math rows: fractions, scripts and nested font groups remain editable. Export preserves the scoped command. Existing single <code>\mathbb{N}</code>, <code>Z</code>, <code>Q</code>, <code>R</code>, <code>C</code> imports retain the previous Unicode-symbol normalization; multi-letter inputs use a <code>blackboard</code> structure.</p>
+<p>The editor bundles KaTeX Main Bold, Caligraphic and AMS font faces with the existing MIT license. Decorative faces are limited to Latin capitals; other characters use fallback glyphs and are not claimed to match every KaTeX alphabet substitution. Semantic token colors remain visible. This does not add <code>\boldsymbol</code>, <code>\mathfrak</code>, arbitrary font declarations or mixed math inside literal <code>\text</code>.</p>
+<h2 id="labeled-arrows--020">Labeled arrows — 0.2.0</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>LaTeX</th>
+<th>Model kind</th>
+<th><code>slots[0]</code></th>
+<th><code>slots[1]</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\xrightarrow[below]{above}</code></td>
+<td><code>xrightarrow</code></td>
+<td>Upper label</td>
+<td>Lower label</td>
+</tr>
+<tr>
+<td><code>\xleftarrow[below]{above}</code></td>
+<td><code>xleftarrow</code></td>
+<td>Upper label</td>
+<td>Lower label</td>
+</tr>
+</tbody>
+</table></div><p>Both slots are math rows, including an empty lower row when the optional argument is absent. The exporter omits <code>[below]</code> when the lower label is empty, and always emits the upper <code>{above}</code> argument. Nested fractions and scripts stay editable. An unfinished optional bracket rejects the complete import without applying a partial document.</p>
+<p>Type <code>xrightarrow</code>, <code>xleftarrow</code>, or search for “labeled arrow” / “설명화살표” in suggestions. Enter applies the candidate; edit the upper label, then Tab to the lower label. The shaft expands to fit the longer label while its arrowhead keeps a fixed size. Empty slots retain an editing affordance. This is a dedicated two-label arrow, distinct from ordinary arrow symbols and generic <code>overset</code> annotations. Other extensible arrow commands (<code>\xleftrightarrow</code>, harpoons, etc.) remain unsupported.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/support.html"><small>Previous</small>Supported features </a><a href="/docs/symbols.html"><small>Next</small>Symbol reference →</a></nav><footer>Barocss Math Editor · 0.2.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#1-document-envelope">1. Document envelope</a><a class="h2" href="#2-rows-and-child-ordering">2. Rows and child ordering</a><a class="h2" href="#3-text-nodes">3. Text nodes</a><a class="h2" href="#4-structures-and-exact-slot-order">4. Structures and exact slot order</a><a class="h2" href="#5-grids-matrices-alignment-and-cases">5. Grids: matrices, alignment and cases</a><a class="h2" href="#6-multiple-lines-versus-nested-rows">6. Multiple lines versus nested rows</a><a class="h2" href="#7-ids-state-and-persistence">7. IDs, state and persistence</a><a class="h2" href="#8-validation-and-limits">8. Validation and limits</a><a class="h2" href="#9-invalid-forms-to-avoid">9. Invalid forms to avoid</a><a class="h2" href="#literal-text-and-operator-name-nodes-workspace">Literal text and operator-name nodes (workspace)</a><a class="h3" href="#explicit-spacing-roman-style-and-limit-placement-workspace">Explicit spacing, roman style and limit placement (workspace)</a><a class="h2" href="#additional-fences-and-annotations-workspace">Additional fences and annotations (workspace)</a><a class="h3" href="#double-integrals-workspace">Double integrals (workspace)</a><a class="h3" href="#norm-node-workspace">Norm node (workspace)</a><a class="h2" href="#triple-and-contour-integrals-workspace">Triple and contour integrals (workspace)</a><a class="h2" href="#brace-annotations-workspace">Brace annotations (workspace)</a><a class="h2" href="#additional-accents-workspace">Additional accents (workspace)</a><a class="h2" href="#limit-variants-and-placement-workspace">Limit variants and placement (workspace)</a><a class="h2" href="#fine-mathematical-spacing-workspace">Fine mathematical spacing (workspace)</a><a class="h2" href="#explicit-fraction-and-binomial-sizes--workspace">Explicit fraction and binomial sizes — workspace</a><a class="h2" href="#mathematical-alphabets--020">Mathematical alphabets — 0.2.0</a><a class="h2" href="#labeled-arrows--020">Labeled arrows — 0.2.0</a></nav></aside></div></body></html>

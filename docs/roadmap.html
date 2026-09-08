@@ -1,9 +1,90 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Roadmap · Barocss Math Editor</title><meta name="description" content="Roadmap for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Roadmap · Barocss Math Editor</title><meta name="description" content="Roadmap for Barocss Math Editor 0.2.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" aria-current="page">Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" aria-current="page">Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="math-editor-roadmap">Math editor roadmap</h1>
 <p>This roadmap describes priorities, not release promises. The current package is an independent editing prototype. Production integration requires the reliability work below even if additional notation is implemented first.</p>
+<h2 id="remaining-latex-priorities-workspace-review-2026-09-08">Remaining LaTeX priorities: workspace review, 2026-09-08</h2>
+<p>These are proposals, not accepted import syntax. Complete each feature through the model, parser, exporter, suggestions and both editing surfaces before calling it supported.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Order</th>
+<th>Candidate syntax</th>
+<th>Value</th>
+<th>Required contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 — implemented in workspace</td>
+<td><code>\lVert x\rVert</code>, <code>\left|x\right|</code></td>
+<td>Norms and vector notation</td>
+<td>One-slot norm, scalable double bars, wrapping, aliases and round trips implemented; release remains open</td>
+</tr>
+<tr>
+<td>2 — implemented in workspace</td>
+<td><code>\iiint</code>, <code>\oint</code></td>
+<td>Multiple and contour integration</td>
+<td>Operator variants with editable lower/upper/body slots and slanted bound placement</td>
+</tr>
+<tr>
+<td>3 — implemented in workspace</td>
+<td><code>\overbrace</code>, <code>\underbrace</code></td>
+<td>Annotated groups and derivations</td>
+<td>Body/annotation model, script attachment policy and scalable braces</td>
+</tr>
+<tr>
+<td>4 — implemented in workspace</td>
+<td><code>\tilde</code>, <code>\bar</code>, <code>\dot</code>, <code>\ddot</code>, <code>\widehat</code>, <code>\widetilde</code></td>
+<td>Statistics, derivatives and estimates</td>
+<td>Distinguish fixed and stretchy accents; nested editing and glyph geometry</td>
+</tr>
+<tr>
+<td>5 — implemented in workspace</td>
+<td><code>\nolimits</code>, <code>\limsup</code>, <code>\liminf</code></td>
+<td>Explicit operator placement and limit variants</td>
+<td>Preserve placement metadata; migrate the current <code>limits: true</code> contract deliberately</td>
+</tr>
+<tr>
+<td>6 — implemented in workspace</td>
+<td><code>\,</code>, <code>\:</code>, <code>\;</code>, <code>\!</code></td>
+<td>Fine mathematical spacing</td>
+<td>Bounded spacing kinds, negative-gap hit testing and canonical export; <code>\quad</code>/<code>\qquad</code> already work</td>
+</tr>
+<tr>
+<td>7 — four commands implemented in workspace</td>
+<td><code>\dfrac</code>, <code>\tfrac</code>, <code>\dbinom</code>, <code>\tbinom</code></td>
+<td>Common pasted formula compatibility</td>
+<td>Preserve <code>mathStyle</code> metadata and explicit command export; general <code>\displaystyle</code> / <code>\textstyle</code> declarations remain open</td>
+</tr>
+<tr>
+<td>8 — implemented in workspace</td>
+<td><code>\mathbf</code>, <code>\mathcal</code>, broader <code>\mathbb</code></td>
+<td>Common mathematical alphabets</td>
+<td>One-slot alphabet structures, bundled fonts, semantic colors and nested editing; decorative glyph coverage is Latin capitals</td>
+</tr>
+<tr>
+<td>9 — implemented in workspace</td>
+<td><code>\xrightarrow</code>, <code>\xleftarrow</code></td>
+<td>Labeled transformations and reactions</td>
+<td>Two math-label slots, optional lower-label parsing, fixed arrowhead and expanding shaft; other extensible arrows remain open</td>
+</tr>
+<tr>
+<td>10 — <code>equation*</code> implemented; others open</td>
+<td><code>equation</code>, <code>align</code>, <code>split</code>, <code>array</code></td>
+<td>Broader imported equation layouts</td>
+<td>Define numbering exclusions, alignment columns and normalization before adding environments</td>
+</tr>
+</tbody>
+</table></div><p>Do not accept arbitrary macros, package loading, external resources or full TeX documents. Chemical formulas can use text, scripts and arrows; dedicated <code>\ce</code>/mhchem grammar and equation balancing are not supported.</p>
+<p>Norms are implemented in the workspace. Triple and contour integrals are implemented in the workspace. Annotated over/under braces are implemented in the workspace. Six additional accents are implemented in the workspace. Operator placement, fine spacing and explicit fraction/binomial sizes are implemented in the workspace. General style declarations and further compatibility features remain open. Keep visual editing and atomic failure tests in the same change as parsing. Note inline editing is resolved according to the user. Further product integration is outside this math-editor release.</p>
+<h2 id="latex-loader-and-note-integration--2026-09-08">LaTeX loader and Note integration — 2026-09-08</h2>
+<ul>
+<li>Scope contract written in <a href="/docs/latex-scope.html">LaTeX import/export</a>: bounded model grammar, explicit exclusions, diagnostics and acceptance gates.</li>
+<li>Core parser and saved-document validation: implemented and tested in the workspace; included in 0.2.0.</li>
+<li>Catalog/template and catalog-driven nested structure-pair round-trip checks pass. Explicit demo import and Note popup draft integration are implemented; product trial tests cover apply/cancel, persistence and source fallback. Wider platform testing remains open.</li>
+<li>Version 0.2.0 includes bounded LaTeX import. Do not advertise workspace imports as released support.</li>
+</ul>
 <h2 id="locale-extension-and-cleanup--2026-09-08">Locale extension and cleanup — 2026-09-08</h2>
 <ul>
 <li>Completed key-only translation lookup and shared editor path labels; removed source-text conversion and custom formatting callbacks.</li>
@@ -57,8 +138,8 @@
 </tr>
 <tr>
 <td>Note/Word/Site/Slide persistence adapters</td>
-<td>Not implemented</td>
-<td>Versioned math payload, tex-only fallback, OMML conversion and host transactions</td>
+<td>Note workspace popup trial implemented</td>
+<td>Validate other browsers and real host caret/undo workflows; Word/Site/Slide adapters and OMML conversion remain open</td>
 </tr>
 <tr>
 <td>Downloadable SVG/PNG output</td>
@@ -66,7 +147,7 @@
 <td>Dedicated renderer/export contract, fonts and scaling</td>
 </tr>
 </tbody>
-</table></div><p>See <a href="/docs/embedding.html">Embedding</a> for existing Note/Word model boundaries. The next concrete target is one real Note integration with a preserved host caret and one coherent undo path, not simultaneous schema replacement in all four products.</p>
+</table></div><p>See <a href="/docs/embedding.html">Embedding</a> for existing Note/Word model boundaries. Note has a popup integration trial. The user confirmed that Note inline editing is resolved. This release focuses on math-editor; product-specific validation is tracked separately.</p>
 <h2 id="integration-progress--2026-09-07">Integration progress — 2026-09-07</h2>
 <div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
 <tr>
@@ -117,12 +198,12 @@
 <td>Move main export only after measured parity</td>
 </tr>
 </tbody>
-</table></div><p>Next: finish the native symbol panel and precise range highlights; unify token editing/composition behavior; add keyboard structural selection. Then integrate one real inline host and measure load/typing cost. Do not add new notation to both renderers independently before shared behavior is stable. See <a href="/docs/adapters.html">adapter parity and API</a>.</p>
+</table></div><p>Next integration work: finish the native symbol panel and precise range highlights; unify token editing/composition behavior; add keyboard structural selection. Measure load/typing cost in host products; Note inline editing is already resolved. Do not add new notation to both renderers independently before shared behavior is stable. See <a href="/docs/adapters.html">adapter parity and API</a>.</p>
 <h2 id="delivered-baseline">Delivered baseline</h2>
 <ul>
 <li>Korean/English library UI and demo; bilingual search aliases in both modes.</li>
 <li>Native input at the active token, passive expression rendering, lexical role colors and composition-aware suggestions.</li>
-<li>Thirteen structure kinds, multiline documents, aligned equations, cases and editable matrices.</li>
+<li>The original structures plus combined scripts, indexed roots, accents, binomials, limits, literal/upright text, independent fences, annotations, spacing and double integrals; multiline documents, aligned equations, cases and editable matrices.</li>
 <li>Model ranges, balanced copy/cut/paste, wrapping, undo/redo and LaTeX export.</li>
 <li>Identity/zero matrix presets, column vectors and editable formula templates.</li>
 <li>A demo-only KaTeX rendering view and automated model/Chromium regression tests.</li>
@@ -149,7 +230,7 @@
 </tr>
 <tr>
 <td>Saved-document validation</td>
-<td>Reject malformed shapes and duplicate IDs; version migration and recoverable failure behavior</td>
+<td>Shape/duplicate-ID validation is implemented; version migration and host recovery remain</td>
 </tr>
 <tr>
 <td>Host session adapter</td>
@@ -165,40 +246,59 @@
 </tr>
 </tbody>
 </table></div><h2 id="priority-2--more-notation">Priority 2 — More notation</h2>
+<p>See the <a href="/docs/latex-guide.html">LaTeX editing guide</a> for supported examples and the next implementation order.</p>
 <div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
 <tr>
 <th>Feature</th>
-<th>Acceptance criteria</th>
+<th>Current status</th>
+<th>Remaining work</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Combined superscript/subscript</td>
-<td>One shared base, consistent script order, cursor navigation, clipboard and LaTeX round trip</td>
+<td>Implemented in workspace</td>
+<td>Wider browser/IME validation and release</td>
 </tr>
 <tr>
-<td>Indexed roots and binomials</td>
-<td>Editable root index / upper-lower entries; nested sizing, wrapping and deletion rules</td>
+<td>Literal text and 19 named functions/custom names</td>
+<td>Implemented in workspace</td>
+<td>Mixed text/math and styled text remain excluded</td>
 </tr>
 <tr>
-<td>Functions and logarithms</td>
-<td>Named operators with proper LaTeX spacing and editable arguments; distinguish variable names from operators</td>
+<td>Indexed roots</td>
+<td>Implemented in workspace</td>
+<td>Wider nested-layout/browser validation and release</td>
 </tr>
 <tr>
-<td>Limits and derivatives</td>
-<td>Explicit slots and approach notation; distinguish derivative structures from the existing ∂ symbol</td>
+<td>Vectors, hats and overlines</td>
+<td>Implemented in workspace</td>
+<td>Wider layout/browser validation and release</td>
 </tr>
 <tr>
-<td>Text in formulas and cases</td>
-<td>Dedicated natural-language mode, escaping, localization-independent content, IME and clipboard support</td>
+<td>Binomials</td>
+<td>Implemented in workspace</td>
+<td>Implemented and Chromium-tested; wider browsers and release remain</td>
 </tr>
 <tr>
-<td>Accents and annotations</td>
-<td>Vectors, bars, hats and over/under braces with editable children</td>
+<td>Limits</td>
+<td>Implemented in workspace</td>
+<td>Approach slot and dedicated operator placement; <code>lim</code> is not in the current function catalog</td>
+</tr>
+<tr>
+<td>Additional delimiters</td>
+<td>Implemented in workspace</td>
+<td>Independent left/right metadata, mixed and invisible ends</td>
+</tr>
+<tr>
+<td>Over/under annotations</td>
+<td>Implemented in workspace</td>
+<td>Implemented and Chromium-tested; wider browsers and release remain</td>
 </tr>
 <tr>
 <td>More templates</td>
-<td>Deterministic model builders, localized discovery, one-step undo; no hidden computed values or false solver claims</td>
+<td>Ongoing</td>
+<td>Deterministic builders, localized discovery and one-step undo</td>
 </tr>
 </tbody>
 </table></div><h2 id="priority-3--interchange-and-richer-grids">Priority 3 — Interchange and richer grids</h2>
@@ -210,8 +310,8 @@
 </thead>
 <tbody>
 <tr>
-<td>Subset LaTeX import</td>
-<td>Define a grammar and supported environments; preserve unsupported input visibly instead of silently dropping it</td>
+<td>Subset LaTeX import — implemented in workspace</td>
+<td>Extend the documented grammar incrementally; preserve unsupported input without changing the existing formula</td>
 </tr>
 <tr>
 <td>Rectangular cell selection</td>
@@ -242,8 +342,86 @@
 <li>Preserve IDs outside edits, regenerate inserted identities and support one-step undo for structural actions.</li>
 <li>Cover Korean/English UI, aliases, accessibility labels and composition interaction.</li>
 <li>Verify deterministic model transformations and representative real browser interaction.</li>
-<li>Render the supported LaTeX and document unsupported cases.</li>
+<li>Render the supported LaTeX with KaTeX and compare it with both rich React and native editing surfaces. Inspect passive and focused states, empty/populated slots and nested examples. Adjust glyph shapes, baselines, script sizes, spacing and caret-induced movement before marking the feature complete. Record intentional editing-space differences and unsupported cases.</li>
 <li>Update the support table, README and implementation notes with actual behavior.</li>
 </ol>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/validation.html"><small>Previous</small>Testing & validation </a><a href="/docs/changelog.html"><small>Next</small>Changelog →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#locale-extension-and-cleanup--2026-09-08">Locale extension and cleanup — 2026-09-08</a><a class="h2" href="#locale-keys-and-suggestion-ranking--2026-09-08">Locale keys and suggestion ranking — 2026-09-08</a><a class="h2" href="#composition-and-maintainability--2026-09-08">Composition and maintainability — 2026-09-08</a><a class="h2" href="#integration-progress--2026-09-07">Integration progress — 2026-09-07</a><a class="h2" href="#delivered-baseline">Delivered baseline</a><a class="h2" href="#priority-1--reliable-editing-and-integration">Priority 1 — Reliable editing and integration</a><a class="h2" href="#priority-2--more-notation">Priority 2 — More notation</a><a class="h2" href="#priority-3--interchange-and-richer-grids">Priority 3 — Interchange and richer grids</a><a class="h2" href="#later-only-with-product-requirements">Later, only with product requirements</a><a class="h2" href="#definition-of-done-for-each-addition">Definition of done for each addition</a></nav></aside></div></body></html>
+<h3 id="2026-09-08--framework-api-documentation">2026-09-08 — Framework API documentation</h3>
+<p>Added dedicated Pure JavaScript, React, Web Component, Vue 3, Svelte and Solid guides,
+plus the shared session/DOM API reference. Guides document the 0.2.0 APIs and distinguish them from
+future options, describe mount-only versus mutable settings and explain
+persistence, ownership, cleanup and renderer parity. React/Solid examples type-check;
+Vue/Svelte complete examples compile; the 19-page HTML documentation build and new-guide
+cross-document/heading links are verified. Website publication is documentation-only;
+the npm version and deployed runtime artifact are unchanged.</p>
+<h3 id="api-guide-practical-examples-2026-09-08">API guide practical examples (2026-09-08)</h3>
+<ul>
+<li>Added isolated JavaScript/React modal drafts with Apply/Cancel, React session history, Vue document switching, Svelte 5 runes, Solid history/templates, Web Component form submission, and shared debounced browser storage with restore/error handling.</li>
+<li>Verified React/Solid/storage TypeScript, Vue/Svelte compilation, Chromium modal/form/storage behavior, documentation links and demo production build. Server persistence remains host-owned; examples use published 0.1.0 APIs.</li>
+</ul>
+<h3 id="combined-scripts--workspace-implementation">Combined scripts — workspace implementation</h3>
+<ul>
+<li>[x] Shared <code>scripts</code> model: <code>[base, subscript, superscript]</code>, JSON validation and LaTeX export.</li>
+<li>[x] Both LaTeX script orders, nested placement, duplicate-script diagnostics.</li>
+<li>[x] React/native rendering, completion from an existing script, Tab traversal and empty-side deletion.</li>
+<li>[x] Include this addition in the 0.2.0 release.</li>
+</ul>
+<h3 id="text-and-function-notation--workspace-implementation">Text and function notation — workspace implementation</h3>
+<ul>
+<li>
+<p>[x] Literal text node, escaped LaTeX interchange, text-only slot validation and editing.</p>
+</li>
+<li>
+<p>[x] Editable operator-name node, 19 standard functions, custom names and scripts on function names.</p>
+</li>
+<li>
+<p>[x] Shared suggestions, English/Korean messages, native/React editing and round-trip checks.</p>
+</li>
+<li>
+<p>[x] Indexed roots with two slots, selection wrapping, literal typing and empty-index deletion.</p>
+</li>
+<li>
+<p>[x] Vector, hat and overline accents with editable bodies and selection wrapping.</p>
+</li>
+<li>
+<p>[x] Additional delimiters, mixed/invisible ends and overset/underset annotations.</p>
+</li>
+<li>
+<p>[x] Over/under brace annotations with editable annotation/body slots.</p>
+</li>
+<li>
+<p>[x] Explicit side-placement import/export (<code>\nolimits</code>); a dedicated toolbar switch remains open.</p>
+</li>
+<li>
+<p>[x] Workspace: <code>limit</code> condition/body model, LaTeX import/export, localized suggestions and React/native editing.</p>
+</li>
+<li>
+<p>[x] Semantic function color for named/custom operators and the limit glyph.</p>
+</li>
+</ul>
+<h3 id="workspace-imported-notation-compatibility">Workspace: imported notation compatibility</h3>
+<ul>
+<li>
+<p>Implemented <code>quad</code>/<code>qquad</code> as zero-slot spacing nodes, including suggestion insertion and deletion/Undo.</p>
+</li>
+<li>
+<p>Preserved explicit <code>limits: true</code> on sum/product/integral/limit nodes through import/export.</p>
+</li>
+<li>
+<p>Implemented one-slot <code>roman</code> groups: scoped <code>\rm</code> declarations normalize to <code>\mathrm{…}</code>. Parsing restores the enclosing expression boundary after nested groups.</p>
+</li>
+<li>
+<p>Regression fixtures include the reported quotient limit with Chinese text, the three-sum inequality and the chain-rule derivative.</p>
+</li>
+<li>
+<p>Implemented in workspace: double integrals (<code>\iint</code>), localized suggestions, domain/bounds/body editing, explicit limits preservation, and regression coverage for the reported mean-value equation.</p>
+</li>
+</ul>
+<h2 id="latest-presentation-status--2026-09-08">Latest presentation status — 2026-09-08</h2>
+<p>Completed in the workspace: scalable fences and radicals, slanted integral side bounds, visible absolute bars, aligned script bases, lining numerals, borderless token focus, 117 symbols including 31 arrows, substring discovery and all-direction <code>-</code>/<code>-&gt;</code> suggestions. See <a href="/docs/validation.html">validation</a> for the targeted Chromium checks. Full browser/accessibility coverage, native/rich React interaction parity, product-specific integration validation remain separate.</p>
+<h2 id="spacing-audit-follow-up--2026-09-08">Spacing audit follow-up — 2026-09-08</h2>
+<p>Seven rich React/KaTeX comparisons are complete; production fixes are pending. Prioritize grid delimiter shapes, nested fraction/script sizing, script separation, grid row spacing and accent clearance, then reduce the measured 20px first-boundary focus expansion. See <a href="/docs/validation.html#editor-versus-katex-spacing-audit--2026-09-08">the comparison findings</a>. Repeat the revised layouts in native DOM and test active inner slots before marking the work complete.</p>
+<p>Spacing follow-up implemented: shared grid fence shapes, tighter grid/fraction/script/accent layouts, bounded nested fraction sizes, and a smaller boundary focus target. Chromium import/edit checks pass; the measured first-boundary expansion fell from 20px to 8px. Full recursive math-style sizing, additional browser/accessibility checks and eliminating all cursor-induced movement remain open.</p>
+<p>Workspace toolbar overflow is implemented: configurable structure-button limits and More/Fewer controls, rich React/native filtering, and always-visible history actions. Context-sensitive grouping and user-persisted toolbar customization remain future work.</p>
+<p>Locale regression: misplaced alphabet/arrow messages moved inside <code>messages</code>; pack-shape/build validation and en/ko browser coverage added.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/validation.html"><small>Previous</small>Testing & validation </a><a href="/docs/changelog.html"><small>Next</small>Changelog →</a></nav><footer>Barocss Math Editor · 0.2.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#remaining-latex-priorities-workspace-review-2026-09-08">Remaining LaTeX priorities: workspace review, 2026-09-08</a><a class="h2" href="#latex-loader-and-note-integration--2026-09-08">LaTeX loader and Note integration — 2026-09-08</a><a class="h2" href="#locale-extension-and-cleanup--2026-09-08">Locale extension and cleanup — 2026-09-08</a><a class="h2" href="#locale-keys-and-suggestion-ranking--2026-09-08">Locale keys and suggestion ranking — 2026-09-08</a><a class="h2" href="#composition-and-maintainability--2026-09-08">Composition and maintainability — 2026-09-08</a><a class="h2" href="#integration-progress--2026-09-07">Integration progress — 2026-09-07</a><a class="h2" href="#delivered-baseline">Delivered baseline</a><a class="h2" href="#priority-1--reliable-editing-and-integration">Priority 1 — Reliable editing and integration</a><a class="h2" href="#priority-2--more-notation">Priority 2 — More notation</a><a class="h2" href="#priority-3--interchange-and-richer-grids">Priority 3 — Interchange and richer grids</a><a class="h2" href="#later-only-with-product-requirements">Later, only with product requirements</a><a class="h2" href="#definition-of-done-for-each-addition">Definition of done for each addition</a><a class="h3" href="#2026-09-08--framework-api-documentation">2026-09-08 — Framework API documentation</a><a class="h3" href="#api-guide-practical-examples-2026-09-08">API guide practical examples (2026-09-08)</a><a class="h3" href="#combined-scripts--workspace-implementation">Combined scripts — workspace implementation</a><a class="h3" href="#text-and-function-notation--workspace-implementation">Text and function notation — workspace implementation</a><a class="h3" href="#workspace-imported-notation-compatibility">Workspace: imported notation compatibility</a><a class="h2" href="#latest-presentation-status--2026-09-08">Latest presentation status — 2026-09-08</a><a class="h2" href="#spacing-audit-follow-up--2026-09-08">Spacing audit follow-up — 2026-09-08</a></nav></aside></div></body></html>

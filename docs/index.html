@@ -1,17 +1,19 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Introduction · Barocss Math Editor</title><meta name="description" content="Introduction for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Introduction · Barocss Math Editor</title><meta name="description" content="Introduction for Barocss Math Editor 0.2.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" aria-current="page">Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" aria-current="page">Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="barocssmath-editor">@barocss/math-editor</h1>
+<p>See the <a href="/docs/json-model.html">JSON model specification</a> for required fields, exact slot order, invariants and persistence limits.</p>
 <h2 id="framework-specific-api-guides">Framework-specific API guides</h2>
 <p><a href="/docs/api-javascript.html">Pure JavaScript</a> · <a href="/docs/api-react.html">React</a> · <a href="/docs/api-web-component.html">Web Component</a> · <a href="/docs/api-vue.html">Vue 3</a> · <a href="/docs/api-svelte.html">Svelte</a> · <a href="/docs/api-solid.html">Solid</a> · <a href="/docs/api-session.html">Session and DOM API</a></p>
+<p>Each guide covers installation, a complete integration, document replacement, saving, lifecycle cleanup and host limitations.</p>
 <p>An embeddable math editor with a framework-independent model, an existing rich React UI, and a new native DOM surface for pure JavaScript, Web Components, Vue, Svelte, Solid and React. Write expressions in place, select existing math, and wrap it in fractions, roots, powers or delimiters. The demo includes a live KaTeX preview.</p>
 <p><strong>Status:</strong> working prototype, not yet a production-ready replacement for the math features in Note, Word or Slides. This package does not calculate, solve equations or parse arbitrary LaTeX.</p>
 <p>See <a href="/docs/adapters.html">framework adapters and inline/custom toolbar integration</a>, <a href="/docs/localization.html">custom locales</a>, and <a href="/docs/roadmap.html">progress / roadmap</a>. The new native renderer has explicit parity gaps; existing React consumers keep their current UI.</p>
 <p>For editor-only, external toolbar, LaTeX, preview, inline and popup compositions, see <a href="/docs/embedding.html">Embedding</a> and <code>/layouts.html</code> in the demo.</p>
 <h2 id="quick-start">Quick start</h2>
-<p>Install version 0.1.0 from npm:</p>
-<pre><code class="language-sh">npm install @barocss/math-editor@0.1.0
+<p>Install version 0.2.0 from npm:</p>
+<pre><code class="language-sh">npm install @barocss/math-editor@0.2.0
 # For the rich React UI:
 npm install react react-dom
 </code></pre>
@@ -56,6 +58,22 @@ function Formula({ documentId, saved, save }: {
 <tr>
 <td><code>locale?: MathLocale</code></td>
 <td>Defaults to <code>ko</code>. Changes UI text without resetting the document or undo history.</td>
+</tr>
+<tr>
+<td><code>autoFocus?: boolean</code></td>
+<td>Start in the initial editable token. Defaults to <code>false</code>.</td>
+</tr>
+<tr>
+<td>`enterBehavior?: 'newline'</td>
+<td>'commit'`</td>
+</tr>
+<tr>
+<td><code>onCommit?()</code> / <code>onCancel?()</code></td>
+<td>Host draft apply/cancel callbacks. Escape dismisses suggestions first; composition reserves its own keys.</td>
+</tr>
+<tr>
+<td><code>showPopovers?: boolean</code></td>
+<td>Defaults to <code>true</code>. Set <code>false</code> while keeping the editor mounted in an inactive host tab; its undo history is preserved.</td>
 </tr>
 <tr>
 <td><code>toolbar?: boolean</code></td>
@@ -209,7 +227,7 @@ function Formula({ documentId, saved, save }: {
 </table></div><h2 id="selection-and-clipboard-boundaries">Selection and clipboard boundaries</h2>
 <p>A range within one row preserves partial text and balanced structures. Selecting across a numerator and denominator expands to their common fraction; selecting across matrix cells expands to their common matrix. This is not a spreadsheet-style rectangular cell selection. Multiple document lines can be copied, replaced or deleted, but cannot be wrapped into a single structure.</p>
 <p>Internal copies include <code>application/x-barocss-math+json</code> and plain-text LaTeX. Paste validates the custom payload and generates fresh IDs. Plain external text is inserted literally; newlines become top-level rows. Multiple-line paste into a nested slot is rejected without changing the document. If a destination strips custom clipboard formats, pasting back provides text rather than reconstructed math.</p>
-<p>The demo's <strong>Copy</strong> button exports LaTeX only. General LaTeX import is not implemented.</p>
+<p>The demo's <strong>Copy</strong> button exports LaTeX only. Workspace builds also provide explicit bounded LaTeX import; see <a href="/docs/latex-scope.html">the import contract</a>. Version 0.2.0 includes bounded LaTeX import. Ordinary clipboard text is still inserted literally.</p>
 <h2 id="model-and-package-boundaries">Model and package boundaries</h2>
 <p><code>MathDocument</code> stores <code>version: 1</code>, a <code>root</code> row and optional <code>additionalLines</code>. Rows alternate text boundaries and structures; even an empty boundary is a valid caret address. LaTeX is an export format, not the editing source.</p>
 <ul>
@@ -218,7 +236,7 @@ function Formula({ documentId, saved, save }: {
 <li><code>@barocss/math-editor/style.css</code>: explicit UI stylesheet using <code>me-</code> classes.</li>
 <li>KaTeX is a demo runtime dependency and a package test dependency; the library renderer does not require it.</li>
 </ul>
-<p>Only pass trusted, well-formed saved documents to <code>defaultValue</code>. <code>parseFragment</code> validates clipboard fragments; it is not a saved-document validation API. Locale is host UI state and is not serialized in the math document.</p>
+<p>Only pass trusted, well-formed saved documents to <code>defaultValue</code>. <code>parseFragment</code> validates clipboard fragments; use <code>parseMathDocument(json)</code> to validate persisted version-1 documents and reject duplicate IDs. Locale is host UI state and is not serialized in the math document.</p>
 <h2 id="source-maintenance">Source maintenance</h2>
 <p>Source, tests and CSS use the package Prettier configuration. <code>pnpm --filter @barocss/math-editor format:check</code> checks readability conventions. Toolbar presentation, output views, locale data and host Enter policy are separate modules; caret/IME invariants are documented at the event boundaries.</p>
 <h2 id="verification-and-next-steps">Verification and next steps</h2>
@@ -233,10 +251,54 @@ pnpm --filter @barocss/math-demo test:e2e
 <p>The demo consumes package exports from <code>dist</code>; rebuild the package before browser tests. Browser tests use Playwright Chromium and start port 5184 if needed. Actual OS Korean IME tests remain deferred at the user's request.</p>
 <ul>
 <li><a href="/docs/symbols.html">Symbol / English / Korean name table</a></li>
+<li><a href="/docs/latex-guide.html">LaTeX editing guide and upcoming notation</a></li>
 <li><a href="/docs/support.html">Supported formulas, templates and full symbol catalog</a></li>
 <li><a href="/docs/implementation.html">Implementation guide</a></li>
 <li><a href="/docs/validation.html">Validation evidence and limitations</a></li>
 <li><a href="/docs/roadmap.html">Roadmap and acceptance criteria</a></li>
 </ul>
-</article><nav class="adjacent" aria-label="Previous and next document"><span></span><a href="/docs/adapters.html"><small>Next</small>API & framework adapters →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#framework-specific-api-guides">Framework-specific API guides</a><a class="h2" href="#quick-start">Quick start</a><a class="h2" href="#suggestion-ordering">Suggestion ordering</a><a class="h2" href="#editing-flows">Editing flows</a><a class="h2" href="#keyboard-reference">Keyboard reference</a><a class="h2" href="#selection-and-clipboard-boundaries">Selection and clipboard boundaries</a><a class="h2" href="#model-and-package-boundaries">Model and package boundaries</a><a class="h2" href="#source-maintenance">Source maintenance</a><a class="h2" href="#verification-and-next-steps">Verification and next steps</a></nav></aside></div></body></html>
+<h2 id="latex-loading-020">LaTeX loading (0.2.0)</h2>
+<pre><code class="language-ts">import { parseLatex, createMathSession, initialState } from '@barocss/math-editor/core';
+
+const result = parseLatex(String.raw`\frac{a}{b} + x^2`);
+if (result.ok) {
+  const session = createMathSession({ document: result.document });
+  // For an existing session, apply(initialState(result.document)) replaces in one undo step.
+} else {
+  console.log(result.diagnostics); // Original UTF-16 positions; no partial document.
+}
+</code></pre>
+<p>The shared contract is <strong>editable structure ↔ exported LaTeX ↔ imported structure</strong>, within the <a href="/docs/latex-scope.html">documented limits</a>. It covers the current structure and symbol catalog, not arbitrary KaTeX input. Failed imports never modify a session. Framework adapters do not implement their own parsers. Use source editing as a fallback in hosts.</p>
+<p>During an existing edit, use <code>session.importLatex(source)</code> rather than resetting <code>defaultValue</code>: this preserves Undo/Redo and enforces inline policy. The rich React editor exposes <code>MathEditorHandle.importLatex</code> through <code>apiRef</code>; see <a href="/docs/api-react.html">React import</a> and <a href="/docs/api-session.html">shared session import</a>. Both paths use the same parser and fail without a partial update.</p>
+<p>Workspace presentation refinements include aligned script bases, lining numerals and background-only token focus. See <a href="/docs/implementation.html#editing-typography-and-focus-2026-09-08-workspace">implementation notes</a>, <a href="/docs/support.html">supported notation</a> and the <a href="/docs/roadmap.html#remaining-latex-priorities-workspace-review-2026-09-08">remaining LaTeX priorities</a>. These changes are included in 0.2.0.</p>
+<p>Workspace norm support: one editable body, shared double-bar fences, <code>norm</code>/<code>노름</code>/<code>||</code> suggestions, range wrapping and LaTeX import/export. The parser accepts short <code>\lVert…\rVert</code> and scalable double-bar aliases; export uses <code>\left\Vert…\right\Vert</code>. Available in 0.2.0.</p>
+<p>Workspace: added triple and contour integral structures (<code>\iiint</code>, <code>\oint</code>) with parser/export parity, localized suggestions, editable bounds/body and explicit <code>\limits</code>. KaTeX comparison informed contour-glyph rendering. Available in 0.2.0.</p>
+<p>Workspace: <code>\overbrace</code>/<code>\underbrace</code> support includes LaTeX parsing/export, localized suggestions, selection wrapping, editable annotation/body slots and scalable brace rendering. Available in 0.2.0.</p>
+<h2 id="compact-and-filtered-toolbars-workspace">Compact and filtered toolbars (workspace)</h2>
+<p>Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and <code>toolbarEnd</code> stay visible. Native toolbars contain structure buttons and history only and show a toggle when needed. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.</p>
+<pre><code class="language-tsx">&lt;MathEditor toolbar={['fraction', 'root', 'superscript', 'matrix']}
+  toolbarMaxItems={3} /&gt;
+</code></pre>
+<pre><code class="language-js">mountMathEditor(host, session, {
+  toolbar: ['fraction', 'root', 'norm'],
+  toolbarMaxItems: 2,
+});
+mountMathToolbar(toolbarHost, session, {
+  kinds: ['fraction', 'root', 'norm'],
+  maxItems: 2,
+});
+</code></pre>
+<p><code>toolbar: false</code> hides the toolbar. A structure array filters its structure buttons only: it does not disable those structures in suggestions, parsing or the model, and does not filter React's auxiliary template/symbol controls. <code>toolbarMaxItems</code> (independent toolbar: <code>maxItems</code>) is a nonnegative count; zero initially hides all structure buttons behind More. A sufficiently large count shows all selected structure buttons initially. Expanded state belongs to the mounted toolbar and is not saved in the math document. The rich React <code>toolbar</code> array and compact behavior are available in 0.2.0.</p>
+<p>Workspace: added <code>\tilde</code>, <code>\bar</code>, <code>\dot</code>, <code>\ddot</code>, <code>\widehat</code> and <code>\widetilde</code> with exact-command parsing/export, localized suggestions, one-slot wrapping and fixed/stretchy accent rendering. Available in 0.2.0.</p>
+<p>Workspace: <code>\limsup</code>/<code>\liminf</code> now have editable condition/body slots and localized suggestions. <code>\nolimits</code> is preserved as <code>limits: false</code> across parsing, JSON and export; existing <code>true</code> remains supported. Repeated placement directives are rejected. Available in 0.2.0.</p>
+<p>Workspace: fine spacing commands <code>\,</code>, <code>\:</code>, <code>\;</code> and <code>\!</code> now support parsing/export, localized suggestion insertion, zero-slot deletion/Undo and positive/negative layout. Available in 0.2.0.</p>
+<h3 id="embedded-editor-sizing">Embedded editor sizing</h3>
+<p>Set <code>--me-font-size</code> on the host (for example <code>18px</code>) to keep React token previews, their focused inputs and script sizes consistent. The default base is22px. The host owns document layout/scale; focusing a token does not alter its size.</p>
+<h3 id="explicit-fraction-sizes-workspace">Explicit fraction sizes (workspace)</h3>
+<p>Import or type the suggestions <code>dfrac</code>, <code>tfrac</code>, <code>dbinom</code>, and <code>tbinom</code> for display/text fraction and binomial presets. The editor preserves their size on export. See <a href="/docs/latex-guide.html">LaTeX guide</a>; available in 0.2.0.</p>
+<h3 id="math-alphabet-support-workspace">Math alphabet support (workspace)</h3>
+<p><code>\mathbf</code>, <code>\mathcal</code> and multi-letter <code>\mathbb</code> now support import, suggestions, range wrapping, editing and export. See <a href="/docs/latex-guide.html#mathematical-alphabets--020">alphabet scope and examples</a>. Available in 0.2.0.</p>
+<h3 id="labeled-arrows-workspace">Labeled arrows (workspace)</h3>
+<p><code>\xrightarrow[below]{above}</code> and <code>\xleftarrow[below]{above}</code> support parsing, suggestions, editable math labels and export. See <a href="/docs/latex-guide.html#labeled-arrows--020">label syntax and slot order</a>. Available in 0.2.0.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><span></span><a href="/docs/latex-guide.html"><small>Next</small>Writing & editing LaTeX →</a></nav><footer>Barocss Math Editor · 0.2.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#framework-specific-api-guides">Framework-specific API guides</a><a class="h2" href="#quick-start">Quick start</a><a class="h2" href="#suggestion-ordering">Suggestion ordering</a><a class="h2" href="#editing-flows">Editing flows</a><a class="h2" href="#keyboard-reference">Keyboard reference</a><a class="h2" href="#selection-and-clipboard-boundaries">Selection and clipboard boundaries</a><a class="h2" href="#model-and-package-boundaries">Model and package boundaries</a><a class="h2" href="#source-maintenance">Source maintenance</a><a class="h2" href="#verification-and-next-steps">Verification and next steps</a><a class="h2" href="#latex-loading-020">LaTeX loading (0.2.0)</a><a class="h2" href="#compact-and-filtered-toolbars-workspace">Compact and filtered toolbars (workspace)</a><a class="h3" href="#embedded-editor-sizing">Embedded editor sizing</a><a class="h3" href="#explicit-fraction-sizes-workspace">Explicit fraction sizes (workspace)</a><a class="h3" href="#math-alphabet-support-workspace">Math alphabet support (workspace)</a><a class="h3" href="#labeled-arrows-workspace">Labeled arrows (workspace)</a></nav></aside></div></body></html>

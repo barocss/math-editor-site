@@ -1,8 +1,10 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Testing &amp; validation · Barocss Math Editor</title><meta name="description" content="Testing &amp; validation for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Testing &amp; validation · Barocss Math Editor</title><meta name="description" content="Testing &amp; validation for Barocss Math Editor 0.2.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" aria-current="page">Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" aria-current="page">Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="validation-report">Validation report</h1>
+<h2 id="current-release-status--020">Current release status — 0.2.0</h2>
+<p>The dated entries below are historical verification records, not current release availability claims. Note inline editing is resolved according to the user; this release does not change or deploy Note. Math-editor release checks and site validation are recorded separately at the end of this document.</p>
 <p>Updated: 2026-09-07. Scope: independent math editor prototype, Korean/English UI, active-input rendering, model selection, wrapping and editable templates.</p>
 <p><strong>Result:</strong> 71 unit tests and 61 Chromium tests passed (132 total, no skipped tests). Package/demo builds and package/demo/browser-test type checks passed.</p>
 <h2 id="automated-coverage">Automated coverage</h2>
@@ -109,5 +111,169 @@
 <p>91 unit tests pass. New cases cover JSON-provided labels/details/aliases, matrix-family aliases, French regional fallback, shared localized slot paths, Japanese/Chinese/Arabic/Hindi/German queries, decomposed accents and template dimensions. Removed source-label conversion and formatting hooks are no longer part of the API.</p>
 <p>79 distinct Chromium scenarios pass across the full suite and the five-case locale-suite rerun. The full run passed 78 cases; the new empty-fraction test initially expected denominator focus instead of the intended numerator-first behavior. The corrected test verifies both localized slots via Tab and converts a decomposed French query to a symbol. An earlier adapter-example variable-name collision was also fixed before this run.</p>
 <p>Package/demo builds, package and browser-test type checks, formatting, and packed runtime/type/CSS exports pass. Built output is cleaned before compilation so removed modules cannot remain in the package. Language search fixtures are not complete translations or OS IME/RTL validation.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/implementation.html"><small>Previous</small>Implementation </a><a href="/docs/roadmap.html"><small>Next</small>Roadmap →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#automated-coverage">Automated coverage</a><a class="h2" href="#manual-in-app-checks">Manual in-app checks</a><a class="h2" href="#explicit-limits">Explicit limits</a><a class="h2" href="#integration-gates">Integration gates</a><a class="h2" href="#line-numbers-and-symbol-discovery">Line numbers and symbol discovery</a><a class="h2" href="#framework-neutral-integration--2026-09-07">Framework-neutral integration — 2026-09-07</a><a class="h2" href="#composition-source-readability-and-json-locales--2026-09-08">Composition, source readability and JSON locales — 2026-09-08</a><a class="h2" href="#english-message-keys-and-literal-symbol-ordering--2026-09-08">English message keys and literal-symbol ordering — 2026-09-08</a><a class="h2" href="#key-only-localization-and-external-language-discovery--2026-09-08">Key-only localization and external-language discovery — 2026-09-08</a></nav></aside></div></body></html>
+<h2 id="workspace-latex--note-trial--2026-09-08">Workspace LaTeX / Note trial — 2026-09-08</h2>
+<ul>
+<li>Math-editor unit suite: 230 tests pass, including 90 symbol entries, templates, all empty structures, six matrix environments, diagnostics/limits and persisted-document validation. One model parity test exercises all 169 pairs of nested structure kinds and compares trees with IDs/typographic minus normalized.</li>
+<li>Explicit demo import browser test passes: editable fraction, failed import preserves formula, locale switch preserves source.</li>
+<li>Note LaTeX command tests: 6 pass, including structure/source consistency, persistence/reopen, undo/redo, stale-data clearing and readonly rejection.</li>
+<li>Note Chromium browser checks: 5 pass across original LaTeX editing, caret/range behavior and new visual draft workflows. Covered cancel/apply, source fallback, save/reload/reopen, multiline matrices/cases and inline top-level line rejection.</li>
+<li>Package and demo type checks, demo browser-test type checks, Note and demo production builds pass. Full office-editor-ui type checking is still blocked by pre-existing errors in transitive workspace modules; changed math integration files reported no errors in that run.</li>
+<li>Native OS IME, Safari/Firefox, assistive technology and real product multi-user conflicts were not tested in this trial. No npm package was published.</li>
+</ul>
+<h2 id="latex-compatibility-completion-pass--2026-09-08">LaTeX compatibility completion pass — 2026-09-08</h2>
+<ul>
+<li>233 unit tests pass, including session import failure atomicity, recursive host-policy checks, alternate delimiter/blackboard spellings and comment-hidden wrapper errors.</li>
+<li>Adapter and LaTeX browser suite: 21 distinct scenarios verified (20 passed in the combined run; the React selector was narrowed and its test rerun). This includes seven session-based adapter import paths, plus rich React undo/redo and editing imported slots.</li>
+<li>Scope is the existing editable model, not all KaTeX syntax. Composite scripts, named functions, text groups, indexed roots and macros remain explicitly excluded.</li>
+<li>Note integration fixes are paused until this package contract is accepted; the reported Note inline-editing and popup-suggestion issues have not been fixed by this compatibility pass.</li>
+</ul>
+<h2 id="imported-latex-editing-regression--2026-09-08">Imported LaTeX editing regression — 2026-09-08</h2>
+<ul>
+<li>All 42 Chromium scenarios in <code>latex-editing.spec.ts</code> and <code>latex-import.spec.ts</code> pass in one run. Browser-test TypeScript checking also passes.</li>
+<li>Added 33 cases: rich React and native DOM editing of nested fractions/roots/scripts, three delimiter structures, sum/product/integral bounds and bodies, all six matrix environments, aligned/cases cells, gathered lines, and normalized command aliases. Each marked slot is changed through the real input, then undone, redone and undone again with LaTeX output assertions.</li>
+<li>Both renderers show suggestions inside an imported root and allow inserting and filling a nested fraction. Imported matrix row/column deletion shortcuts restore original contents with Undo.</li>
+<li>Existing import tests cover the seven session-based adapters, atomic failure, inline multiline rejection, and import history.</li>
+<li>Initial failures were test selectors: a focused React token has an input instead of a preview, and native text runs encompass multiple lexical tokens. Selectors now follow each renderer's actual representation. No editor implementation changes were needed for these scenarios.</li>
+<li>This is Chromium coverage of the supported import subset. It does not establish arbitrary LaTeX support, OS IME behavior, other browser engines, or resolve the paused Note integration issues.</li>
+</ul>
+<h2 id="combined-scripts-and-contextual-selection--2026-09-08">Combined scripts and contextual selection — 2026-09-08</h2>
+<ul>
+<li>236 unit tests pass. Added both script-order imports, shared-node export, duplicate-script rejection and completion/removal of the opposite script.</li>
+<li>All 56 Chromium cases across LaTeX editing, import and wrapping pass in one final run. Both renderers edit imported combined scripts and complete existing scripts using mouse-selected suggestions; geometry assertions verify a shared script column. Empty-side deletion and Undo preserve the other script.</li>
+<li>Drag selection wraps formulas through the contextual popup; the native toolbar-free inline surface also offers and applies these actions. Multi-line wrapping stays disabled.</li>
+<li>Package build, demo type checking and browser-test type checking pass. Tests place the caret through input editing rather than OS-dependent End behavior, which scrolled the page in the initial runs.</li>
+<li>JSON model, mapping and support docs describe the workspace addition. No package publish or Note integration fixes were performed.</li>
+</ul>
+<h2 id="selection-suggestions--2026-09-08">Selection suggestions — 2026-09-08</h2>
+<p>The contextual wrapping UI now uses the existing suggestion panel/list styling and listbox/option semantics instead of a separate toolbar. Mouse application, arrow-key selection and Enter application are covered; 48 Chromium cases in wrapping and LaTeX editing pass, along with package build and browser-test type checking. Native inline selection remains available without a toolbar. The previous standalone wrapping-panel styles were removed.</p>
+<h2 id="literal-text-and-functions--2026-09-08">Literal text and functions — 2026-09-08</h2>
+<ul>
+<li>239 unit tests pass, including all 19 named-function round trips, literal text escaping, mixed-math rejection, and function-script insertion with literal-slot protection.</li>
+<li>54 Chromium scenarios in LaTeX editing and wrapping pass. The two suggestion tests were then extended and rerun successfully to cover adding an exponent after a function suggestion in both renderers.</li>
+<li>Package build, demo and browser-test type checking pass. New English/Korean message keys and locale aliases use the existing registration mechanism. Matrix-prefix recommendation regression tests remain green.</li>
+<li>Literal text is not mixed TeX text/math or a text-styling engine. The published npm version remains unchanged.</li>
+</ul>
+<h2 id="sequential-typing-regression--2026-09-08">Sequential typing regression — 2026-09-08</h2>
+<ul>
+<li>Added real per-character keyboard tests for literal text, custom function names, ordinary math, suggestion acceptance, continued typing, middle insertion/deletion, and returning from text to math with Tab.</li>
+<li>Reproduced dropped typing after a model range selection in both renderers. Printable keys now replace the range and focus the resulting input. The sequential typing and wrapping suites pass all 21 cases after the fix; the replacement tests also check Undo restoration.</li>
+<li>Package build and browser-test type checking pass. This does not cover native OS IME composition.</li>
+</ul>
+<h2 id="indexed-roots--2026-09-08">Indexed roots — 2026-09-08</h2>
+<ul>
+<li>All 241 unit tests pass, including indexed-root round trips, empty/nested indices, host exclusions and preserving the radicand when removing an empty index. The catalog-driven nested-pair test now includes indexed roots.</li>
+<li>The broad browser run passed 65 cases. Two new deletion tests incorrectly moved the caret out of the index with ArrowRight; after selecting the index character directly, both pass. The targeted five-case suite also verifies imported-slot edits in both renderers and drag wrapping with Undo.</li>
+<li>Package and demo builds and browser-test type checking pass. Scope, model mapping, JSON slot order, usage guide and roadmap are updated. No npm release was made.</li>
+</ul>
+<h2 id="accents-and-reported-inequality--2026-09-08">Accents and reported inequality — 2026-09-08</h2>
+<ul>
+<li>248 unit tests pass, including accent bodies, nested wrappers, slanted relation symbols, the reported Cauchy–Schwarz expression, and comment/nesting handling for scripted parentheses.</li>
+<li>74 Chromium scenarios in LaTeX editing and wrapping pass. An additional regression loads the reported full inequality and edits its first lower script and the exponent of the complete final parenthesis.</li>
+<li>Package/demo builds and browser-test type checking pass. Updated the guide, scope, JSON/mapping tables, symbol reference and roadmap. No npm publish was performed.</li>
+</ul>
+<h3 id="binomial-operand-wrapping-and-function-spacing-workspace">Binomial, operand wrapping and function spacing (workspace)</h3>
+<ul>
+<li>253 unit tests pass, including nested binomial import/export, malformed arguments, exclusions, operand preservation and undo.</li>
+<li>React and native browser checks cover binomial slot editing, command typing, operand wrapping, continuation, deletion/undo and normal Enter behavior.</li>
+<li>Function-spacing regression types <code>ln</code>, attaches a subscript and edits the name to <code>log</code>. Passive boundary targets measure at most 4.5px; the name-to-subscript gap stays below 14px. Screenshots were inspected for both renderers.</li>
+<li>The final spacing regression run passed 33 browser tests covering functions, operand wrapping, sequential typing and existing range wrapping. Package build, browser-test type checking and demo build pass.</li>
+</ul>
+<h3 id="limits-and-function-colors-workspace">Limits and function colors (workspace)</h3>
+<p>261 unit tests pass. Browser validation covers LaTeX limit slot editing, per-character suggestion input, condition arrows, Tab navigation, wrapper deletion and Undo in both renderers. Function color checks cover the active name input and passive preview, including a subscripted operator. The combined browser run passed 69 tests. Package/demo builds and browser-test TypeScript checks pass.</p>
+<h3 id="imported-notation-and-scalable-delimiter-regression-workspace">Imported notation and scalable delimiter regression (workspace)</h3>
+<p>The three reported equations are regression fixtures: a quotient limit with <code>\quad</code> and Chinese text; a three-sum inequality with <code>\limits</code>; and the chain rule with <code>\rm</code>. Unit coverage includes command preservation, scoped roman normalization, rejected placement directives and zero-slot spacing insertion. Browser tests import and edit each equation in React/native, measure spacing widths, and exercise deletion/Undo. Structured parentheses are measured against the enclosed fraction height; matching editor screenshots are inspected.</p>
+<h3 id="fences-annotations-and-indexed-root-geometry-workspace">Fences, annotations and indexed-root geometry (workspace)</h3>
+<p>291 unit tests pass. Browser coverage verifies both renderers importing and editing braces, angles, mixed/invisible fences, overset and underset; annotation typing/navigation/deletion/Undo; and the indexed radical meeting the overbar at the same coordinate. The 105-case regression run had one incorrect expected test string for a multiline separator; after correcting the fixture, all 20 wrapping cases passed. The brace/angle symbol-query browser test also passes. The indexed-root screenshot was inspected.</p>
+<h2 id="latest-workspace-typography-and-discovery-checks--2026-09-08">Latest workspace typography and discovery checks — 2026-09-08</h2>
+<ul>
+<li>The last recorded unit run passed 327 tests, including catalog parsing/export and arrow suggestions. This documentation update does not constitute a new unit run.</li>
+<li>Chromium: chemical-layout (2), function-spacing (2), root-geometry (6) and similarity-glyph (2) passed across React/native. The glyph test was updated to the renamed font and rerun separately. Chemical geometry checks cover base/coefficient alignment, subscript gap/offset and editing the subscript.</li>
+<li>Absolute-focus (2) passed again after removing the focus halo, including visible delimiters and operand replacement. Screenshots were inspected for chemistry and borderless focus.</li>
+<li>Earlier focused runs covered arrow triggers (4), arrow search/typing/wrapping (22), integral bounds (4), double integrals (4), equation-only cases (2) and down-arrow chemistry (4). These are separate targeted runs, not one full-suite total.</li>
+<li>Package build passed after the typography changes. Safari, Firefox, Windows, native OS IME, screen-reader behavior and Note's reported inline/dialog issues remain unverified or open. No npm release was made.</li>
+</ul>
+<h2 id="editor-versus-katex-spacing-audit--2026-09-08">Editor versus KaTeX spacing audit — 2026-09-08</h2>
+<p>The <code>spacing-audit.spec.ts</code> Chromium audit imported seven expressions in the rich React demo, verified a KaTeX preview for each exported expression, and captured passive editor DOM beside that preview. The comparison board uses the existing editor styles and an 18px KaTeX container; font metrics differ, so it is a qualitative layout reference, not a pixel-equality test. The board and width measurements are saved in <code>apps/math-demo/artifacts/spacing-audit/</code>. Native rendering, inner-slot focus, long conditions and touch hit targets still need their own audit. No production spacing rules were changed in this audit.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Priority</th>
+<th>Observed difference</th>
+<th>Recommended adjustment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>pmatrix</code> sides look bracket-like; the cases brace lacks a clear central cusp</td>
+<td>Reuse the scalable physical fence shapes for grid delimiters before tuning whitespace</td>
+</tr>
+<tr>
+<td>1</td>
+<td>A nested fraction retains full-size inner text and becomes disproportionately tall</td>
+<td>Introduce a shared, bounded math-size scale for nested fractions/scripts; keep the input and its measuring twin identical</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Combined scripts have more upper/lower separation than the reference</td>
+<td>Tighten the script stack and remove slot line-box overhead; test nested scripts and active slots</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Matrix and cases rows have much more vertical space</td>
+<td>Reduce row gap/padding while retaining a usable empty-cell target; test tall cells separately</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Vector/hat/overline marks float above the letters</td>
+<td>Position each accent against its body rather than retaining one generous top gap</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Sum/product placement is reasonably close but bounds/body gaps remain generous</td>
+<td>Tune after script sizing; preserve separate integral and explicit-limits placement rules</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The tall nested fence is largely driven by the fraction/root contents</td>
+<td>Fix interior sizing first, then reassess delimiter width and body clearance</td>
+</tr>
+</tbody>
+</table></div><p>For all seven samples, focusing the first empty boundary increased the expression width by exactly 20px (4px passive to 24px active). This measures that boundary only, not arbitrary cursor positions. Evaluate an overlay hit area or a smaller active minimum so focusing does not push the entire formula sideways; do not reduce all empty slots globally.</p>
+<p>Suggested sequence: grid delimiter shapes → nested-size policy → combined scripts/fraction gaps → matrix rows and accents → boundary focus stability. Acceptance should include passive/active screenshots, empty and populated slots, nested content, pointer access, Tab navigation, typing and Undo in both renderers. KaTeX is a notation/layout reference, while editing still requires visible caret targets.</p>
+<h3 id="spacing-implementation-follow-up">Spacing implementation follow-up</h3>
+<p>Shared CSS refinements now address grid fence shapes, grid gaps, fraction/script line boxes, bounded nested fraction sizes, accent offsets and large-operator body gaps. The final import/edit and comparison run passed 80 Chromium cases across React/native; an earlier 11-case run covered chemistry, limits and root geometry. Demo build passed. The refreshed comparison is <code>comparison-after.png</code>. First-boundary focus expansion is now 8px instead of 20px in all seven samples. These checks do not establish complete TeX style parity or native OS IME/accessibility coverage.</p>
+<h3 id="norm-fences--2026-09-08">Norm fences — 2026-09-08</h3>
+<p>337 unit tests pass, including norm aliases/canonical round trips, failed-import state preservation, localized/punctuation discovery and range wrapping/Undo. Four Chromium tests pass across rich React/native: nested-fraction norm import, scalable bars, active-slot replacement/Undo, empty-body suggestion insertion and Tab continuation. Active/passive screenshots were compared with the KaTeX preview of the same exported nested fraction. Editing retains extra body clearance for caret targets. Package and demo builds pass; no npm publication was performed.</p>
+<h3 id="triple-and-contour-integrals--workspace">Triple and contour integrals — workspace</h3>
+<p>341 unit tests pass, including nested bodies, explicit limits preservation, localized discovery and failed-placement atomicity. The 95-case Chromium run covers rich React/native imported-slot editing, suggestion insertion, traversal, deletion/Undo and integral geometry. After KaTeX comparison, contour glyphs were changed from system U+222E to an integral stroke plus ring; the final eight-case bounds/edit run passed again. Package/demo builds pass. Broader browser and OS input coverage remains open; no npm release was made.</p>
+<h3 id="overunder-braces--workspace">Over/under braces — workspace</h3>
+<p>345 unit tests pass, including bare/annotated import, nested bodies, duplicate annotation rejection, discovery and range wrapping/Undo. In the broad Chromium run, 90 cases passed and an existing overline test encountered a page navigation during a concurrent package rebuild. After the build completed, all ten targeted brace/overline checks passed. Four nested brace import/edit checks also passed separately. Simple and nested brace screenshots were compared with KaTeX, including rich React/native active and passive states. Package/demo builds pass. This is workspace support, not a new npm release.</p>
+<p>Contour correction: the earlier synthetic-glyph approach was visually incorrect. Ten Chromium regressions now pass, including the reported <code>\oint_{20}^{20}{x}</code> in React/native, single-glyph count, absence of pseudo-element drawings, native font slant, side bounds and explicit limits. Screenshots were rechecked against KaTeX.</p>
+<p>Compact toolbar: two Chromium checks pass for rich React expand/collapse with preserved content/history and hidden-command typing, and native independent toolbar filtering with expansion preserved after insertion. A compact demo screenshot was inspected.</p>
+<h3 id="six-additional-accents--workspace">Six additional accents — workspace</h3>
+<p>351 unit tests pass. A 25-case Chromium run passes for rich React/native import/edit, suggestion insertion, content-preserving unwrapping/Undo and the KaTeX comparison board. The initial dot typing test selected the existing multiplication-symbol candidate; the corrected test explicitly chooses Dot accent, preserving symbol-first ranking. After final accent clearance tuning, the comparison board passed again and was visually inspected for simple and nested expressions. The image is saved as <code>apps/math-demo/artifacts/spacing-audit/accents-comparison.png</code>. Package/demo builds pass; no npm release was made.</p>
+<h3 id="limit-variants-and-explicit-side-placement--workspace">Limit variants and explicit side placement — workspace</h3>
+<p>362 unit tests pass, including all supported operators with <code>limits: false</code>, JSON validation, canonical round trips and localized limit-name discovery. Eleven Chromium cases pass for both renderers: condition/body editing, insertion, deletion/Undo and the KaTeX comparison board. Package/demo builds pass. The comparison is a visual reference rather than pixel parity: KaTeX 0.16.28's operatorname-based liminf preview showed a below-name condition for the explicit nolimits example, while the editor deliberately honors the stored side-placement directive. No placement metadata is discarded to match that preview. Broader browser checks and a direct placement toolbar switch remain open.</p>
+<p>Fine spacing: 366 unit tests pass. Nine Chromium checks pass across rich React/native for measured spacer widths, insertion, deletion/Undo, continued typing and a KaTeX comparison board. The negative gap preserves adjacent input access and has no painted hit box. Broader TeX glue/style semantics remain out of scope.</p>
+<p>Limit preview correction: the earlier liminf display mismatch is now resolved in the demo through rendering-only KaTeX macro definitions. Seven Chromium checks pass: both limit names with default/limits/nolimits MathML placement and a refreshed visual comparison. Saved JSON and canonical LaTeX remain unchanged. Hosts using KaTeX 0.16.28 can use the documented macro configuration.</p>
+<h2 id="explicit-size-validation--2026-09-08">Explicit size validation — 2026-09-08</h2>
+<ul>
+<li>Package build and 371 unit tests passed, including four size-command round trips, suggestion insertion and nested explicit styles.</li>
+<li>Chromium: 8 React/native imported-slot editing cases, 8 typed-preset cases and one KaTeX comparison audit passed. Typed cases assert active input size and final exported source.</li>
+<li>Compared explicit display/text sizes and nested sizes against KaTeX. The editor keeps its interaction spacing; it does not claim pixel-identical TeX layout. General style declarations remain unsupported.</li>
+<li>Reference image: <code>apps/math-demo/artifacts/spacing-audit/explicit-sizes.png</code>. Publication and wider browser/platform validation remain open.</li>
+</ul>
+<h2 id="math-alphabets--2026-09-08">Math alphabets — 2026-09-08</h2>
+<p>Package build and 376 unit tests passed. Thirteen Chromium checks passed: six typed-suggestion cases, six imported-slot editing/undo cases across React/native, and one KaTeX comparison audit including nested alphabets and a fraction with a script. Decorative alphabet claims are limited to Latin capitals. The comparison is in <code>apps/math-demo/artifacts/spacing-audit/math-alphabets.png</code>. Broader glyph coverage and cross-browser validation remain open.</p>
+<h2 id="labeled-arrows--2026-09-08">Labeled arrows — 2026-09-08</h2>
+<p>Package build and 381 unit tests passed, including label round trips, JSON validation and malformed optional-argument rejection. Nine Chromium checks passed: four typed/width-growth cases, four imported-label edit/undo cases across React/native, and one KaTeX comparison audit. The audit was repeated after fixing arrowhead width. See <code>apps/math-demo/artifacts/spacing-audit/labeled-arrows.png</code>. Other extensible arrows and wider browser testing remain open.</p>
+<h2 id="locale-correction-and-equation--2026-09-08">Locale correction and equation* — 2026-09-08</h2>
+<p>Package build and 388 unit tests passed. Built-in locale tests reject misplaced fields, check en/ko parity and verify referenced literal message keys. Four Chromium cases passed: both locales' nine recent suggestion labels and arrow slot labels, plus React/native equation* import/edit/undo. The native fixture uses separate structural slots to match its whole-run text editing model. A KaTeX audit also compared the imported fraction/root equation. Demo build passed. Numbered equations remain unsupported.</p>
+<h2 id="020-release-verification">0.2.0 release verification</h2>
+<ul>
+<li>Formatting, package type checking, 388 unit tests and all eight packed JavaScript entry points pass. Packed CSS, locale JSON and licensed math fonts are present.</li>
+<li>The 379-case Chromium suite was reviewed against the current UI. Stale assumptions about expanded toolbars, symbol counts, broad candidate-name matching, focus outlines and suggestion-versus-line shortcuts were updated. Corrected cases were rerun, including the full 20-case wrapping file.</li>
+<li>Production demo build and generated documentation page/anchor checks pass. This release covers math-editor only. Note inline editing is resolved per the user and other product deployment is outside scope.</li>
+</ul>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/implementation.html"><small>Previous</small>Implementation </a><a href="/docs/roadmap.html"><small>Next</small>Roadmap →</a></nav><footer>Barocss Math Editor · 0.2.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#current-release-status--020">Current release status — 0.2.0</a><a class="h2" href="#automated-coverage">Automated coverage</a><a class="h2" href="#manual-in-app-checks">Manual in-app checks</a><a class="h2" href="#explicit-limits">Explicit limits</a><a class="h2" href="#integration-gates">Integration gates</a><a class="h2" href="#line-numbers-and-symbol-discovery">Line numbers and symbol discovery</a><a class="h2" href="#framework-neutral-integration--2026-09-07">Framework-neutral integration — 2026-09-07</a><a class="h2" href="#composition-source-readability-and-json-locales--2026-09-08">Composition, source readability and JSON locales — 2026-09-08</a><a class="h2" href="#english-message-keys-and-literal-symbol-ordering--2026-09-08">English message keys and literal-symbol ordering — 2026-09-08</a><a class="h2" href="#key-only-localization-and-external-language-discovery--2026-09-08">Key-only localization and external-language discovery — 2026-09-08</a><a class="h2" href="#workspace-latex--note-trial--2026-09-08">Workspace LaTeX / Note trial — 2026-09-08</a><a class="h2" href="#latex-compatibility-completion-pass--2026-09-08">LaTeX compatibility completion pass — 2026-09-08</a><a class="h2" href="#imported-latex-editing-regression--2026-09-08">Imported LaTeX editing regression — 2026-09-08</a><a class="h2" href="#combined-scripts-and-contextual-selection--2026-09-08">Combined scripts and contextual selection — 2026-09-08</a><a class="h2" href="#selection-suggestions--2026-09-08">Selection suggestions — 2026-09-08</a><a class="h2" href="#literal-text-and-functions--2026-09-08">Literal text and functions — 2026-09-08</a><a class="h2" href="#sequential-typing-regression--2026-09-08">Sequential typing regression — 2026-09-08</a><a class="h2" href="#indexed-roots--2026-09-08">Indexed roots — 2026-09-08</a><a class="h2" href="#accents-and-reported-inequality--2026-09-08">Accents and reported inequality — 2026-09-08</a><a class="h3" href="#binomial-operand-wrapping-and-function-spacing-workspace">Binomial, operand wrapping and function spacing (workspace)</a><a class="h3" href="#limits-and-function-colors-workspace">Limits and function colors (workspace)</a><a class="h3" href="#imported-notation-and-scalable-delimiter-regression-workspace">Imported notation and scalable delimiter regression (workspace)</a><a class="h3" href="#fences-annotations-and-indexed-root-geometry-workspace">Fences, annotations and indexed-root geometry (workspace)</a><a class="h2" href="#latest-workspace-typography-and-discovery-checks--2026-09-08">Latest workspace typography and discovery checks — 2026-09-08</a><a class="h2" href="#editor-versus-katex-spacing-audit--2026-09-08">Editor versus KaTeX spacing audit — 2026-09-08</a><a class="h3" href="#spacing-implementation-follow-up">Spacing implementation follow-up</a><a class="h3" href="#norm-fences--2026-09-08">Norm fences — 2026-09-08</a><a class="h3" href="#triple-and-contour-integrals--workspace">Triple and contour integrals — workspace</a><a class="h3" href="#overunder-braces--workspace">Over/under braces — workspace</a><a class="h3" href="#six-additional-accents--workspace">Six additional accents — workspace</a><a class="h3" href="#limit-variants-and-explicit-side-placement--workspace">Limit variants and explicit side placement — workspace</a><a class="h2" href="#explicit-size-validation--2026-09-08">Explicit size validation — 2026-09-08</a><a class="h2" href="#math-alphabets--2026-09-08">Math alphabets — 2026-09-08</a><a class="h2" href="#labeled-arrows--2026-09-08">Labeled arrows — 2026-09-08</a><a class="h2" href="#locale-correction-and-equation--2026-09-08">Locale correction and equation* — 2026-09-08</a><a class="h2" href="#020-release-verification">0.2.0 release verification</a></nav></aside></div></body></html>

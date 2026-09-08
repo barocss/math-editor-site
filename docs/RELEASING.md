@@ -20,7 +20,7 @@ Before releasing UI changes, also run `pnpm --filter @barocss/math-demo test:e2e
 
 1. Run `pnpm changeset`, select only `@barocss/math-editor`, and write a user-facing change summary.
 2. Use patch for compatible fixes and minor for features. During 0.x development, clearly identify breaking API changes in a minor release. Reserve 1.0.0 for the agreed stable API.
-3. Run `pnpm version:math`. It checks the Changesets release plan and refuses changes affecting other packages before running version/changelog generation.
+3. Run `pnpm version:math`. It runs Changesets in a temporary math-only workspace and copies back only this package manifest/changelog, preventing dependent product version bumps. The consumed changeset summary is retained in CHANGELOG.md.
 4. Review and commit the version/changelog and any dependency/lockfile changes with the implementation. Run release validation, then publish locally.
 5. Record a package-specific Git tag such as `math-editor-v0.1.1` on the release commit, and update the site with the matching package version.
 

@@ -1,6 +1,6 @@
 # Session and native DOM API reference
 
-This reference applies to pure JavaScript, `MathEditorSurface`, Web Component, Vue, Svelte and Solid native integrations in npm 0.1.0. Rich React `MathEditor` owns separate history and has its own [props](API-REACT.md).
+This reference applies to pure JavaScript, `MathEditorSurface`, Web Component, Vue, Svelte and Solid native integrations in 0.2.0. Rich React `MathEditor` owns separate history and has its own [props](API-REACT.md).
 
 ## Imports
 
@@ -146,3 +146,18 @@ The host owns validation because it knows supported structures, size limits and 
 - Native and rich React editing UX differ; see [the parity table](ADAPTERS.md#current-renderer-parity).
 - One session is not a concurrent multi-user collaboration engine.
 - Host UI, permissions, persistence, clipboard environment restrictions and SSR boundaries remain the integrator's responsibility.
+
+
+## LaTeX import (0.2.0)
+
+```ts
+const result = session.importLatex(String.raw`\frac{a}{b}`);
+if (!result.ok) {
+  // No mutation or subscription notification. Retain the caller's source.
+  console.log(result.diagnostics);
+}
+```
+
+This operation replaces the current formula in one undo step; redo restores the imported formula. Inline sessions reject multiple top-level lines before modifying state. All framework adapters using a session share this API; Web Components expose it as `element.session.importLatex(source)`.
+
+For state-independent inspection, use `parseLatex(source, { multiline?, excludedStructures? })` from `/core`. For opening a different saved document, validate JSON with `parseMathDocument` and call `session.load`. Loading deliberately resets history, importing does not. See [the exact syntax contract](LATEX-SCOPE.md); arbitrary LaTeX macros are not supported. These APIs are available in 0.2.0.

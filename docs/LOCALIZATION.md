@@ -61,7 +61,7 @@ The complete configuration is `messages`, optional `aliases`, and optional `dire
 
 - Search accepts the localized label, locale-pack aliases and existing English/Korean catalog aliases.
 - Symbol triggers such as `/`, `^`, `E/` and `->` are language-independent. Matching literal symbols appear before structures.
-- Word matching is case-insensitive prefix matching on the trailing word, optionally preceded by `\`. Unicode letters and combining marks are accepted; NFC normalization handles composed/decomposed accents without changing replacement offsets.
+- Word matching is case-insensitive substring matching on the trailing word, optionally preceded by `\`. Unicode letters and combining marks are accepted; NFC normalization handles composed/decomposed accents without changing replacement offsets.
 - Supply single-word aliases for multiword names. Space-separated phrases, transliteration, fuzzy matching, accent removal and language-specific word segmentation are not implemented.
 - Symbol-browser search also includes translated names, aliases, glyphs and LaTeX spellings. It uses substring matching.
 
@@ -95,3 +95,9 @@ Raw built-in packs are exported as `@barocss/math-editor/locales/en.json` and `/
 Compare its message keys and placeholder names against English. Exercise translated labels and aliases for a literal symbol, a structure, a matrix size and a template. Check nested slot names, language switching without data loss, and missing-message fallback. For a complete release, also review wording with a fluent speaker and test keyboard, screen-reader and relevant IME/RTL behavior in target browsers.
 
 See [VALIDATION.md](./VALIDATION.md) for current test coverage and [ROADMAP.md](./ROADMAP.md) for remaining renderer and accessibility work.
+
+Exact alias spellings rank first, then exact localized labels, case-insensitive exact matches, prefixes and interior matches. This preserves LaTeX case distinctions such as `downarrow` / `Downarrow`. Symbolic triggers retain their existing priority; numeric operands do not search dimension labels. Localized aliases participate in the same matching rules. Use `화살표` or `arrow` for the arrow family, and `평형` for equilibrium arrows.
+
+## Built-in pack validation
+
+All translation strings belong under `messages`, including `structure.*` and `slot.*`. Top-level fields are only `messages`, `aliases`, and `direction`. The locale build rejects misplaced fields. Tests check en/ko key parity, nonempty values and literal catalog/UI keys referenced by library source. Browser checks cover recent alphabet, explicit-size and labeled-arrow suggestions plus upper/lower slot labels in both languages. Custom packs can still be partial and use the documented English fallback.

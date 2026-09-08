@@ -1,8 +1,10 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Implementation · Barocss Math Editor</title><meta name="description" content="Implementation for Barocss Math Editor 0.1.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Implementation · Barocss Math Editor</title><meta name="description" content="Implementation for Barocss Math Editor 0.2.0."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.1.0</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a></section><section><h2>Project</h2><a href="/docs/implementation.html" aria-current="page">Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.0</small></span><a href="/#playground">Try the editor ↗</a></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" aria-current="page">Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="implementation-guide">Implementation guide</h1>
+<p>See the <a href="/docs/json-model.html">JSON model specification</a> for required fields, exact slot order, invariants and persistence limits.</p>
+<p>See <a href="/docs/latex-model.html">LaTeX → JSON model mapping</a> for node types, slot order and complete conversion examples.</p>
 <h2 id="ownership-and-data-flow">Ownership and data flow</h2>
 <p>The host owns document persistence, placement and outer focus. <code>MathEditor</code> owns an editing session, its caret, composition draft, model range and up to 100 previous history states. Do not record each internal change into a second host undo stack without a session adapter.</p>
 <p>A typical edit follows:</p>
@@ -112,7 +114,7 @@
 <p><code>MathRange</code> has anchor/focus points identified by logical text ID and UTF-16 offset. <code>resolveRange</code> orders them in document traversal order and finds the deepest shared row. Endpoints in different slots expand to a balanced common structure; endpoints on different document lines produce multiple row slices.</p>
 <p>Pointer hit testing uses token rectangles and mirror text ranges. A drag inside the current input stays native until it leaves that field. A model selection suppresses the active input. Partial token marks reflect the actual selected substring.</p>
 <p><code>wrapRange</code> accepts one selected row and one of the supported wrapper kinds. It copies that balanced fragment into the new structure and replaces the range through <code>pasteFragment</code>. Fraction/power/subscript operations focus their empty second slot. Other wrappers leave the caret after the inserted structure. Power bases receive parentheses unless they are a simple name/number or an already grouped structure. This rule is not a precedence parser and does not infer algebraic equivalence.</p>
-<p>The UI disables unsupported structural insertion while a model range is selected. Template insertion explicitly replaces the selection. Contextual wrap tools appear below the surface so their appearance does not move the expression during a drag.</p>
+<p>The UI disables unsupported structural insertion while a model range is selected. Template insertion explicitly replaces the selection. Selection actions use the regular portaled suggestion list beside the selected range. Printable keyboard input replaces a model selection and focuses the resulting input.</p>
 <h2 id="clipboard-boundary">Clipboard boundary</h2>
 <p>Copies write a versioned <code>MathFragment</code> and plain-text LaTeX. <code>parseFragment</code> rejects oversized payloads (&gt;200,000 characters), too many nodes (&gt;10,000), excessive nesting (&gt;40), more than 200 rows, invalid slot arities and invalid grid geometry. Valid insertion creates fresh IDs and preserves the destination prefix/suffix. Malformed custom data falls back to plain text when available.</p>
 <p>External text is literal input, not executable HTML and not parsed LaTeX. Newlines produce top-level rows; a multiline insertion in a nested slot is rejected. Whole saved documents still require a future validator and version-migration policy.</p>
@@ -136,5 +138,173 @@
 <h2 id="composition-refactor--2026-09-08">Composition refactor — 2026-09-08</h2>
 <p>The math package and demo source/CSS are consistently formatted. The React toolbar and native toolbar were extracted without moving caret/history ownership. Comments explain composition identity, publication/save notifications and structural clipboard boundaries. Formatting is intentionally separate from changing the selection algorithms: the two renderer implementations are still present.</p>
 <p>Output views subscribe to one session and skip caret-only redraws. Host completion is explicit (<code>onCommit</code>, <code>onCancel</code>, <code>onExit</code>) and independent of the single-top-level-line model policy. Popup drafts apply through a transaction, not a history-resetting load. See <a href="/docs/embedding.html">Embedding</a> for the layouts, product-specific data mismatches and the next integration gates.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/latex-scope.html"><small>Previous</small>LaTeX support </a><a href="/docs/validation.html"><small>Next</small>Testing & validation →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#ownership-and-data-flow">Ownership and data flow</a><a class="h2" href="#source-map">Source map</a><a class="h2" href="#presentation-tree-invariants">Presentation tree invariants</a><a class="h2" href="#active-input-rendering-and-composition">Active-input rendering and composition</a><a class="h2" href="#ranges-and-transformations">Ranges and transformations</a><a class="h2" href="#clipboard-boundary">Clipboard boundary</a><a class="h2" href="#localization">Localization</a><a class="h2" href="#adding-a-symbol-template-or-structure">Adding a symbol, template or structure</a><a class="h2" href="#integration-and-testing">Integration and testing</a><a class="h2" href="#line-gutter-and-symbol-discovery">Line gutter and symbol discovery</a><a class="h2" href="#framework-neutral-integration-layer-2026-09-07">Framework-neutral integration layer (2026-09-07)</a><a class="h2" href="#composition-refactor--2026-09-08">Composition refactor — 2026-09-08</a></nav></aside></div></body></html>
+<h3 id="workspace-binomial-and-operand-suggestions">Workspace: binomial and operand suggestions</h3>
+<p><code>binomial</code> has exactly two slots, upper then lower, and serializes as <code>\binom{n}{k}</code>. It shares validation, wrapping, navigation and undo with other structures. Operand suggestions carry <code>wrapOperand: true</code>, so acceptance preserves the query as a selected operand instead of deleting it. Both React and native DOM use the same acceptance function. In operand-only menus, bare Enter retains normal behavior until an arrow key selects an action.</p>
+<h3 id="workspace-limits-and-function-colors">Workspace: limits and function colors</h3>
+<p><code>limit</code> stores <code>[condition, body]</code> and exports <code>\lim_{condition}{body}</code>. Parsing accepts an optional lower condition and one body atom; missing slots stay editable. Repeated lower conditions and upper-limit syntax fail atomically. The React and native renderers stack the condition beneath the <code>lim</code> glyph, then render the body alongside it. Function names and <code>lim</code> use <code>--me-function</code> (default <code>#087b78</code>); nested slot tokens keep their own semantic colors.</p>
+<h3 id="workspace-imported-notation-compatibility">Workspace: imported notation compatibility</h3>
+<ul>
+<li>Implemented <code>quad</code>/<code>qquad</code> as zero-slot spacing nodes, including suggestion insertion and deletion/Undo.</li>
+<li>Preserved explicit <code>limits: true</code> on sum/product/integral/limit nodes through import/export.</li>
+<li>Implemented one-slot <code>roman</code> groups: scoped <code>\rm</code> declarations normalize to <code>\mathrm{…}</code>. Parsing restores the enclosing expression boundary after nested groups.</li>
+<li>Regression fixtures include the reported quotient limit with Chinese text, the three-sum inequality and the chain-rule derivative.</li>
+</ul>
+<h3 id="workspace-fences-annotations-and-indexed-root-rendering">Workspace: fences, annotations and indexed-root rendering</h3>
+<p>Added curly/angle fences, open-closed and closed-open interval presets, generic fences with independent ends, and annotation/body nodes for overset/underset. Both renderers share the physical delimiter definitions. Selection wrapping retains the original expression and focuses the annotation when appropriate. Indexed roots now draw a radical that meets the overbar at the same coordinate, with the index overlapping its shoulder.</p>
+<h2 id="editing-typography-and-focus-2026-09-08-workspace">Editing typography and focus: 2026-09-08 (workspace)</h2>
+<p>Active token inputs use a tinted background and caret without an outline or outer halo. Forced-colors mode retains its system focus outline. Toolbar, suggestion and surface keyboard-focus indicators keep their own rules. This changes presentation only; selection, clipboard and JSON/LaTeX output are unchanged.</p>
+<p>Single-script slots use inline flex layout to avoid an extra line-box descent below the base. Passive boundary targets within script bases are 1px wide and expand when focused; text and single-script wrappers omit extra side margins. This aligns coefficients with the base and brings subscripts closer without removing editable caret positions.</p>
+<p>The stylesheet bundles the MIT-licensed KaTeX Main font as <code>Barocss Math Glyphs</code>, scoped to ASCII digits and U+223C. Digits have consistent lining heights, and the similarity sign stays distinct from infinity. Other glyphs retain their existing font fallback. Consumers must ship the stylesheet's relative font asset and license.</p>
+<h3 id="workspace-spacing-refinement">Workspace spacing refinement</h3>
+<p>Grid fences reuse the scalable parenthesis/brace masks. Grid gaps are 4px vertically and 12px horizontally with 3px/5px padding. Fraction/script/accent slots use flex boxes to avoid extra text-line descent. Nested fraction text is bounded at 16px and then 12px; this is a conservative local rule, not a complete TeX display/text/script style engine. Combined scripts keep 16px text with tighter line height. Active structural boundaries now use a 12px minimum; real empty slots retain their existing larger targets. Accent offsets and large-operator body spacing are reduced. These shared CSS rules apply to rich React and native DOM.</p>
+<h2 id="required-visual-check-for-notation-changes">Required visual check for notation changes</h2>
+<p>For every new mathematical feature or LaTeX syntax extension, compare the editor with KaTeX rendering of the same exported expression before completion. Check both rich React and native DOM, passive and active inputs, empty and populated slots, and representative nesting. Review delimiter/glyph shapes, baselines, script sizes, accent and limit placement, spacing, clipping and focus-induced movement. Adjust the editor as part of the feature, not as deferred visual polish. Preserve usable caret targets and document deliberate differences from KaTeX. KaTeX is a visual reference, not a parser-support contract or a pixel-equality requirement. Save comparison evidence and verify typing, navigation, deletion and Undo after layout changes.</p>
+<p>Workspace norm support: one editable body, shared double-bar fences, <code>norm</code>/<code>노름</code>/<code>||</code> suggestions, range wrapping and LaTeX import/export. The parser accepts short <code>\lVert…\rVert</code> and scalable double-bar aliases; export uses <code>\left\Vert…\right\Vert</code>. Available in 0.2.0.</p>
+<h2 id="triple-and-contour-integrals-workspace">Triple and contour integrals (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Input</th>
+<th>Model</th>
+<th>Slots / behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\iiint_a^b{f}</code></td>
+<td><code>tripleIntegral</code></td>
+<td><code>[lower, upper, body]</code></td>
+</tr>
+<tr>
+<td><code>\oint_C{f}</code></td>
+<td><code>contourIntegral</code></td>
+<td><code>[lower, upper, body]</code>; absent upper stays empty</td>
+</tr>
+</tbody>
+</table></div><p>Search <code>iiint</code> / <code>삼중적분</code> / <code>∭</code>, or <code>oint</code> / <code>폐곡선적분</code> / <code>∮</code>. Tab visits lower, upper and body. Backspace after the structure unwraps its contents; Undo restores it. Both accept and preserve <code>\limits</code> for stacked bounds; default editing places bounds alongside the slanted glyph. Unbraced input consumes one body atom, as for existing integrals. <code>\nolimits</code> is supported in the current workspace. These are editable notation, not integration or path analysis. Contour glyphs use the bundled KaTeX Size2-Regular U+222E directly, with its native ring and slant. No pseudo-element strokes are added.</p>
+<h2 id="brace-annotations-workspace">Brace annotations (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Input</th>
+<th>Model</th>
+<th>Slots</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\overbrace{a+b}^{n}</code></td>
+<td><code>overbrace</code></td>
+<td><code>[annotation, body]</code></td>
+</tr>
+<tr>
+<td><code>\underbrace{a+b}_{n}</code></td>
+<td><code>underbrace</code></td>
+<td><code>[annotation, body]</code></td>
+</tr>
+</tbody>
+</table></div><p>Type <code>overbrace</code> / <code>위중괄호</code> or <code>underbrace</code> / <code>아래중괄호</code>. The annotation is edited first; Tab moves into the body. Wrapping a selection preserves it in the body and focuses the empty annotation. Both slots allow nested math. The brace stretches across the body/annotation container. Backspace immediately after the structure unwraps its contents; Undo restores the structure.</p>
+<p>The parser accepts a bare brace body and creates an empty annotation. Export always includes the corresponding <code>^{…}</code> or <code>_{…}</code>, including an empty annotation. Repeated annotation markers fail. An opposite-side script is handled as an outer ordinary script, not a second brace annotation. Slot order is annotation then body even for underbraces; this matches overset/underset. This workspace addition retains document version 1; older consumers must reject unknown structure kinds during validation.</p>
+<h2 id="compact-and-filtered-toolbars-workspace">Compact and filtered toolbars (workspace)</h2>
+<p>Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and <code>toolbarEnd</code> stay visible. Native toolbars contain structure buttons and history only and show a toggle when needed. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.</p>
+<pre><code class="language-tsx">&lt;MathEditor toolbar={['fraction', 'root', 'superscript', 'matrix']}
+  toolbarMaxItems={3} /&gt;
+</code></pre>
+<pre><code class="language-js">mountMathEditor(host, session, {
+  toolbar: ['fraction', 'root', 'norm'],
+  toolbarMaxItems: 2,
+});
+mountMathToolbar(toolbarHost, session, {
+  kinds: ['fraction', 'root', 'norm'],
+  maxItems: 2,
+});
+</code></pre>
+<p><code>toolbar: false</code> hides the toolbar. A structure array filters its structure buttons only: it does not disable those structures in suggestions, parsing or the model, and does not filter React's auxiliary template/symbol controls. <code>toolbarMaxItems</code> (independent toolbar: <code>maxItems</code>) is a nonnegative count; zero initially hides all structure buttons behind More. A sufficiently large count shows all selected structure buttons initially. Expanded state belongs to the mounted toolbar and is not saved in the math document. The rich React <code>toolbar</code> array and compact behavior are available in 0.2.0.</p>
+<h2 id="additional-accents-workspace">Additional accents (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Syntax</th>
+<th>Model / appearance</th>
+<th>Search</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\tilde{x}</code></td>
+<td><code>tilde</code>, fixed-width centered wave</td>
+<td><code>tilde</code>, <code>물결악센트</code></td>
+</tr>
+<tr>
+<td><code>\bar{x}</code></td>
+<td><code>bar</code>, short centered line</td>
+<td><code>bar</code>, <code>짧은윗줄</code></td>
+</tr>
+<tr>
+<td><code>\dot{x}</code></td>
+<td><code>dot</code>, one centered dot</td>
+<td><code>dot</code>, <code>위점</code></td>
+</tr>
+<tr>
+<td><code>\ddot{x}</code></td>
+<td><code>ddot</code>, two dots</td>
+<td><code>ddot</code>, <code>두점</code></td>
+</tr>
+<tr>
+<td><code>\widehat{AB}</code></td>
+<td><code>widehat</code>, body-width hat</td>
+<td><code>widehat</code>, <code>넓은모자</code></td>
+</tr>
+<tr>
+<td><code>\widetilde{AB}</code></td>
+<td><code>widetilde</code>, body-width wave</td>
+<td><code>widetilde</code>, <code>넓은물결</code></td>
+</tr>
+</tbody>
+</table></div><p>Each is a structure with a unique <code>id</code> and exactly one MathRow in <code>slots: [body]</code>. Empty and nested bodies are supported, including scripts and fractions. Import preserves the command spelling; export emits the same command with a braced body. Selection wrapping retains the original expression. Tab continues outside; Backspace after the wrapper preserves its body, and Undo restores it. <code>dot</code> can also match a multiplication symbol: choose Dot accent explicitly or search <code>위점</code>. <code>bar</code> remains distinct from the existing body-width <code>overline</code>. These additions are in 0.2.0 and do not evaluate derivatives or estimates.</p>
+<h2 id="limit-variants-and-placement-workspace">Limit variants and placement (workspace)</h2>
+<p><code>\limsup_{n}{x}</code> and <code>\liminf_{n}{x}</code> use <code>limsup</code> / <code>liminf</code> structures with exactly <code>[condition, body]</code> rows. Search <code>limsup</code> / <code>상극한</code> or <code>liminf</code> / <code>하극한</code>; Tab moves from condition to body. They do not evaluate sequence limits.</p>
+<p>All limit-family, sum/product and integral nodes accept a single <code>\limits</code> or <code>\nolimits</code> immediately after the command, before scripts. The optional <code>limits</code> field is now boolean: omitted means default, <code>true</code> is stacked placement, <code>false</code> is side placement. Both explicit values survive JSON validation, copying and LaTeX export. Repeated/conflicting directives are rejected. Existing <code>limits: true</code> remains valid; older package builds do not accept <code>false</code> or the new limit kinds.</p>
+<p>Placement is currently selected through imported LaTeX/model metadata, not a dedicated toolbar switch. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.</p>
+<h2 id="fine-mathematical-spacing-workspace">Fine mathematical spacing (workspace)</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>LaTeX</th>
+<th>Node type</th>
+<th>Width</th>
+<th>Suggestion search</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\,</code></td>
+<td><code>thinSpace</code></td>
+<td>3mu / 1⁄6em</td>
+<td><code>thinspace</code>, <code>얇은간격</code></td>
+</tr>
+<tr>
+<td><code>\:</code></td>
+<td><code>mediumSpace</code></td>
+<td>4mu / 2⁄9em</td>
+<td><code>mediumspace</code>, <code>중간간격</code></td>
+</tr>
+<tr>
+<td><code>\;</code></td>
+<td><code>thickSpace</code></td>
+<td>5mu / 5⁄18em</td>
+<td><code>thickspace</code>, <code>두꺼운간격</code></td>
+</tr>
+<tr>
+<td><code>\!</code></td>
+<td><code>negativeThinSpace</code></td>
+<td>−3mu / −1⁄6em</td>
+<td><code>negativethinspace</code>, <code>간격줄이기</code></td>
+</tr>
+</tbody>
+</table></div><p>All four nodes have a unique ID and <code>slots: []</code>, like quad/qquad. Import/export preserve the exact command; ordinary source whitespace is still normalized. Insertion resumes immediately after the spacer. Backspace removes it and Undo restores it. Negative spacing uses a zero-width node with negative inline-end margin, not an overlay that intercepts pointer input. Click the adjoining text to edit; the spacer has no text slot. Plain punctuation remains literal and is not a spacing trigger.</p>
+<p>Editor dimensions scale in script/limit slots. These are explicit gaps added to the editor's own token clearance, not a complete TeX math-glue or script-style suppression engine. Arbitrary dimensions (<code>\hspace</code>, <code>\kern</code>) and rubber-glue stretch/shrink remain unsupported. This is 0.2.0 functionality.</p>
+<h2 id="explicit-fractionbinomial-sizes">Explicit fraction/binomial sizes</h2>
+<p>Reuse the existing two-slot structures with optional <code>mathStyle: 'display' | 'text'</code>. Validate metadata only on those two kinds, preserve it during model cloning, and choose the matching command at export. Suggestion presets carry <code>mathStyle</code> into insertion without duplicating toolbar structure kinds. React and DOM expose <code>data-math-style</code>; scoped size variables allow a nested explicit style to override its parent. Keep active inputs and passive tokens at the same size. General TeX style declarations are outside this implementation.</p>
+<h2 id="scoped-math-alphabets">Scoped math alphabets</h2>
+<p><code>bold</code>, <code>calligraphic</code> and <code>blackboard</code> are one-slot structures validated by the document/clipboard codec. Both renderers use their generic structure path. Scoped CSS font variables keep inner alphabet choices independent of outer ones and leave structural glyphs unchanged. KaTeX font files live under <code>src/fonts</code> alongside their license. The parser retains the earlier five single number-set aliases to avoid changing stored symbol semantics.</p>
+<h2 id="labeled-arrows">Labeled arrows</h2>
+<p>The <code>xrightarrow</code> and <code>xleftarrow</code> structures have two slots in upper/lower order. Parse the optional lower bracket before the required upper argument, then store in model order. Render the generic slots in three CSS grid rows, with a pseudo-element shaft and a fixed-size head in the middle row. Labels drive grid width; the decoration cannot intercept pointer events. These commands are inserted through the shared catalog and do not require a separate dialog.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/latex-model.html"><small>Previous</small>LaTeX → JSON model </a><a href="/docs/validation.html"><small>Next</small>Testing & validation →</a></nav><footer>Barocss Math Editor · 0.2.0 · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#ownership-and-data-flow">Ownership and data flow</a><a class="h2" href="#source-map">Source map</a><a class="h2" href="#presentation-tree-invariants">Presentation tree invariants</a><a class="h2" href="#active-input-rendering-and-composition">Active-input rendering and composition</a><a class="h2" href="#ranges-and-transformations">Ranges and transformations</a><a class="h2" href="#clipboard-boundary">Clipboard boundary</a><a class="h2" href="#localization">Localization</a><a class="h2" href="#adding-a-symbol-template-or-structure">Adding a symbol, template or structure</a><a class="h2" href="#integration-and-testing">Integration and testing</a><a class="h2" href="#line-gutter-and-symbol-discovery">Line gutter and symbol discovery</a><a class="h2" href="#framework-neutral-integration-layer-2026-09-07">Framework-neutral integration layer (2026-09-07)</a><a class="h2" href="#composition-refactor--2026-09-08">Composition refactor — 2026-09-08</a><a class="h3" href="#workspace-binomial-and-operand-suggestions">Workspace: binomial and operand suggestions</a><a class="h3" href="#workspace-limits-and-function-colors">Workspace: limits and function colors</a><a class="h3" href="#workspace-imported-notation-compatibility">Workspace: imported notation compatibility</a><a class="h3" href="#workspace-fences-annotations-and-indexed-root-rendering">Workspace: fences, annotations and indexed-root rendering</a><a class="h2" href="#editing-typography-and-focus-2026-09-08-workspace">Editing typography and focus: 2026-09-08 (workspace)</a><a class="h3" href="#workspace-spacing-refinement">Workspace spacing refinement</a><a class="h2" href="#required-visual-check-for-notation-changes">Required visual check for notation changes</a><a class="h2" href="#triple-and-contour-integrals-workspace">Triple and contour integrals (workspace)</a><a class="h2" href="#brace-annotations-workspace">Brace annotations (workspace)</a><a class="h2" href="#compact-and-filtered-toolbars-workspace">Compact and filtered toolbars (workspace)</a><a class="h2" href="#additional-accents-workspace">Additional accents (workspace)</a><a class="h2" href="#limit-variants-and-placement-workspace">Limit variants and placement (workspace)</a><a class="h2" href="#fine-mathematical-spacing-workspace">Fine mathematical spacing (workspace)</a><a class="h2" href="#explicit-fractionbinomial-sizes">Explicit fraction/binomial sizes</a><a class="h2" href="#scoped-math-alphabets">Scoped math alphabets</a><a class="h2" href="#labeled-arrows">Labeled arrows</a></nav></aside></div></body></html>

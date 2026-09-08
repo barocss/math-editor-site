@@ -93,3 +93,10 @@ The layout lab demonstrates the interaction contracts; it is not installation in
 Open `/layouts.html` in the math demo. Toggle each optional surface, edit the independent inline example, press Enter to create another host block, and open/cancel/apply the popup. Existing React UI and all framework adapters remain on `/` and `/adapters.html`.
 
 The browser tests cover panel synchronization without extra change events, single-row completion, separate next-block creation, modal mouse suggestions, popup cancellation and one-step undo after applying a draft. OS IME testing remains deferred; this is not a full product integration certification.
+
+
+## Note trial (0.2.0)
+
+Note opts into the shared `LatexEditor` visual mode with `MathEditorSurface`. Existing tex-only atoms load through `parseLatex`; unsupported input stays in the original source editor. Visual draft changes produce `tex` plus JSON-encoded `mathDocument`. `setMathSource` validates the structure, source equality and inline policy, then applies one host transaction. Cancellation writes nothing. Direct source changes clear stale structure, while font/alignment-only edits retain it.
+
+Other products must use the same [import scope](LATEX-SCOPE.md) and core parser. Do not add product-specific regex conversions. Existing Word OMML and Site/Slide ownership boundaries still need their own host adapters; the Note trial does not integrate those products automatically.

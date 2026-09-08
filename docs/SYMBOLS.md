@@ -1,9 +1,34 @@
 # Symbol names / 기호 이름 목록
 
-All 90 supported symbols. Use **All symbols / 전체 기호** in the editor to browse and insert them before typing. Both English and Korean searches work in either UI language. The full aliases, triggers and LaTeX mappings are in [SUPPORT.md](./SUPPORT.md).
+All 117 supported symbols. Use **All symbols / 전체 기호** in the editor to browse and insert them before typing. Both English and Korean searches work in either UI language. The full aliases, triggers and LaTeX mappings are in [SUPPORT.md](./SUPPORT.md).
 
 | Symbol / 기호 | English / 영문 | Korean / 한글 |
 |---|---|---|
+| ↑ | Up arrow | 위쪽 화살표 |
+| ↕ | Up-down arrow | 상하 화살표 |
+| ⇐ | Double left arrow | 왼쪽 이중 화살표 |
+| ⇑ | Double up arrow | 위쪽 이중 화살표 |
+| ⇓ | Double down arrow | 아래쪽 이중 화살표 |
+| ⇕ | Double up-down arrow | 상하 이중 화살표 |
+| ↗ | Northeast arrow | 오른쪽 위 대각선 화살표 |
+| ↘ | Southeast arrow | 오른쪽 아래 대각선 화살표 |
+| ↙ | Southwest arrow | 왼쪽 아래 대각선 화살표 |
+| ↖ | Northwest arrow | 왼쪽 위 대각선 화살표 |
+| ⟶ | Long right arrow | 긴 오른쪽 화살표 |
+| ⟵ | Long left arrow | 긴 왼쪽 화살표 |
+| ⟷ | Long left-right arrow | 긴 양방향 화살표 |
+| ⟹ | Long double right arrow | 긴 오른쪽 이중 화살표 |
+| ⟸ | Long double left arrow | 긴 왼쪽 이중 화살표 |
+| ⟺ | Long double left-right arrow | 긴 양방향 이중 화살표 |
+| ↪ | Hook right arrow | 갈고리 오른쪽 화살표 |
+| ↩ | Hook left arrow | 갈고리 왼쪽 화살표 |
+| ⇀ | Right harpoon up | 오른쪽 위 반쪽 화살표 |
+| ↼ | Left harpoon up | 왼쪽 위 반쪽 화살표 |
+| ⇁ | Right harpoon down | 오른쪽 아래 반쪽 화살표 |
+| ↽ | Left harpoon down | 왼쪽 아래 반쪽 화살표 |
+| ⇌ | Equilibrium right-left arrows | 평형 오른쪽 왼쪽 화살표 |
+| ⇋ | Equilibrium left-right arrows | 평형 왼쪽 오른쪽 화살표 |
+| ↓ | Down arrow | 아래쪽 화살표 |
 | ∋ | Contains as an element | 원소를 포함 |
 | ⊃ | Superset | 상위집합 |
 | ⊇ | Superset or equal | 상위집합 또는 같음 |
@@ -94,3 +119,10 @@ All 90 supported symbols. Use **All symbols / 전체 기호** in the editor to b
 | Φ | Uppercase Phi | 대문자 파이 / 피 |
 | Ψ | Uppercase Psi | 대문자 프사이 |
 | Ω | Uppercase Omega | 대문자 오메가 |
+
+## Slanted relations (workspace)
+
+| Symbol | English | Korean | LaTeX |
+|---|---|---|---|
+| ⩾ | Greater than or equal (slanted) | 크거나 같음 (기울임) | `\geqslant` |
+| ⩽ | Less than or equal (slanted) | 작거나 같음 (기울임) | `\leqslant` |

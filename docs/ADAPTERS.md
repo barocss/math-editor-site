@@ -4,6 +4,8 @@
 
 [Pure JavaScript](API-JAVASCRIPT.md) · [React](API-REACT.md) · [Web Component](API-WEB-COMPONENT.md) · [Vue 3](API-VUE.md) · [Svelte](API-SVELTE.md) · [Solid](API-SOLID.md) · [Session and DOM API](API-SESSION.md)
 
+Each guide covers installation, a complete integration, document replacement, saving, lifecycle cleanup and host limitations.
+
 
 ## Distribution architecture
 
@@ -152,7 +154,7 @@ The directive reads its accessor in a reactive effect and cleans up with `onClea
 | Composition candidate preview | Disabled choices while composing | Menu hidden while composing |
 | Keyboard model ranges / OS IME matrix / full accessibility audit | Pending | Pending |
 
-The native renderer is an integration preview, not a replacement of the rich React editor. Completing parity before switching the main entry is the next release gate. Trusted document loading still needs schema/ID validation. LaTeX is export-only; plain-text paste is not a LaTeX parser.
+The native renderer is an integration preview, not a replacement of the rich React editor. Completing parity before switching the main entry is the next release gate. Use `parseMathDocument` to validate schema and IDs before trusted document loading. Bounded LaTeX import is available through `importLatex`; ordinary plain-text paste remains literal.
 
 ## Local verification and packaging
 
@@ -165,7 +167,7 @@ pnpm --filter @barocss/math-demo test:e2e
 pnpm --filter @barocss/math-demo build
 # Inspect a tarball locally; this does not publish:
 pnpm --dir packages/math-editor pack --pack-destination /tmp/math-editor-package
-node packages/math-editor/scripts/check-package.mjs /tmp/math-editor-package/barocss-math-editor-0.1.0.tgz
+node packages/math-editor/scripts/check-package.mjs /tmp/math-editor-package/barocss-math-editor-0.2.0.tgz
 ```
 
 Release work still includes package ownership/versioning, an explicit release decision, supported-browser and framework-version CI, bundle budgets and renderer parity. No registry publication has been performed.
@@ -173,3 +175,25 @@ Release work still includes package ownership/versioning, an explicit release de
 ## Independent outputs and host completion
 
 The DOM entry also exports `mountMathLatex` and `mountMathPreview`. See [Embedding](EMBEDDING.md) for the four-surface composition contract, native `enterBehavior`/`onCommit`/`onCancel`, popup draft handling and Note-style next-block creation. The rich React editor adds `toolbar`, `toolbarEnd` and `showTokenLegend`; its dedicated single-line/host-completion API remains the native `MathEditorSurface`.
+
+## Compact and filtered toolbars (workspace)
+
+Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and `toolbarEnd` stay visible. Native toolbars contain structure buttons and history only and show a toggle when needed. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.
+
+```tsx
+<MathEditor toolbar={['fraction', 'root', 'superscript', 'matrix']}
+  toolbarMaxItems={3} />
+```
+
+```js
+mountMathEditor(host, session, {
+  toolbar: ['fraction', 'root', 'norm'],
+  toolbarMaxItems: 2,
+});
+mountMathToolbar(toolbarHost, session, {
+  kinds: ['fraction', 'root', 'norm'],
+  maxItems: 2,
+});
+```
+
+`toolbar: false` hides the toolbar. A structure array filters its structure buttons only: it does not disable those structures in suggestions, parsing or the model, and does not filter React's auxiliary template/symbol controls. `toolbarMaxItems` (independent toolbar: `maxItems`) is a nonnegative count; zero initially hides all structure buttons behind More. A sufficiently large count shows all selected structure buttons initially. Expanded state belongs to the mounted toolbar and is not saved in the math document. The rich React `toolbar` array and compact behavior are available in 0.2.0.

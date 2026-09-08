@@ -57,6 +57,44 @@ For commands or opening another document, create one `createMathSession()` insta
 
 Use `mode: 'inline'` and `onCommit`/`onExit` for host caret handoff. In a modal, pass the modal element as mount-only `menuHost` when required by its focus trap. A new modal draft session keeps Cancel from modifying the original. Vue's `mounted` hook runs client-side; browser storage still belongs in your own client lifecycle. Keep the directive host empty and do not combine it with `v-html` or rendered children.
 
+## Document switching, history buttons and explicit save
+
+This complete component uses two trusted in-memory documents. Save stores a snapshot; switching tabs discards unsaved changes and resets history. Add a dirty-state confirmation in a product that must protect unsaved edits. The session is a plain variable, not a deeply reactive object.
+
+```vue
+<script setup lang="ts">
+import { ref, shallowRef, onUnmounted } from 'vue';
+import { vMathEditor } from '@barocss/math-editor/vue';
+import { createMathSession, createMathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+const documents = [createMathDocument('x'), createMathDocument('y')];
+const active = ref(0);
+const session = createMathSession({ document: documents[0], locale: 'en' });
+const snapshot = shallowRef(session.getSnapshot());
+const unsubscribe = session.subscribe(next => { snapshot.value = next; });
+const options = { session, locale: 'en' };
+function open(index: number) {
+  active.value = index;
+  session.load(documents[index]);
+}
+function save() {
+  documents[active.value] = session.getSnapshot().state.document;
+}
+onUnmounted(() => { unsubscribe(); session.destroy(); });
+</script>
+
+<template>
+  <button @click="open(0)">Formula A</button>
+  <button @click="open(1)">Formula B</button>
+  <button :disabled="!snapshot.canUndo" @click="session.execute({ type: 'undo' })">Undo</button>
+  <button :disabled="!snapshot.canRedo" @click="session.execute({ type: 'redo' })">Redo</button>
+  <button @click="save">Save formula {{ active + 1 }}</button>
+  <div v-math-editor="options"></div>
+  <pre>{{ snapshot.latex }}</pre>
+</template>
+```
+
 ## Persistence and ownership
 
 Persist the `MathDocument` passed to `onChange`; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.

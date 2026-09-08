@@ -88,6 +88,57 @@ If a server persists changes asynchronously, debounce/serialize writes and handl
 
 `mountMathPreview(host, session, { render(host, snapshot) })` delegates rendering to your application. `render` may return a cleanup function. The math-editor package does not ship KaTeX as a runtime requirement; import your chosen renderer separately. All output handles must be destroyed when their hosts are removed.
 
+## Reusable browser-storage adapter with restore and error reporting
+
+This adapter avoids writes for caret changes, debounces edits, flushes on page hide, and removes its listeners on teardown. Restore runs before subscribing so opening saved content does not immediately write it back. It does not validate documents itself: supply your application's schema validator as `decode`, which must throw for invalid or unsupported JSON. Use a different key per document. Call `dispose()` before changing the session's document/key.
+
+```ts
+import type { MathDocument } from '@barocss/math-editor/core';
+import { createMathSession } from '@barocss/math-editor/core';
+
+type Session = ReturnType<typeof createMathSession>;
+export function attachBrowserStorage(
+  session: Session,
+  key: string,
+  decode: (json: unknown) => MathDocument,
+  onError: (error: unknown) => void,
+) {
+  // Invoke on the client only. Storage may be unavailable or full.
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored !== null) session.load(decode(JSON.parse(stored)));
+  } catch (error) { onError(error); }
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let pending: MathDocument | undefined;
+  function flush() {
+    clearTimeout(timer);
+    timer = undefined;
+    if (!pending) return;
+    try {
+      localStorage.setItem(key, JSON.stringify(pending));
+      pending = undefined;
+    } catch (error) { onError(error); }
+  }
+  const unsubscribe = session.subscribe((snapshot, documentChanged) => {
+    if (!documentChanged) return;
+    pending = snapshot.state.document;
+    clearTimeout(timer);
+    timer = setTimeout(flush, 300);
+  });
+  window.addEventListener('pagehide', flush);
+  return {
+    flush,
+    dispose() {
+      unsubscribe();
+      window.removeEventListener('pagehide', flush);
+      flush();
+    },
+  };
+}
+```
+
+The host owns validation because it knows supported structures, size limits and schema versions. Do not replace `decode` with a TypeScript cast. Page-hide flushing is best effort, not a guarantee against crashes; localStorage is not cross-device persistence or multi-tab conflict resolution. Display `onError` failures and offer a retry via `flush()`.
+
 ## Failure and compatibility boundaries
 
 - All adapters are ESM; no CommonJS/global-script API is promised.

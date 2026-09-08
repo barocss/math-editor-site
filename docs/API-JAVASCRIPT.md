@@ -87,6 +87,67 @@ For a popup, create a draft session from a copy of the original document. Commit
 - Saving every `subscribe` callback: caret and locale changes also emit; check `documentChanged`.
 - Treating LaTeX output as a source document or a computation API.
 
+## Complete modal: Apply, Cancel and focus restoration
+
+This function creates its own native dialog and draft. Call it from a user action with a trusted document. It resolves to a new document on Apply, or `undefined` on Cancel. No host document changes while typing. Block mode permits multiline formulas; use inline mode only when the source is single-row.
+
+```js
+import { createMathSession } from '@barocss/math-editor/core';
+import { mountMathEditor } from '@barocss/math-editor/dom';
+import '@barocss/math-editor/style.css';
+
+export function editFormula(original) {
+  const previousFocus = document.activeElement;
+  const dialog = document.createElement('dialog');
+  const title = document.createElement('h2');
+  title.textContent = 'Edit formula';
+  const titleId = `formula-${crypto.randomUUID()}`;
+  title.id = titleId;
+  dialog.setAttribute('aria-labelledby', titleId);
+  const host = document.createElement('div');
+  const apply = document.createElement('button');
+  const cancel = document.createElement('button');
+  apply.textContent = 'Apply';
+  cancel.textContent = 'Cancel';
+  apply.type = cancel.type = 'button';
+  dialog.append(title, host, cancel, apply);
+  document.body.append(dialog);
+  const session = createMathSession({ document: original, locale: 'en' });
+
+  return new Promise(resolve => {
+    let finished = false;
+    const finish = accepted => {
+      if (finished) return;
+      finished = true;
+      const result = accepted ? session.getSnapshot().state.document : undefined;
+      editor.destroy();
+      session.destroy();
+      dialog.close();
+      dialog.remove();
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected)
+        previousFocus.focus();
+      resolve(result);
+    };
+    const editor = mountMathEditor(host, {
+      session,
+      menuHost: dialog,
+      onCancel: () => finish(false),
+    });
+    apply.addEventListener('click', () => finish(true));
+    cancel.addEventListener('click', () => finish(false));
+    dialog.addEventListener('cancel', event => {
+      event.preventDefault();
+      finish(false);
+    });
+    dialog.addEventListener('close', () => finish(false));
+    dialog.showModal();
+    editor.focus();
+  });
+}
+```
+
+Use `const next = await editFormula(currentDocument); if (next) commitToHost(next);` in your host's click handler. `currentDocument` and `commitToHost` belong to your application. Commit as one host undo transaction. For route teardown while a modal is open, close the dialog before removing its DOM so the `close` handler releases the draft.
+
 ## Persistence and ownership
 
 Persist the `MathDocument` passed to `onChange`; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.

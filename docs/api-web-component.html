@@ -93,9 +93,51 @@ editor.addEventListener('math-cancel', () =&gt; console.log('Host decides whethe
 </tr>
 </tbody>
 </table></div><p>Events bubble and are composed. Disconnect destroys the renderer; reconnect restores the same session/document/history. Permanent removal should also release host-owned subscriptions. Shared styles must be loaded in the page because this is light DOM, not a shadow-root widget.</p>
+<h2 id="complete-form-integration-with-json-and-latex-outputs">Complete form integration with JSON and LaTeX outputs</h2>
+<p>Custom elements do not automatically submit their document as form data. This function builds the form, synchronizes hidden fields, and calls a host callback with <code>FormData</code>. It does not assume a backend URL. Pass a trusted initial document and call the returned cleanup on route removal.</p>
+<pre><code class="language-js">import { defineMathEditor } from '@barocss/math-editor/web-component';
+import '@barocss/math-editor/style.css';
+
+export function mountFormulaForm(host, initialDocument, onSubmit) {
+  defineMathEditor();
+  const form = document.createElement('form');
+  const editor = document.createElement('barocss-math-editor');
+  editor.setAttribute('locale', 'en');
+  editor.value = initialDocument;
+  const json = document.createElement('input');
+  const latex = document.createElement('input');
+  json.type = latex.type = 'hidden';
+  json.name = 'formulaDocument';
+  latex.name = 'formulaLatex';
+  const button = document.createElement('button');
+  button.type = 'submit';
+  button.textContent = 'Save formula';
+  const sync = () =&gt; {
+    const snapshot = editor.session.getSnapshot();
+    json.value = JSON.stringify(snapshot.state.document);
+    latex.value = snapshot.latex;
+  };
+  const submit = event =&gt; {
+    event.preventDefault();
+    sync(); // Include the initial value even when no edit occurred.
+    onSubmit(new FormData(form));
+  };
+  editor.addEventListener('math-change', sync);
+  form.addEventListener('submit', submit);
+  form.append(editor, json, latex, button);
+  host.append(form);
+  sync();
+  return () =&gt; {
+    editor.removeEventListener('math-change', sync);
+    form.removeEventListener('submit', submit);
+    form.remove(); // disconnectedCallback releases the native renderer.
+  };
+}
+</code></pre>
+<p>The JSON field is the editable source; LaTeX is an export. Validate and authorize submitted JSON on your server. Browser form fields are not a trust boundary. The host callback can implement pending/error UI around its own request.</p>
 <h2 id="persistence-and-ownership">Persistence and ownership</h2>
 <p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
 <p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
 <p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
 </article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-react.html"><small>Previous</small>React </a><a href="/docs/api-vue.html"><small>Next</small>Vue 3 →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install-and-register">Install and register</a><a class="h2" href="#properties-and-commands">Properties and commands</a><a class="h2" href="#attributes">Attributes</a><a class="h2" href="#events">Events</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install-and-register">Install and register</a><a class="h2" href="#properties-and-commands">Properties and commands</a><a class="h2" href="#attributes">Attributes</a><a class="h2" href="#events">Events</a><a class="h2" href="#complete-form-integration-with-json-and-latex-outputs">Complete form integration with JSON and LaTeX outputs</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

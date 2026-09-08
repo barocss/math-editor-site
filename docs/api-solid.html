@@ -39,9 +39,36 @@ export function Formula() {
 <h2 id="host-lifecycle">Host lifecycle</h2>
 <p>The directive calls <code>editor.destroy()</code> on cleanup. It cannot clean up arbitrary host event listeners or save subscriptions. Its host must remain an empty DOM element in your JSX because the editor owns descendants. DOM mounting is client-only; use the framework's client-only boundary when integrating into an SSR route.</p>
 <p>For inline or popup integration, use the native <code>mode</code>, <code>enterBehavior</code>, <code>onCommit</code>, <code>onCancel</code> and <code>onExit</code> options described in the shared API. Those notifications do not automatically create the next prose block or close a modal.</p>
+<h2 id="history-templates-and-saved-document-restoration">History, templates and saved-document restoration</h2>
+<p>This complete component keeps the session outside reactive effects, subscribes to snapshots, and releases the subscription on teardown. Save is in-memory; Restore opens that snapshot and clears undo history.</p>
+<pre><code class="language-tsx">import { createSignal, onCleanup } from 'solid-js';
+import { mathEditor } from '@barocss/math-editor/solid';
+import { createMathSession, createMathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+void mathEditor;
+export function FormulaWithHistory() {
+  let saved = createMathDocument('x');
+  const session = createMathSession({ document: saved, locale: 'en' });
+  const [snapshot, setSnapshot] = createSignal(session.getSnapshot());
+  const unsubscribe = session.subscribe(next =&gt; setSnapshot(next));
+  onCleanup(() =&gt; { unsubscribe(); session.destroy(); });
+  return &lt;&gt;
+    &lt;button disabled={!snapshot().canUndo}
+      onClick={() =&gt; session.execute({ type: 'undo' })}&gt;Undo&lt;/button&gt;
+    &lt;button disabled={!snapshot().canRedo}
+      onClick={() =&gt; session.execute({ type: 'redo' })}&gt;Redo&lt;/button&gt;
+    &lt;button onClick={() =&gt; session.execute({ type: 'template', id: 'quadratic' })}&gt;Quadratic formula&lt;/button&gt;
+    &lt;button onClick={() =&gt; { saved = session.getSnapshot().state.document; }}&gt;Save&lt;/button&gt;
+    &lt;button onClick={() =&gt; session.load(saved)}&gt;Restore saved&lt;/button&gt;
+    &lt;div use:mathEditor={{ session, locale: 'en' }} /&gt;
+    &lt;pre&gt;{snapshot().latex}&lt;/pre&gt;
+  &lt;/&gt;;
+}
+</code></pre>
 <h2 id="persistence-and-ownership">Persistence and ownership</h2>
 <p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
 <p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
 <p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
 </article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-svelte.html"><small>Previous</small>Svelte </a><a href="/docs/api-session.html"><small>Next</small>Session & DOM API →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#complete-component">Complete component</a><a class="h2" href="#reactive-options-and-sessions">Reactive options and sessions</a><a class="h2" href="#host-lifecycle">Host lifecycle</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#complete-component">Complete component</a><a class="h2" href="#reactive-options-and-sessions">Reactive options and sessions</a><a class="h2" href="#host-lifecycle">Host lifecycle</a><a class="h2" href="#history-templates-and-saved-document-restoration">History, templates and saved-document restoration</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

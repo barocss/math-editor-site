@@ -50,6 +50,37 @@ The directive calls `editor.destroy()` on cleanup. It cannot clean up arbitrary 
 
 For inline or popup integration, use the native `mode`, `enterBehavior`, `onCommit`, `onCancel` and `onExit` options described in the shared API. Those notifications do not automatically create the next prose block or close a modal.
 
+## History, templates and saved-document restoration
+
+This complete component keeps the session outside reactive effects, subscribes to snapshots, and releases the subscription on teardown. Save is in-memory; Restore opens that snapshot and clears undo history.
+
+```tsx
+import { createSignal, onCleanup } from 'solid-js';
+import { mathEditor } from '@barocss/math-editor/solid';
+import { createMathSession, createMathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+void mathEditor;
+export function FormulaWithHistory() {
+  let saved = createMathDocument('x');
+  const session = createMathSession({ document: saved, locale: 'en' });
+  const [snapshot, setSnapshot] = createSignal(session.getSnapshot());
+  const unsubscribe = session.subscribe(next => setSnapshot(next));
+  onCleanup(() => { unsubscribe(); session.destroy(); });
+  return <>
+    <button disabled={!snapshot().canUndo}
+      onClick={() => session.execute({ type: 'undo' })}>Undo</button>
+    <button disabled={!snapshot().canRedo}
+      onClick={() => session.execute({ type: 'redo' })}>Redo</button>
+    <button onClick={() => session.execute({ type: 'template', id: 'quadratic' })}>Quadratic formula</button>
+    <button onClick={() => { saved = session.getSnapshot().state.document; }}>Save</button>
+    <button onClick={() => session.load(saved)}>Restore saved</button>
+    <div use:mathEditor={{ session, locale: 'en' }} />
+    <pre>{snapshot().latex}</pre>
+  </>;
+}
+```
+
 ## Persistence and ownership
 
 Persist the `MathDocument` passed to `onChange`; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.

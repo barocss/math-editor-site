@@ -69,9 +69,65 @@ const tools = mountMathToolbar(toolsHost, session, {
 <li>Saving every <code>subscribe</code> callback: caret and locale changes also emit; check <code>documentChanged</code>.</li>
 <li>Treating LaTeX output as a source document or a computation API.</li>
 </ul>
+<h2 id="complete-modal-apply-cancel-and-focus-restoration">Complete modal: Apply, Cancel and focus restoration</h2>
+<p>This function creates its own native dialog and draft. Call it from a user action with a trusted document. It resolves to a new document on Apply, or <code>undefined</code> on Cancel. No host document changes while typing. Block mode permits multiline formulas; use inline mode only when the source is single-row.</p>
+<pre><code class="language-js">import { createMathSession } from '@barocss/math-editor/core';
+import { mountMathEditor } from '@barocss/math-editor/dom';
+import '@barocss/math-editor/style.css';
+
+export function editFormula(original) {
+  const previousFocus = document.activeElement;
+  const dialog = document.createElement('dialog');
+  const title = document.createElement('h2');
+  title.textContent = 'Edit formula';
+  const titleId = `formula-${crypto.randomUUID()}`;
+  title.id = titleId;
+  dialog.setAttribute('aria-labelledby', titleId);
+  const host = document.createElement('div');
+  const apply = document.createElement('button');
+  const cancel = document.createElement('button');
+  apply.textContent = 'Apply';
+  cancel.textContent = 'Cancel';
+  apply.type = cancel.type = 'button';
+  dialog.append(title, host, cancel, apply);
+  document.body.append(dialog);
+  const session = createMathSession({ document: original, locale: 'en' });
+
+  return new Promise(resolve =&gt; {
+    let finished = false;
+    const finish = accepted =&gt; {
+      if (finished) return;
+      finished = true;
+      const result = accepted ? session.getSnapshot().state.document : undefined;
+      editor.destroy();
+      session.destroy();
+      dialog.close();
+      dialog.remove();
+      if (previousFocus instanceof HTMLElement &amp;&amp; previousFocus.isConnected)
+        previousFocus.focus();
+      resolve(result);
+    };
+    const editor = mountMathEditor(host, {
+      session,
+      menuHost: dialog,
+      onCancel: () =&gt; finish(false),
+    });
+    apply.addEventListener('click', () =&gt; finish(true));
+    cancel.addEventListener('click', () =&gt; finish(false));
+    dialog.addEventListener('cancel', event =&gt; {
+      event.preventDefault();
+      finish(false);
+    });
+    dialog.addEventListener('close', () =&gt; finish(false));
+    dialog.showModal();
+    editor.focus();
+  });
+}
+</code></pre>
+<p>Use <code>const next = await editFormula(currentDocument); if (next) commitToHost(next);</code> in your host's click handler. <code>currentDocument</code> and <code>commitToHost</code> belong to your application. Commit as one host undo transaction. For route teardown while a modal is open, close the dialog before removing its DOM so the <code>close</code> handler releases the draft.</p>
 <h2 id="persistence-and-ownership">Persistence and ownership</h2>
 <p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
 <p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
 <p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
 </article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/embedding.html"><small>Previous</small>Embedding & layouts </a><a href="/docs/api-react.html"><small>Next</small>React →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#mount-a-complete-editor">Mount a complete editor</a><a class="h2" href="#open-update-and-execute">Open, update and execute</a><a class="h2" href="#external-toolbar">External toolbar</a><a class="h2" href="#inline-and-popup-hosting">Inline and popup hosting</a><a class="h2" href="#common-mistakes">Common mistakes</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#mount-a-complete-editor">Mount a complete editor</a><a class="h2" href="#open-update-and-execute">Open, update and execute</a><a class="h2" href="#external-toolbar">External toolbar</a><a class="h2" href="#inline-and-popup-hosting">Inline and popup hosting</a><a class="h2" href="#common-mistakes">Common mistakes</a><a class="h2" href="#complete-modal-apply-cancel-and-focus-restoration">Complete modal: Apply, Cancel and focus restoration</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

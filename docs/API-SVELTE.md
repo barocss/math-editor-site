@@ -48,6 +48,32 @@ For an external toolbar or loading another document, create one `createMathSessi
 
 Actions mount in the browser. Avoid `document`, `window` and localStorage at module initialization in SSR applications. A popup should create a fresh draft session and commit only on Apply. `onCancel` is a host notification; it does not close your dialog or revert your data automatically. Keep the action host empty; do not render Svelte children into its editor subtree.
 
+## Svelte 5 runes: session, Undo and saved snapshot
+
+This is a complete runes component, not legacy `$:` syntax. Save retains a structured snapshot in memory; Restore deliberately resets undo history. Replace the in-memory persistence with the storage adapter in the shared API when needed.
+
+```svelte
+<script lang="ts">
+  import { onDestroy } from 'svelte';
+  import { mathEditor } from '@barocss/math-editor/svelte';
+  import { createMathSession, createMathDocument } from '@barocss/math-editor/core';
+  import '@barocss/math-editor/style.css';
+
+  let saved = createMathDocument('x');
+  const session = createMathSession({ document: saved, locale: 'en' });
+  let snapshot = $state(session.getSnapshot());
+  const unsubscribe = session.subscribe(next => { snapshot = next; });
+  onDestroy(() => { unsubscribe(); session.destroy(); });
+</script>
+
+<button disabled={!snapshot.canUndo} onclick={() => session.execute({ type: 'undo' })}>Undo</button>
+<button disabled={!snapshot.canRedo} onclick={() => session.execute({ type: 'redo' })}>Redo</button>
+<button onclick={() => { saved = session.getSnapshot().state.document; }}>Save</button>
+<button onclick={() => session.load(saved)}>Restore saved</button>
+<div use:mathEditor={{ session, locale: 'en' }}></div>
+<pre>{snapshot.latex}</pre>
+```
+
 ## Persistence and ownership
 
 Persist the `MathDocument` passed to `onChange`; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.

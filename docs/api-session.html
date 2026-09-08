@@ -164,6 +164,52 @@ session.execute({ type: 'redo' });
 <h2 id="independent-toolbar-and-outputs">Independent toolbar and outputs</h2>
 <p><code>mountMathToolbar(host, session, { kinds?, onExecute? })</code> exposes <code>destroy()</code>. Use <code>onExecute: () =&gt; editor.focus()</code> to return keyboard focus after choosing a tool. <code>mountMathLatex(host, session)</code> renders derived LaTeX and returns <code>destroy()</code>.</p>
 <p><code>mountMathPreview(host, session, { render(host, snapshot) })</code> delegates rendering to your application. <code>render</code> may return a cleanup function. The math-editor package does not ship KaTeX as a runtime requirement; import your chosen renderer separately. All output handles must be destroyed when their hosts are removed.</p>
+<h2 id="reusable-browser-storage-adapter-with-restore-and-error-reporting">Reusable browser-storage adapter with restore and error reporting</h2>
+<p>This adapter avoids writes for caret changes, debounces edits, flushes on page hide, and removes its listeners on teardown. Restore runs before subscribing so opening saved content does not immediately write it back. It does not validate documents itself: supply your application's schema validator as <code>decode</code>, which must throw for invalid or unsupported JSON. Use a different key per document. Call <code>dispose()</code> before changing the session's document/key.</p>
+<pre><code class="language-ts">import type { MathDocument } from '@barocss/math-editor/core';
+import { createMathSession } from '@barocss/math-editor/core';
+
+type Session = ReturnType&lt;typeof createMathSession&gt;;
+export function attachBrowserStorage(
+  session: Session,
+  key: string,
+  decode: (json: unknown) =&gt; MathDocument,
+  onError: (error: unknown) =&gt; void,
+) {
+  // Invoke on the client only. Storage may be unavailable or full.
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored !== null) session.load(decode(JSON.parse(stored)));
+  } catch (error) { onError(error); }
+  let timer: ReturnType&lt;typeof setTimeout&gt; | undefined;
+  let pending: MathDocument | undefined;
+  function flush() {
+    clearTimeout(timer);
+    timer = undefined;
+    if (!pending) return;
+    try {
+      localStorage.setItem(key, JSON.stringify(pending));
+      pending = undefined;
+    } catch (error) { onError(error); }
+  }
+  const unsubscribe = session.subscribe((snapshot, documentChanged) =&gt; {
+    if (!documentChanged) return;
+    pending = snapshot.state.document;
+    clearTimeout(timer);
+    timer = setTimeout(flush, 300);
+  });
+  window.addEventListener('pagehide', flush);
+  return {
+    flush,
+    dispose() {
+      unsubscribe();
+      window.removeEventListener('pagehide', flush);
+      flush();
+    },
+  };
+}
+</code></pre>
+<p>The host owns validation because it knows supported structures, size limits and schema versions. Do not replace <code>decode</code> with a TypeScript cast. Page-hide flushing is best effort, not a guarantee against crashes; localStorage is not cross-device persistence or multi-tab conflict resolution. Display <code>onError</code> failures and offer a retry via <code>flush()</code>.</p>
 <h2 id="failure-and-compatibility-boundaries">Failure and compatibility boundaries</h2>
 <ul>
 <li>All adapters are ESM; no CommonJS/global-script API is promised.</li>
@@ -173,4 +219,4 @@ session.execute({ type: 'redo' });
 <li>Host UI, permissions, persistence, clipboard environment restrictions and SSR boundaries remain the integrator's responsibility.</li>
 </ul>
 </article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-solid.html"><small>Previous</small>Solid </a><a href="/docs/support.html"><small>Next</small>Supported features →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#imports">Imports</a><a class="h2" href="#createmathsessionoptions">createMathSession(options)</a><a class="h2" href="#commands">Commands</a><a class="h2" href="#mountmatheditorhost-options">mountMathEditor(host, options)</a><a class="h2" href="#saving-without-caret-only-writes">Saving without caret-only writes</a><a class="h2" href="#independent-toolbar-and-outputs">Independent toolbar and outputs</a><a class="h2" href="#failure-and-compatibility-boundaries">Failure and compatibility boundaries</a></nav></aside></div></body></html>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#imports">Imports</a><a class="h2" href="#createmathsessionoptions">createMathSession(options)</a><a class="h2" href="#commands">Commands</a><a class="h2" href="#mountmatheditorhost-options">mountMathEditor(host, options)</a><a class="h2" href="#saving-without-caret-only-writes">Saving without caret-only writes</a><a class="h2" href="#independent-toolbar-and-outputs">Independent toolbar and outputs</a><a class="h2" href="#reusable-browser-storage-adapter-with-restore-and-error-reporting">Reusable browser-storage adapter with restore and error reporting</a><a class="h2" href="#failure-and-compatibility-boundaries">Failure and compatibility boundaries</a></nav></aside></div></body></html>

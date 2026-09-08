@@ -72,6 +72,53 @@ editor.addEventListener('math-cancel', () => console.log('Host decides whether t
 
 Events bubble and are composed. Disconnect destroys the renderer; reconnect restores the same session/document/history. Permanent removal should also release host-owned subscriptions. Shared styles must be loaded in the page because this is light DOM, not a shadow-root widget.
 
+## Complete form integration with JSON and LaTeX outputs
+
+Custom elements do not automatically submit their document as form data. This function builds the form, synchronizes hidden fields, and calls a host callback with `FormData`. It does not assume a backend URL. Pass a trusted initial document and call the returned cleanup on route removal.
+
+```js
+import { defineMathEditor } from '@barocss/math-editor/web-component';
+import '@barocss/math-editor/style.css';
+
+export function mountFormulaForm(host, initialDocument, onSubmit) {
+  defineMathEditor();
+  const form = document.createElement('form');
+  const editor = document.createElement('barocss-math-editor');
+  editor.setAttribute('locale', 'en');
+  editor.value = initialDocument;
+  const json = document.createElement('input');
+  const latex = document.createElement('input');
+  json.type = latex.type = 'hidden';
+  json.name = 'formulaDocument';
+  latex.name = 'formulaLatex';
+  const button = document.createElement('button');
+  button.type = 'submit';
+  button.textContent = 'Save formula';
+  const sync = () => {
+    const snapshot = editor.session.getSnapshot();
+    json.value = JSON.stringify(snapshot.state.document);
+    latex.value = snapshot.latex;
+  };
+  const submit = event => {
+    event.preventDefault();
+    sync(); // Include the initial value even when no edit occurred.
+    onSubmit(new FormData(form));
+  };
+  editor.addEventListener('math-change', sync);
+  form.addEventListener('submit', submit);
+  form.append(editor, json, latex, button);
+  host.append(form);
+  sync();
+  return () => {
+    editor.removeEventListener('math-change', sync);
+    form.removeEventListener('submit', submit);
+    form.remove(); // disconnectedCallback releases the native renderer.
+  };
+}
+```
+
+The JSON field is the editable source; LaTeX is an export. Validate and authorize submitted JSON on your server. Browser form fields are not a trust boundary. The host callback can implement pending/error UI around its own request.
+
 ## Persistence and ownership
 
 Persist the `MathDocument` passed to `onChange`; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.

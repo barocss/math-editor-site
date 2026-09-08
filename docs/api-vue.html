@@ -61,9 +61,43 @@ const options = computed&lt;DOMMathEditorOptions&gt;(() =&gt; ({
 <p>For commands or opening another document, create one <code>createMathSession()</code> instance in setup, pass it as <code>session</code> in options, and call <code>session.load(validatedDocument)</code>. Register host subscription cleanup and <code>session.destroy()</code> with <code>onUnmounted</code>. Avoid deeply proxying the session or recreating it inside a computed getter.</p>
 <h2 id="inline-popup-and-ssr">Inline, popup and SSR</h2>
 <p>Use <code>mode: 'inline'</code> and <code>onCommit</code>/<code>onExit</code> for host caret handoff. In a modal, pass the modal element as mount-only <code>menuHost</code> when required by its focus trap. A new modal draft session keeps Cancel from modifying the original. Vue's <code>mounted</code> hook runs client-side; browser storage still belongs in your own client lifecycle. Keep the directive host empty and do not combine it with <code>v-html</code> or rendered children.</p>
+<h2 id="document-switching-history-buttons-and-explicit-save">Document switching, history buttons and explicit save</h2>
+<p>This complete component uses two trusted in-memory documents. Save stores a snapshot; switching tabs discards unsaved changes and resets history. Add a dirty-state confirmation in a product that must protect unsaved edits. The session is a plain variable, not a deeply reactive object.</p>
+<pre><code class="language-vue">&lt;script setup lang=&quot;ts&quot;&gt;
+import { ref, shallowRef, onUnmounted } from 'vue';
+import { vMathEditor } from '@barocss/math-editor/vue';
+import { createMathSession, createMathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+const documents = [createMathDocument('x'), createMathDocument('y')];
+const active = ref(0);
+const session = createMathSession({ document: documents[0], locale: 'en' });
+const snapshot = shallowRef(session.getSnapshot());
+const unsubscribe = session.subscribe(next =&gt; { snapshot.value = next; });
+const options = { session, locale: 'en' };
+function open(index: number) {
+  active.value = index;
+  session.load(documents[index]);
+}
+function save() {
+  documents[active.value] = session.getSnapshot().state.document;
+}
+onUnmounted(() =&gt; { unsubscribe(); session.destroy(); });
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;button @click=&quot;open(0)&quot;&gt;Formula A&lt;/button&gt;
+  &lt;button @click=&quot;open(1)&quot;&gt;Formula B&lt;/button&gt;
+  &lt;button :disabled=&quot;!snapshot.canUndo&quot; @click=&quot;session.execute({ type: 'undo' })&quot;&gt;Undo&lt;/button&gt;
+  &lt;button :disabled=&quot;!snapshot.canRedo&quot; @click=&quot;session.execute({ type: 'redo' })&quot;&gt;Redo&lt;/button&gt;
+  &lt;button @click=&quot;save&quot;&gt;Save formula {{ active + 1 }}&lt;/button&gt;
+  &lt;div v-math-editor=&quot;options&quot;&gt;&lt;/div&gt;
+  &lt;pre&gt;{{ snapshot.latex }}&lt;/pre&gt;
+&lt;/template&gt;
+</code></pre>
 <h2 id="persistence-and-ownership">Persistence and ownership</h2>
 <p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
 <p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
 <p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
 </article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-web-component.html"><small>Previous</small>Web Component </a><a href="/docs/api-svelte.html"><small>Next</small>Svelte →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#complete-component">Complete component</a><a class="h2" href="#lifecycle-and-document-replacement">Lifecycle and document replacement</a><a class="h2" href="#inline-popup-and-ssr">Inline, popup and SSR</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#complete-component">Complete component</a><a class="h2" href="#lifecycle-and-document-replacement">Lifecycle and document replacement</a><a class="h2" href="#inline-popup-and-ssr">Inline, popup and SSR</a><a class="h2" href="#document-switching-history-buttons-and-explicit-save">Document switching, history buttons and explicit save</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

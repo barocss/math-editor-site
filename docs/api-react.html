@@ -122,9 +122,75 @@ export function InlineFormula({ onSave, onExit }: {
 <li>Mirroring each <code>onChange</code> into a new component key, destroying undo and IME state.</li>
 <li>Assuming rich and native components have identical symbol/selection tools.</li>
 </ul>
+<h2 id="complete-react-modal-with-an-isolated-rich-editor-draft">Complete React modal with an isolated rich-editor draft</h2>
+<p>The parent supplies a trusted document and receives one Apply callback. Typing and Cancel never call <code>onApply</code>. Render a fresh instance for each editing request (for example, a monotonically increasing request key). This uses published 0.1.0 props only.</p>
+<pre><code class="language-tsx">import { useEffect, useRef } from 'react';
+import { MathEditor } from '@barocss/math-editor/react';
+import type { MathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+export function FormulaDialog({ original, onApply, onClose }: {
+  original: MathDocument;
+  onApply: (document: MathDocument) =&gt; void;
+  onClose: () =&gt; void;
+}) {
+  const dialog = useRef&lt;HTMLDialogElement&gt;(null);
+  const draft = useRef(structuredClone(original));
+  const finished = useRef(false);
+  useEffect(() =&gt; {
+    const element = dialog.current!;
+    const previous = document.activeElement;
+    element.showModal();
+    return () =&gt; {
+      element.close();
+      if (previous instanceof HTMLElement &amp;&amp; previous.isConnected) previous.focus();
+    };
+  }, []);
+  function finish(apply: boolean) {
+    if (finished.current) return;
+    finished.current = true;
+    if (apply) onApply(structuredClone(draft.current));
+    onClose(); // Parent unmounts this component.
+  }
+  return &lt;dialog ref={dialog} aria-label=&quot;Edit formula&quot;
+    onCancel={event =&gt; { event.preventDefault(); finish(false); }}&gt;
+    &lt;MathEditor defaultValue={original} locale=&quot;en&quot; showTokenLegend={false}
+      onChange={document =&gt; { draft.current = document; }} /&gt;
+    &lt;button type=&quot;button&quot; onClick={() =&gt; finish(false)}&gt;Cancel&lt;/button&gt;
+    &lt;button type=&quot;button&quot; onClick={() =&gt; finish(true)}&gt;Apply&lt;/button&gt;
+  &lt;/dialog&gt;;
+}
+</code></pre>
+<p><code>onApply</code> is a synchronous host-state commit in this example. If saving requires a server request, keep a pending/error state, disable duplicate Apply, and close only after success. Do not replace <code>defaultValue</code> on every keystroke.</p>
+<h2 id="native-react-surface-with-undo-redo-and-document-switching">Native React surface with Undo, Redo and document switching</h2>
+<p>This is an alternative to the rich modal. The stable session is created once per mounted component; loading a different trusted <code>source</code> resets its history. Keep <code>source</code> stable while saving: do not feed each emitted document back into it.</p>
+<pre><code class="language-tsx">import { useEffect, useState } from 'react';
+import { MathEditorSurface } from '@barocss/math-editor/react';
+import { createMathSession, type MathDocument } from '@barocss/math-editor/core';
+import '@barocss/math-editor/style.css';
+
+export function SessionFormula({ source }: { source: MathDocument }) {
+  const [session] = useState(() =&gt; createMathSession({ document: source, locale: 'en' }));
+  const [snapshot, setSnapshot] = useState(() =&gt; session.getSnapshot());
+  useEffect(() =&gt; {
+    const unsubscribe = session.subscribe(next =&gt; setSnapshot(next));
+    setSnapshot(session.getSnapshot());
+    return () =&gt; { unsubscribe(); session.destroy(); };
+  }, [session]);
+  useEffect(() =&gt; { session.load(source); }, [session, source]);
+  return &lt;&gt;
+    &lt;button disabled={!snapshot.canUndo}
+      onClick={() =&gt; session.execute({ type: 'undo' })}&gt;Undo&lt;/button&gt;
+    &lt;button disabled={!snapshot.canRedo}
+      onClick={() =&gt; session.execute({ type: 'redo' })}&gt;Redo&lt;/button&gt;
+    &lt;MathEditorSurface session={session} locale=&quot;en&quot; /&gt;
+    &lt;pre&gt;{snapshot.latex}&lt;/pre&gt;
+  &lt;/&gt;;
+}
+</code></pre>
 <h2 id="persistence-and-ownership">Persistence and ownership</h2>
 <p>Persist the <code>MathDocument</code> passed to <code>onChange</code>; LaTeX is derived output and is not an editable round-trip format. The package does not parse arbitrary LaTeX. Validate externally supplied JSON before loading it: loading assumes a trusted, structurally valid document with unique IDs. There is no server save or collaboration transport built in.</p>
 <p>Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.</p>
 <p>See <a href="/docs/api-session.html">session and DOM API</a> for exact options, commands, events and cleanup, and <a href="/docs/adapters.html#current-renderer-parity">renderer differences</a> before choosing a native wrapper over the rich React editor.</p>
 </article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-javascript.html"><small>Previous</small>Pure JavaScript </a><a href="/docs/api-web-component.html"><small>Next</small>Web Component →</a></nav><footer>Barocss Math Editor · 0.1.0 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#rich-editor">Rich editor</a><a class="h2" href="#rich-component-props-in-npm-010">Rich component props in npm 0.1.0</a><a class="h2" href="#native-surface">Native surface</a><a class="h2" href="#ssr-and-popup-behavior">SSR and popup behavior</a><a class="h2" href="#common-mistakes">Common mistakes</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#install">Install</a><a class="h2" href="#rich-editor">Rich editor</a><a class="h2" href="#rich-component-props-in-npm-010">Rich component props in npm 0.1.0</a><a class="h2" href="#native-surface">Native surface</a><a class="h2" href="#ssr-and-popup-behavior">SSR and popup behavior</a><a class="h2" href="#common-mistakes">Common mistakes</a><a class="h2" href="#complete-react-modal-with-an-isolated-rich-editor-draft">Complete React modal with an isolated rich-editor draft</a><a class="h2" href="#native-react-surface-with-undo-redo-and-document-switching">Native React surface with Undo, Redo and document switching</a><a class="h2" href="#persistence-and-ownership">Persistence and ownership</a></nav></aside></div></body></html>

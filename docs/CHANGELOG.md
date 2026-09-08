@@ -1,5 +1,11 @@
 # @barocss/math-editor
 
+## 0.2.1
+
+### Patch Changes
+
+- Support Shift+arrow model selection in React and native DOM editors, sharing drag-range copying, deletion and wrapping behavior. Extend horizontal selections across balanced structures and vertical selections between document lines. Restore Cases alongside paired braces for the `{` suggestion trigger, preserving paired braces as the default. Update English/Korean interaction guidance.
+
 ## 0.2.0
 
 ### Minor Changes
@@ -26,4 +32,3 @@ Initial public release.
 - English/Korean JSON locale packs and host-registered translations and suggestion aliases.
 
 The native surface has documented feature differences from the rich React editor. See ADAPTERS.md and VALIDATION.md for the supported scope. This release does not parse arbitrary LaTeX or evaluate expressions.
-

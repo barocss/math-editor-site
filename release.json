@@ -1,6 +1,6 @@
 {
   "package": "@barocss/math-editor",
-  "version": "0.2.0",
-  "integrity": "sha512-EFR2XoPYuOpPeByXV1mLm1Q/IwBxU7jH0MKFk434cwqmJ74PbbgkNd3MGljMUq4btDedhA1wvlp8MB003FSWOw==",
-  "builtAt": "2026-09-08T11:36:45.870Z"
+  "version": "0.2.1",
+  "integrity": "sha512-mLk33FgxQhiKWjXqniMVYev4+kpEBfz3ns6+xOD/nXs4nOARIY8f5SioTRAr/5L9Bto9VNzOQN40etU4fEWUJg==",
+  "builtAt": "2026-09-08T13:14:42.774Z"
 }

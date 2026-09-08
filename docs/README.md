@@ -20,10 +20,10 @@ For editor-only, external toolbar, LaTeX, preview, inline and popup compositions
 
 ## Quick start
 
-Install version 0.2.0 from npm:
+Install version 0.2.1 from npm:
 
 ```sh
-npm install @barocss/math-editor@0.2.0
+npm install @barocss/math-editor@0.2.1
 # For the rich React UI:
 npm install react react-dom
 ```
@@ -236,3 +236,9 @@ Import or type the suggestions `dfrac`, `tfrac`, `dbinom`, and `tbinom` for disp
 ### Labeled arrows (workspace)
 
 `\xrightarrow[below]{above}` and `\xleftarrow[below]{above}` support parsing, suggestions, editable math labels and export. See [label syntax and slot order](LATEX-GUIDE.md#labeled-arrows--020). Available in 0.2.0.
+
+## Keyboard ranges and brace discovery (0.2.1)
+
+Shift+Left/Right extends or shrinks the same model range used by dragging. Structures are crossed as balanced units; copied and deleted ranges use existing model normalization. Shift+Up/Down extends to an adjacent top-level document line, using a logical text offset rather than pixel-based column matching; grid-cell rectangular selection is not added. Copy, cut, wrapping, deletion and Undo use the existing range behavior. IME composition and modifier shortcuts retain their existing handling.
+
+Typing `{` offers both paired braces and cases. Paired braces remain the first candidate; choose Cases explicitly to insert its editable grid.

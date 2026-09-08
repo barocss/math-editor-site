@@ -5,7 +5,7 @@ The `vMathEditor` directive mounts the native DOM editor. It is not a Vue compon
 ## Install
 
 ```sh
-npm install @barocss/math-editor@0.2.0 vue
+npm install @barocss/math-editor@0.2.1 vue
 ```
 
 ## Complete component

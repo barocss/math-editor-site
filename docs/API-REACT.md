@@ -10,7 +10,7 @@ React offers two components. Choose intentionally: they share document structure
 ## Install
 
 ```sh
-npm install @barocss/math-editor@0.2.0 react react-dom
+npm install @barocss/math-editor@0.2.1 react react-dom
 ```
 
 ## Rich editor

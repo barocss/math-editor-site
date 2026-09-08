@@ -191,3 +191,7 @@ Spacing follow-up implemented: shared grid fence shapes, tighter grid/fraction/s
 Workspace toolbar overflow is implemented: configurable structure-button limits and More/Fewer controls, rich React/native filtering, and always-visible history actions. Context-sensitive grouping and user-persisted toolbar customization remain future work.
 
 Locale regression: misplaced alphabet/arrow messages moved inside `messages`; pack-shape/build validation and en/ko browser coverage added.
+
+### 0.2.1
+
+Keyboard model selection with Shift+arrows and `{` cases discovery are implemented. The dedicated demo adds sized PNG download/copy and fit preview; image generation remains site-only. Pixel-column vertical selection and rectangular grid ranges remain future work.

@@ -5,7 +5,7 @@ Use this integration for vanilla JavaScript, custom application shells and imper
 ## Install
 
 ```sh
-npm install @barocss/math-editor@0.2.0
+npm install @barocss/math-editor@0.2.1
 ```
 
 ## Mount a complete editor

@@ -254,3 +254,7 @@ Package build and 388 unit tests passed. Built-in locale tests reject misplaced 
 - Formatting, package type checking, 388 unit tests and all eight packed JavaScript entry points pass. Packed CSS, locale JSON and licensed math fonts are present.
 - The 379-case Chromium suite was reviewed against the current UI. Stale assumptions about expanded toolbars, symbol counts, broad candidate-name matching, focus outlines and suggestion-versus-line shortcuts were updated. Corrected cases were rerun, including the full 20-case wrapping file.
 - Production demo build and generated documentation page/anchor checks pass. This release covers math-editor only. Note inline editing is resolved per the user and other product deployment is outside scope.
+
+## 0.2.1 release verification
+
+Formatting, types, 390 unit tests and all eight packed entry points passed. Thirty-nine related Chromium cases passed for keyboard and drag selection, clipboard, wrapping, tokens, brace/cases discovery, preview and bundled locales. Website PNG download/copy checks validate dimensions and nonblank raster pixels. Long-formula fitting and transparent alpha were checked separately. Image generation is a demo dependency, not a library API.

@@ -1,6 +1,6 @@
 # Math editor website
 
-Static output for @barocss/math-editor 0.2.0.
+Static output for @barocss/math-editor 0.2.1.
 
 Source: https://github.com/barocss/barocss-editor (apps/math-demo).
 Package: https://www.npmjs.com/package/@barocss/math-editor

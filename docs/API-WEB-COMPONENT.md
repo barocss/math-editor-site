@@ -5,7 +5,7 @@ Use the custom element with plain HTML or a framework that can pass DOM properti
 ## Install and register
 
 ```sh
-npm install @barocss/math-editor@0.2.0
+npm install @barocss/math-editor@0.2.1
 ```
 
 ```js

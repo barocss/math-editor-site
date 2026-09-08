@@ -1,13 +1,13 @@
 :root {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #243b32;
-  background: #f6f7f3;
+  color: #20242b;
+  background: #fafaf8;
   font-synthesis: none;
-  --muted: #60756b;
-  --line: #d7dfd7;
+  --muted: #606975;
+  --line: #dce0e5;
   --paper: #fff;
-  --tint: #eaf0e7;
-  --accent: #286348;
+  --tint: #edf1ff;
+  --accent: #315efb;
   color-scheme: light;
 }
 * {
@@ -344,13 +344,16 @@ footer {
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    color: #e2ebe2;
-    background: #16231d;
-    --muted: #a2b5a9;
-    --line: #35493d;
-    --paper: #1d2d24;
-    --tint: #253b2e;
-    --accent: #a6d2b4;
+    color: #e7ebf3;
+    background: #151922;
+    --muted: #b0bacb;
+    --line: #353e50;
+    --paper: #1c2230;
+    --tint: #27334d;
+    --accent: #9bb5ff;
     color-scheme: dark;
   }
 }
+
+.brand { color: inherit; }
+.docs-nav a[aria-current] { box-shadow: inset 2px 0 0 var(--accent); }

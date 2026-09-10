@@ -244,6 +244,7 @@ This has two top-level lines and exports as `gathered`. A two-row matrix inside 
 | `MathCaret` | Text node `id`, UTF-16 `start`/`end`, optional affinity | No |
 | `MathState` | `{ document, caret }` while editing | No; save its `document` |
 | `MathRange` | Structural selection endpoints | No |
+| `MathMatrixRange` | `{ matrixId, anchor, focus }` with row-major cell indices; transient rectangular selection | No |
 | `MathHistory` | Past/present/future editing states | No |
 | `MathFragment` | Clipboard `{ version: 1, rows: MathRow[] }` | No; different envelope from a document |
 | Host `tex` / `mathDocument` attributes | Product-specific storage container | No; the host may store serialized document JSON alongside derived LaTeX |

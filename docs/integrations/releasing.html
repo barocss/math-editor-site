@@ -1,0 +1,213 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Integration release guide · Barocss Math Editor</title><meta name="description" content="Integration release guide for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" aria-current="page">Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="publishing-the-host-plugins">Publishing the host plugins</h1>
+<p>The release set contains the core and nine host adapters as separate
+npm packages. Changesets manage the core and each plugin independently.
+The source repository and the shared integration workspace stay
+private. Generated JavaScript remains readable by anyone who receives it.</p>
+<h2 id="package-boundaries">Package boundaries</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Host</th>
+<th>npm package</th>
+<th>Public entries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tiptap</td>
+<td><code>@barocss/math-editor-tiptap</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>ProseMirror</td>
+<td><code>@barocss/math-editor-prosemirror</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>Lexical</td>
+<td><code>@barocss/math-editor-lexical</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>Editor.js</td>
+<td><code>@barocss/math-editor-editorjs</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>TinyMCE</td>
+<td><code>@barocss/math-editor-tinymce</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>CKEditor 5</td>
+<td><code>@barocss/math-editor-ckeditor</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>Quill</td>
+<td><code>@barocss/math-editor-quill</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>Slate</td>
+<td><code>@barocss/math-editor-slate</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code></td>
+</tr>
+<tr>
+<td>Gutenberg</td>
+<td><code>@barocss/math-editor-gutenberg</code></td>
+<td>main, <code>/shared</code>, <code>/style.css</code>, <code>/data</code></td>
+</tr>
+</tbody>
+</table></div><p>Each public plugin owns its host source, tests and TypeScript configuration.
+The private <code>@barocss/math-editor-integrations</code> package contains only common
+data, draft-field UI, messages and styles, with no host SDK dependencies.
+The common build helper compiles each plugin's own <code>src/</code> and bundles only the
+common modules it uses. It includes declarations and message JSON
+needed by TypeScript, but omits implementation TypeScript and source maps. The
+public packages have no runtime or type dependency on the private package.</p>
+<p>Changing workspace <code>exports</code> to source paths does not change that distribution
+boundary. Do not add the private common package to the npm release set. The release
+check rejects its name in dependency fields, JavaScript and type imports. A consumer
+site must work with the ten public package archives and no common package installed.</p>
+<p>Workspace <code>exports</code>, <code>main</code> and <code>types</code> resolve source files for Vite and
+TypeScript consumers. Apps do not need a package build before development.
+<code>publishConfig.exports</code>, <code>publishConfig.main</code> and <code>publishConfig.types</code> resolve
+the shipped JavaScript and declarations. Core CSS/font paths remain unchanged.
+The private common package exposes source only and is never published.</p>
+<p>Use the release commands below or <code>pnpm pack</code> for public packages. pnpm applies
+the publish overrides; the plugin release staging code applies them explicitly
+before its <code>npm pack</code> call. Direct <code>npm pack</code> on a workspace source manifest is
+not the release workflow. Declaration builds use <code>tsconfig.math-build.json</code> to
+read already-built dependency declarations without including sibling source.
+An explicit artifact directory in the sample Vite configuration selects published
+exports. Ordinary development and <code>pnpm build:math:site</code> select workspace source
+exports. The default site build does not require npm publication, a version bump
+or package dist folders. It records local versions only as build metadata.</p>
+<p>Tiptap declares ProseMirror as a normal public package dependency and imports its
+existing API. The build keeps that dependency external. pnpm/Changesets can track
+this relationship, and batch publishing places ProseMirror before Tiptap. Private
+common declarations are copied under each artifact's <code>dist/_shared/</code> directory.</p>
+<p>Each package lists the public math core and its own host SDKs as required peers.
+It does not bundle React, WordPress, CKEditor, or any other host runtime. The first
+release requires <code>@barocss/math-editor</code> <strong>at the compatible peer version declared by each plugin</strong>, which
+includes the shared toolbar, token editing, LaTeX insertion and iframe APIs.</p>
+<p>WordPress has two delivery paths: the npm Gutenberg adapter for custom builds,
+and the separately built <a href="/docs/integrations/wordpress.html">installable plugin ZIP</a>.
+Publishing the npm adapter does not publish a WordPress.org plugin.</p>
+<h2 id="changesets-and-versions">Changesets and versions</h2>
+<p>Keep independent versions: <code>fixed</code> and <code>linked</code> groups are unnecessary. Add a
+Changeset for every affected public package. Because shared implementation is
+bundled rather than installed as a public dependency, Changesets cannot infer all
+affected hosts from an edit to the private workspace.</p>
+<ul>
+<li>A Slate-only bug fix names the Slate package with <code>patch</code>.</li>
+<li>A shared draft/clipboard fix names every adapter that embeds that code.</li>
+<li>An additive public API uses <code>minor</code>; a breaking API or storage change requires
+an explicit compatibility and migration decision.</li>
+<li>A core change also names <code>@barocss/math-editor</code>; raise plugin peer minimums when
+they start calling newly released core APIs.</li>
+</ul>
+<p>Preview the complete math product release, then apply the reviewed plan:</p>
+<pre><code class="language-sh">pnpm version:math:plan
+pnpm version:math
+</code></pre>
+<p>The product versioner isolates the core and nine public plugin packages. It preserves unrelated
+workspace changesets and refuses a changeset that mixes selected products with
+an unrelated package. <code>pnpm version:math</code> applies the complete math product plan;
+it does not bump other products. <code>pnpm version:math:core</code> is available when only
+the core must be versioned. Do not run repository-wide version commands or an
+unfiltered recursive publish for a math-only release.</p>
+<p>The first plugin release is already published. Review future peer-range changes
+as compatibility changes: Changesets can promote a plugin to a major version
+when a core update changes its peer requirement. Independent versions do not
+mean that a shared implementation change affects only one package.</p>
+<h2 id="local-batch-release">Local batch release</h2>
+<pre><code class="language-sh"># One command: build, validate and publish the core plus all nine public plugins.
+pnpm release:math
+# Check the same flow without uploading packages:
+pnpm release:math:dry-run
+</code></pre>
+<p>The command runs <code>pnpm -r publish</code> in a generated workspace containing only the
+ten inspected packages. It orders the core before the plugins, keeps framework
+and host SDKs external, and skips versions already present on npm. It does not
+publish the private integration workspace or other products. npm can still ask
+for authentication per package. See the <a href="/docs/releasing.html">batch release guide</a>
+for reports, partial failures, validation and website deployment.</p>
+<h2 id="build-and-inspect">Build and inspect</h2>
+<pre><code class="language-sh">pnpm build:math:plugins
+# Build and test only CKEditor and its common prerequisites:
+pnpm --filter @barocss/math-editor-ckeditor build
+pnpm --filter @barocss/math-editor-ckeditor test
+# Preferred preparation for the complete math product:
+pnpm release:math:prepare
+# Optional plugin-only artifact inspection:
+pnpm release:math:plugins:prepare
+# Or prepare just the selected host artifacts:
+pnpm release:math:plugins:prepare --editor slate,lexical
+</code></pre>
+<p>Preparation builds the selected plugins and their public plugin dependencies,
+checks each package's types/tests, creates npm tarballs and a
+release report, and verifies that private imports, undeclared host dependencies,
+implementation sources and source maps are absent. It works before publication;
+the report records any version or license condition that still prevents publishing.
+The isolated consumer check loads declarations from the extracted tarballs with
+the pinned workspace SDKs supplied as external peers. It is not a claim that an
+unreleased peer version is already installable from npm.</p>
+<h2 id="publication-prerequisites">Publication prerequisites</h2>
+<p>The plugin manifests use <code>license: &quot;MIT&quot;</code> and each package includes a LICENSE file
+with copyright attributed to barocss.com. Only the nine public plugin manifests
+have <code>private: false</code>; the shared source remains private. Before producing publishable artifacts:</p>
+<ol>
+<li>Verify that each selected tarball includes its README and MIT LICENSE, and
+that its manifest declares <code>license: &quot;MIT&quot;</code>. Host SDK licenses are separate;
+see the <a href="/docs/integrations/commercial-model.html">licensing guide</a>.</li>
+<li>Set <code>private: false</code> only for packages selected for publication, and apply the
+reviewed version plan. Update the README's unpublished status at that point.</li>
+<li>Verify that plugin peer ranges accept the core version in the batch. Batch
+preparation checks this before publishing. For a plugin-only release, verify
+that a compatible core is already on npm.</li>
+<li>Prepare new plugin artifacts and review their report. Ensure the npm account
+has publish access to the <code>@barocss</code> scope and can satisfy registry authentication.</li>
+</ol>
+<p>The default is <code>pnpm release:math</code>. For an explicitly selected plugin-only
+release, the existing artifact command can publish the exact reviewed tarballs
+from plugin preparation:</p>
+<pre><code class="language-sh">pnpm release:math:plugins --from output/math-plugin-releases/&lt;release&gt;/release.json
+</code></pre>
+<p>The command accepts only the nine known plugin names, verifies artifact hashes and
+manifest contents again, checks the published core requirement, and publishes
+stable versions with the <code>latest</code> tag. It never publishes the private integration
+workspace, the core, or other products as a side effect. If a registry operation
+fails partway through, <code>publish-results.json</code> records each attempt, including
+successful and uncertain results. A report with an existing attempt record cannot
+be reused. Preserve that record, reconcile the versions on npm, and prepare a new
+report containing only packages confirmed unpublished. Published versions cannot
+be overwritten.</p>
+<p>TinyMCE, CKEditor and WordPress licensing obligations are separate from the Barocss
+license. The public sample build currently leaves TinyMCE/CKEditor demos disabled
+until an appropriate host license configuration is supplied. Their local examples
+and all nine documentation pages remain available. See the host guides before
+deploying those SDKs.</p>
+<p>References: <a href="https://changesets.dev/guide/config">Changesets configuration</a>,
+<a href="https://changesets.dev/guide/cli">Changesets CLI</a>,
+<a href="https://docs.npmjs.com/cli/v11/configuring-npm/package-json/">npm package metadata</a>,
+and <a href="https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/">scoped public packages</a>.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/validation.html"><small>Previous</small>Integration validation </a><a href="/docs/integrations/roadmap.html"><small>Next</small>Integration roadmap →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#package-boundaries">Package boundaries</a><a class="h2" href="#changesets-and-versions">Changesets and versions</a><a class="h2" href="#local-batch-release">Local batch release</a><a class="h2" href="#build-and-inspect">Build and inspect</a><a class="h2" href="#publication-prerequisites">Publication prerequisites</a></nav></aside></div></body></html>

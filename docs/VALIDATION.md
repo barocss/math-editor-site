@@ -1,6 +1,143 @@
 # Validation report
 
-## Current release status — 0.2.0
+## Inline fence transformation suggestions — workspace, 2026-09-09
+
+Core: **584 tests in 36 files passed**. Core type checking and the main site/docs
+build passed. `fence-suggestions-check.js` passed in Chromium for rich React and
+all nine host demos, including menu reopening, keyboard acceptance, cancellation,
+retained caret, continued typing and separate Undo entries. Editor.js is a block
+host; this run does not claim an inline placement for that adapter.
+
+`fence-context-check.js` passed all eight bracket choices through the optional
+footer in the same ten editor views. `fence-inline-options-check.js` passed in a
+native inline iframe with toolbar and footer disabled, including nearest nested
+fence targeting, ko/en switching, unchanged document on locale changes, retained
+input focus/caret, continued typing and teardown.
+
+Existing root conversion suggestions were rerun in React and Quill and passed.
+`fence-rendering-check.js` verifies the exported source after changing a bracket
+around a fraction. The editor and KaTeX screenshots were visually inspected:
+`output/playwright/fence-transform-editor.png` and
+`output/playwright/fence-transform-katex.png`. This uses the existing delimiter
+renderer and does not claim pixel-identical layout.
+
+See EDIT-029 through EDIT-032 for acceptance criteria. This is local Chromium
+workspace evidence, not a release, real OS IME or cross-browser certification.
+
+## Contextual radical tools — workspace, 2026-09-09
+
+Core: **570 tests passed in 35 files**. Type checking and the main documentation/demo build passed.
+
+`context-tools-check.js` passed in local Chromium for rich React and all nine
+host examples: Tiptap, ProseMirror, Lexical, Editor.js, TinyMCE, CKEditor, Quill,
+Slate and Gutenberg. It covers query-independent discovery, retained tools after
+suggestion dismissal, F6/Escape focus, conversion, selected index editing, a
+non-square-index explanation, radicand retention, Undo, leaving a radical and
+hiding tools during model range selection.
+
+`context-tools-options-check.js` passed for nearest nested targeting, native DOM
+inside an iframe, owner-document keyboard focus, dynamic `contextTools`, en/ko
+labels, synthetic composition guards, outside blur, teardown, and dynamic Web
+Component `context-tools` attributes. Synthetic events do not certify OS IME.
+
+The footer was visually inspected separately from the suggestion popup. Evidence
+is in `output/playwright/context-tools-footer.png` and the two browser fixtures.
+EDIT-021 through EDIT-028 record acceptance criteria and remaining checks: native
+Tab order, document equality across locale changes, individual framework-wrapper
+option smoke tests, and broader browsers/platforms. The new footer currently
+covers square/indexed roots. Other structure families remain roadmap work.
+These are workspace-source checks; no package or site was published.
+
+## Fractional scripts and empty-slot deletion — workspace, 2026-09-09
+
+Core: 568 tests passed in 35 files; type checking and formatting passed. The
+main documentation/demo build passed. `empty-slot-deletion-check.js` passed
+16 real-key checks across React/native DOM: Delete and Backspace from empty
+root, fraction, exponent and root-index slots, retained content, focus and Undo.
+Grid cells and populated rows are protected by the added core tests.
+
+`rendering-regression-check.js` passed 12 Chromium comparisons: three formulas,
+two base sizes and two renderers. Fraction terms matched KaTeX font sizes;
+vertical offset differences were at most 0.109em against a 0.25em threshold.
+Horizontal gap, active-input size and focus assertions passed. Matching-size
+editor/KaTeX screenshots were visually inspected for the indexed-root power
+and simple fractional power. Full pixel identity is not claimed.
+
+Local evidence: `output/playwright/math-rendering-regression-evidence.json`
+records metrics and source SHA-256 values. Screenshot pairs use the paths in
+[Rendering checks](RENDERING-TESTS.md). This is workspace-source evidence, not
+packed-release, all-host, cross-browser or full notation certification.
+
+See [Editing scenarios](EDITING-SCENARIOS.md) for stable scenario IDs, acceptance criteria, coverage gaps and per-run reporting.
+
+
+## Radical conversion suggestions — workspace, 2026-09-09
+
+Core tests: 558 passed in 34 files; type checking passed. Ten added cases cover
+nested radicands, retained node IDs, selected index `2`, safe reverse conversion,
+non-square and structured indices, nearest-root targeting, stale targets, empty
+slots, localization, literal text and Undo/Redo.
+
+`root-transform-check.js` passed in Chromium for rich React and Quill's native
+DOM field. It checks pointer and arrow/Enter acceptance, selected index editing,
+radicand preservation, reverse conversion, and rejection of index `3` conversion.
+The generated LaTeX and KaTeX preview match; editor/KaTeX radical screenshots
+were inspected. This does not certify every browser or every host adapter.
+
+## Selection suggestion navigation — workspace, 2026-09-09
+
+`apps/math-integrations/tests/selection-suggestions-check.js` passed in Chromium
+for rich React and all nine host integrations. The check covers Shift+arrow
+ranges, Up/Down navigation, the Alt+Down alias, Enter wrapping the selected
+characters, retained input focus after wrapping, and native mouse-drag selection.
+No page errors were reported. Core tests: 548 passed; core type check passed.
+`selection-collapse-check.js` also passed for React horizontal caret recovery,
+fraction boundaries and resumed typing. `tinymce-inline-check.js` passed for
+inline and classic iframe hosts, including vertical caret recovery after Escape
+dismisses the wrapping menu, Apply/Cancel, serialization and Undo/Redo.
+
+A visible wrapping menu now owns vertical arrows. Left/Right still collapses
+a model selection to its ordered edge. This replaces the Alt-only menu
+navigation policy in the historical selection-collapse record below.
+
+## Styling and themes — workspace, 2026-09-09
+
+Release browser regression: all 385 existing Chromium cases passed across the
+full run and a focused rerun. Three stale expectations were updated for locale
+query parameters, the explicit toolbar overflow button and Alt+arrow wrapping
+navigation; all 26 cases in those three files passed on rerun. Shared integration
+unit tests: 52 passing. No notation/model changes were needed for theming.
+
+`apps/math-integrations/tests/style-customization-check.js` passed in Chromium:
+independent light/dark instances, resolved host `var()` aliases, isolation from
+unrelated portal-container variables, external toolbar styling, native iframe
+menus, rich React suggestions/selection menus, and live theme switches preserving
+input focus, document state and history. The site controls and styling reader
+were also checked in Korean; English controls are covered by the fixture.
+
+`tinymce-inline-check.js` additionally passed palette/action styling and the
+existing typing, Apply/Cancel, serialization, history and cleanup cases in both
+inline and classic iframe TinyMCE. The Apply control now has an explicit class,
+so prepended size controls cannot prevent its primary style. These checks do not
+certify arbitrary customer CSS palettes or browser/assistive-technology contrast.
+
+
+## Selection collapse — workspace, 2026-09-09
+
+Core unit regression: 503 tests in 31 files. The added cases cover ordered edges
+for forward/reversed structural ranges, partial-text and collapsed ranges,
+absent ranges/non-arrow keys and unchanged source. Plain arrows now restore
+a caret from model selection in both renderers; Alt+Up/Down retains a range for
+wrapping-suggestion navigation.
+
+Real Chromium checks in `apps/math-integrations/tests/selection-collapse-check.js`
+passed for rich React, including subsequent typing and fraction-boundary collapse.
+`tinymce-inline-check.js` passed all four plain arrows and subsequent typing in
+both inline TinyMCE and its classic iframe. Native selection/toolbar, shared iframe
+and all nine matrix host regressions also passed. Wider browser and OS IME checks
+remain open. This is workspace evidence, not a new published package version.
+
+## Current release status — 0.2.1
 
 The dated entries below are historical verification records, not current release availability claims. Note inline editing is resolved according to the user; this release does not change or deploy Note. Math-editor release checks and site validation are recorded separately at the end of this document.
 
@@ -43,13 +180,67 @@ The in-app browser also verified the complete English demo/editor UI, quadratic-
 - Real OS Korean IME testing is deferred at the user's request. Synthetic composition events verify guarding and draft handling only.
 - Automated browser coverage is Chromium on macOS. Narrow viewport checks are not mobile-browser or touch validation.
 - Full screen-reader math navigation, high contrast, and every theme are not certified.
-- There is no saved-document validator, persistence/restart-recovery test, migration path or host-wide undo integration.
-- Rectangular matrix selections, keyboard model range extension, general LaTeX import and symbolic computation are not implemented.
+- Saved-document validation, bounded LaTeX import and keyboard model ranges are implemented; model-version migration and recovery remain open. Host persistence/Undo evidence is recorded separately in the integration validation guide.
+- Matrix rectangles and transpose are implemented in the workspace; full TeX interpretation and symbolic computation are not implemented.
 - Deep nesting and very large expressions have no agreed performance budget yet.
 
 ## Integration gates
 
 Before shipping inside a host product, test actual input methods and target browsers, establish a single undo owner, validate saved documents, verify focus across host/math boundaries, and define recoverable clipboard/import failures. Every new structure must have localized labels, deterministic transformations, one-step structural undo, browser interaction coverage and supported LaTeX output.
+
+## Matrix cell ranges and transpose — 2026-09-09 workspace
+
+- 498 core tests pass, including 16 cell-rectangle/model/history cases and a grid
+  hit-test regression for tall fractions. Selection snapshots stay isolated;
+  invalid shapes and oversized pastes preserve the entire document/history.
+- `apps/math-integrations/tests/matrix-range-check.js` passes in both rich React
+  and the native renderer with zero page errors. It covers active-input drag,
+  reversed corners, keyboard extension/shrinking, Shift+click, exact nested-cell
+  clipboard payloads, mismatched paste rejection, paste/cut/clear/typing Undo,
+  anchored TSV growth, full transpose and resumed nested-denominator editing.
+- The same exported transposed matrix was inspected in both editors and KaTeX.
+  Screenshots: `output/playwright/matrix-range-native-katex.png` and
+  `output/playwright/matrix-range-react-katex.png`. Cell order and nested structure
+  match; editing retains its existing spacing and caret targets.
+- Pointer hit testing uses row and column tracks independently once a cell range
+  starts. A tall fraction no longer attracts the pointer away from a neighboring
+  cell during edge scrolling. Pointer focus uses `preventScroll`, and the React
+  selection hint is below the expression to avoid moving it mid-drag.
+- Clipboard checks dispatch ClipboardEvent with DataTransfer; they do not certify
+  system clipboard transfer to other applications. OS IME, touch, Safari/Firefox
+  and screen-reader coverage remain open. No new LaTeX syntax or model version was
+  introduced; neither npm publication nor site deployment is part of this run.
+
+## Native controls and precise selection — 2026-09-09 workspace
+
+The native surface now exposes symbol search, templates and matrix presets behind
+More tools, plus contextual row/column/delimiter controls. Selected passive text
+is highlighted at its exact endpoints. Pointer drags can start in the live input
+and extend through structures while ordinary within-input selection stays native.
+
+- The core suite passes 481 tests, including toolbar catalog restrictions,
+  partial-text intersections, Shift-drag anchors, selection-menu dismissal and
+  suggestion placement around reserved host controls.
+- `apps/math-integrations/tests/native-parity-check.js` passes in Chromium with
+  zero page errors: exact partial highlights, native within-input replacement,
+  cross-fraction selection in both directions, Shift-drag forward/backward anchors,
+  shrinking the range back, replacement and Undo, symbol insertion into selected
+  text, editable templates, matrix edits, filtered/hidden toolbars and teardown.
+- Selection Escape checks preserve the model/native range on the first Escape,
+  reopen suggestions for a changed selection, and notify host Cancel on the second.
+- The browser clipboard check dispatches a ClipboardEvent with DataTransfer and
+  verifies both exact LaTeX endpoints and the structured MIME payload. This is
+  handler validation, not an OS clipboard compatibility claim.
+- Synthetic formula composition disables toolbar mutations and restores them on
+  composition end. Real OS IME testing remains deferred.
+- The existing fraction fixture is shown alongside its KaTeX output in
+  `output/playwright/native-parity-editor-katex.png`; this addition changes
+  controls and selection presentation, not supported notation or glyph geometry.
+
+These are workspace changes awaiting release. Whole logical-run active inputs,
+one active-run role color, additional
+complete locale packs and broader browser/accessibility certification remain open.
+Host-specific browser findings are recorded in the integration validation guide.
 
 ## Line numbers and symbol discovery
 
@@ -63,7 +254,12 @@ Three browser tests verify the UI-only line gutter through split/join/undo, its 
 - A packed tarball was extracted into a temporary directory. Five entry points (`core`, `dom`, `web-component`, `vue`, `svelte`) imported without framework peers or browser globals; main/React/Solid entries imported after installing links to only their relevant local peers. All eight JS export paths and declared CSS/type targets exist. This is a local packaging smoke test, not publication or an exhaustive downstream TypeScript/bundler matrix.
 - The in-app browser visually verified the adapter lab and actual pure-JS `x/ → ↓ → Enter → 2` input, producing `\frac{x}{2}`. Inline mode displays without the block editor's large surface and toolbar.
 
-Remaining adapter gates: exact range highlighting, active-input cross-structure dragging, token-level edit colors, composition preview parity, native all-symbol/context toolbars, reactive-option/version matrix and accessibility/browser coverage. Native `MathEditorSurface` is not advertised as complete rich React parity. OS IME testing remains deferred.
+Updated 2026-09-09: exact range highlighting, active-input cross-structure dragging
+and native symbol/template/grid controls are implemented in the workspace.
+Remaining adapter gates include token-level active input/colors, composition
+preview parity, framework/version coverage and accessibility/browser coverage.
+Native `MathEditorSurface` is not advertised as complete rich React parity.
+OS IME testing remains deferred.
 
 ## Composition, source readability and JSON locales — 2026-09-08
 
@@ -258,3 +454,247 @@ Package build and 388 unit tests passed. Built-in locale tests reject misplaced 
 ## 0.2.1 release verification
 
 Formatting, types, 390 unit tests and all eight packed entry points passed. Thirty-nine related Chromium cases passed for keyboard and drag selection, clipboard, wrapping, tokens, brace/cases discovery, preview and bundled locales. Website PNG download/copy checks validate dimensions and nonblank raster pixels. Long-formula fitting and transparent alpha were checked separately. Image generation is a demo dependency, not a library API.
+
+## Editing utilities — workspace, 2026-09-09
+
+Core unit regression: **548 tests**. Shared integrations: **52 tests**. Core, integration package and both demo applications pass TypeScript checks. The main demo documentation/site build and the integration demo production build pass. The integration demo retains its existing large host-SDK chunk warnings.
+
+- `token-paste-check.js`: Vue and rich React pass continuous token typing, middle insertion, boundary deletion, range replacement through explicit LaTeX paste, atomic diagnostics, continued typing and Undo.
+- `quick-presentation-check.js`: Vue, rich React and Quill pass symbol/template favorites, recent items, insertion focus, bracket/size/limit changes and Undo. Editor views and the live KaTeX output were visually compared.
+- `host-composition-check.js`: 16 supported inline/block combinations across nine host demos preserve browser preedit, commit/cancel and subsequent typing without per-key refocusing.
+- `latex-paste-host-check.js`: the same 16 combinations keep Ctrl/Cmd+Enter inside the paste form. Inserted fractions remain local drafts, typing resumes, and Cancel preserves host serialization.
+- `native-parity-check.js`: exact text and cross-structure selection, Shift-drag, shrinkback, structured copy, discovery, grid controls, restrictions and teardown pass. Its coordinate helper now maps logical text across token spans.
+- Quill composition and typing regression fixtures pass, including read-only recovery, host history and matrix-cell entry.
+
+This is local Chromium evidence. OS IME, Safari/Firefox, installed WordPress and cross-application system clipboard checks were not repeated. No new mathematical grammar or numerical behavior is introduced. Release artifacts prepared before these changes require regeneration; nothing was published by this work.
+
+
+## EDIT-019 continuous editing — workspace, 2026-09-10
+
+- Run: `2026-09-09T17-47-53-597Z`; source fingerprint remained stable.
+- Evidence: [report](../../output/playwright/editing-scenarios/2026-09-09T17-47-53-597Z/REPORT.md), [checkpoints and source hashes](../../output/playwright/editing-scenarios/2026-09-09T17-47-53-597Z/report.json).
+- Command: `pnpm --filter @barocss/math-editor test:editing`.
+- Environment: Chromium 152 / macOS, English locale, workspace source.
+- **React standalone block: PASS, 28 checkpoints. Quill in-place block: PASS, 29 checkpoints.**
+- Real key input creates `fraction(indexedRoot(3, ab), 2) + matrix(1, 2; 3, 4)`;
+  an explicit tree assertion checks content and nesting. The last cell becomes
+  `456789` in a second uninterrupted typing chain.
+- Both surfaces pass two five-step Undo/Redo chains, retained typing focus,
+  empty-root Delete/Undo/Redo and unchanged retained content. Each first history
+  step is compared with its recorded structural checkpoint.
+- Quill draft operations leave host data unchanged. Apply is one host Undo step;
+  Redo restores it. Save, page reload, Restore and reopen preserve the Delta and
+  formula structure. The restored matrix remains editable; Cancel preserves the
+  saved document. React has no host persistence lifecycle, so that part is N/A.
+- The runner fails on either scenario failure or a changed source fingerprint.
+  It stores the executed fixture, failure screenshots, diagnostics and final data.
+- No runtime library changes were required. Earlier fixture failures exposed OS
+  `End` assumptions and selection of the wrong saved block; the final fixture
+  verifies caret offsets with arrows and reopens the uniquely identified formula.
+- Not covered: other hosts, Quill inline mode, real OS IME/clipboard,
+  Firefox/WebKit, touch, accessibility and performance budgets. No release-wide
+  pass or new rendering pass is claimed.
+
+
+## EDIT-019 Quill inline extension — workspace, 2026-09-10
+
+- Run: `2026-09-09T22-30-59-017Z`; source fingerprint remained stable.
+- [Report](../../output/playwright/editing-scenarios/2026-09-09T22-30-59-017Z/REPORT.md) and
+  [checkpoints](../../output/playwright/editing-scenarios/2026-09-09T22-30-59-017Z/report.json).
+- **React block: PASS (28 checkpoints); Quill block: PASS (29); Quill inline: PASS (30).**
+- The unchanged continuous editing chain runs in all three targets. Renderer and
+  mode are recorded separately, including artifact names and the failure summary.
+- Quill inline commits with Enter from the outer boundary. No extra formula line
+  or host paragraph appears; prose is unchanged by math editing.
+- Apply/host Undo/Redo, Save/reload/Restore, re-edit and Cancel preserve the
+  inline formula. A later Right-arrow exit returns focus to Quill; typing `q`
+  inserts exactly one character immediately after that formula. Host Undo
+  restores the committed Delta, including formula data.
+- Runtime library code was unchanged. The runner and scenario documentation were
+  extended; no npm publication or new rendering audit was required.
+- Other hosts, standalone inline adapters, OS IME/clipboard, Firefox/WebKit,
+  touch, accessibility and performance remain outside this run.
+
+
+## EDIT-019 Tiptap and ProseMirror — workspace, 2026-09-10
+
+- Run: `2026-09-09T22-39-51-097Z`, stable source fingerprint.
+- [Report](../../output/playwright/editing-scenarios/2026-09-09T22-39-51-097Z/REPORT.md) and
+  [checkpoints and hashes](../../output/playwright/editing-scenarios/2026-09-09T22-39-51-097Z/report.json).
+- **7 targets PASS / 205 checkpoints:** React block (28), Quill block/inline
+  (29/30), Tiptap block/inline (29/30), ProseMirror block/inline (29/30).
+- Chromium 152 on macOS, English UI, workspace source. The extended runner hashes
+  both newly covered plugin sources and package metadata.
+- Each target passes the existing continuous formula chain. Integrated hosts
+  additionally check Apply/host Undo/Redo, Save/reload/Restore, re-edit/Cancel,
+  retained formula data and unchanged prose/container structure. Inline targets
+  check Enter commit, right-boundary exit, exact prose position and host Undo.
+- Initial integrated run `2026-09-09T22-36-38-459Z`: six PASS, Tiptap inline FAIL.
+  A quick prose edit after Restore shared the restored document's history event;
+  Undo removed both. The sample now brackets `setContent` with `closeHistory`
+  transactions, keeping the replacement and subsequent typing separate.
+- Corrected run `2026-09-09T22-38-26-544Z`: seven PASS. The final run above repeats
+  all seven targets with the final runner documentation and source hashes.
+- Integration-demo TypeScript and production build pass. Existing large-chunk
+  build warnings remain. Test source formatting passes. Core/plugin runtime
+  code was unchanged; the fix belongs to the Tiptap demo's restoration callback.
+- Remaining: Lexical, Editor.js, TinyMCE, CKEditor, Slate and Gutenberg; native OS
+  IME/clipboard, other browser engines, touch, accessibility and performance.
+
+
+## EDIT-019 Lexical — workspace, 2026-09-10
+
+- Run: `2026-09-09T23-08-15-353Z`, stable source fingerprint.
+- [Report](../../output/playwright/editing-scenarios/2026-09-09T23-08-15-353Z/REPORT.md) and
+  [checkpoints and hashes](../../output/playwright/editing-scenarios/2026-09-09T23-08-15-353Z/report.json).
+- **9 targets PASS / 264 checkpoints:** React block (28), Quill block/inline
+  (29/30), Tiptap block/inline (29/30), ProseMirror block/inline (29/30),
+  Lexical block/inline (29/30).
+- Chromium 152 on macOS, English UI, workspace source. Fingerprints now include
+  the Lexical plugin source and package metadata.
+- Lexical passes the full nested editing and two history chains, Apply as one
+  host Undo event, Redo, Save/reload/Restore, re-edit and Cancel. Inline also
+  passes Enter commit without a new paragraph, right-boundary exit, focus return,
+  typing immediately after the formula and host Undo.
+- Host checks read Lexical serialized state and retain container boundaries and
+  formula atoms. Drafts must not change saved host state. Restoration must match
+  the complete saved JSON; math rendering alone is not the persistence check.
+- The initial run `2026-09-09T23-06-35-494Z` reached Save/Restore in both Lexical
+  modes but used an incorrect locator for reopening. Lexical uses a mounted
+  `.bme-lexical-node` widget; `data-barocss-math` belongs to its HTML export.
+  The fixture now locates its live widget. No product code change was needed.
+- Runner formatting passes. This change only extends tests and documentation;
+  no new build, package publication or rendering audit was required.
+- Next: Editor.js, TinyMCE, CKEditor, Slate and Gutenberg. Native OS IME/clipboard,
+  other browser engines, touch, accessibility and performance remain outside this run.
+
+
+## EDIT-019 Editor.js — workspace, 2026-09-10
+
+- Run: `2026-09-09T23-25-26-845Z`, stable source fingerprint.
+- [Report](../../output/playwright/editing-scenarios/2026-09-09T23-25-26-845Z/REPORT.md) and
+  [checkpoints and hashes](../../output/playwright/editing-scenarios/2026-09-09T23-25-26-845Z/report.json).
+- **10 targets PASS / 293 checkpoints:** React block (28), Quill/Tiptap/
+  ProseMirror/Lexical block and inline (29/30 each), Editor.js block (29).
+- Chromium 152 on macOS, English UI, workspace source. Fingerprints include
+  Editor.js plugin source and package metadata.
+- Editor.js passes nested fraction/root/matrix editing, suggestion selection,
+  two uninterrupted formula Undo/Redo chains, empty-root deletion/restoration,
+  Apply, Save/reload/Restore, re-edit and Cancel. Draft checks confirm saved host
+  data stays unchanged until Apply; prose blocks and block order remain intact.
+- Async `save()` comparisons exclude only the generated `time` field. Block IDs,
+  saved model data, paragraph data and version remain in persistence assertions.
+- **Editor.js host Undo/Redo is not covered:** the demo has no document history
+  integration. The runner records this limitation in `hostHistory`; it retains
+  the mandatory host Undo/Redo assertions for other configured hosts. Editor.js
+  inline mode is outside the block tool's contract.
+- Test-source formatting passes. Only the runner, fixture and documentation
+  changed; no runtime fix, build, publication or new rendering audit was needed.
+- Next: TinyMCE, CKEditor, Slate and Gutenberg. Native OS IME/clipboard, other
+  browser engines, touch, accessibility and performance remain separate work.
+
+
+## EDIT-019 TinyMCE — workspace, 2026-09-10
+
+- Run: `2026-09-09T23-39-57-339Z`, stable source fingerprint.
+- [Report](../../output/playwright/editing-scenarios/2026-09-09T23-39-57-339Z/REPORT.md) and
+  [checkpoints and hashes](../../output/playwright/editing-scenarios/2026-09-09T23-39-57-339Z/report.json).
+- **12 targets PASS / 352 checkpoints:** React block (28), Quill/Tiptap/
+  ProseMirror/Lexical/TinyMCE block and inline (29/30 each), Editor.js block (29).
+- Chromium 152 on macOS, English UI, workspace source. TinyMCE 8.9.0 uses
+  `inline: true` for its host. Both math modes are covered; classic iframe mode
+  is not covered by this run. Fingerprints include TinyMCE source and metadata.
+- TinyMCE passes the sustained fraction/root/matrix chain, formula history,
+  draft isolation, one host Undo/Redo for Apply, Save/reload/Restore, re-edit and
+  Cancel. Inline also passes Enter commit, right-boundary exit, focus return,
+  typing immediately after the formula and host Undo.
+- The fixture applies and reopens an empty atom before the chain because TinyMCE
+  inserts on Apply. This exposed a real bug: the empty preview renderer returned
+  no visible content, leaving no click target. The adapter now shows the existing
+  localized empty-formula message and skips the renderer for empty LaTeX.
+  Serialized content stays empty; the test checks the label does not leak into HTML.
+- HTML comparisons retain the complete serialized document. A detached parser
+  reads prose and element boundaries for caret checks. Live locators exclude
+  TinyMCE's `.mce-offscreen-selection` clone inside the editable body.
+- Diagnostic run `2026-09-09T23-38-20-112Z` confirmed that a reported prose Undo
+  failure was in the fixture: saved and actual HTML were identical, but building
+  the expected prose result had mutated the saved units array. The fixture now
+  copies that array. No timing wait or product history change is used to pass it.
+- TinyMCE package TypeScript, two unit tests, build and changed-source formatting
+  pass. Package-local build also exposed a metafile path check using the wrong
+  working directory. The build now sets esbuild's working directory to the repo
+  root; the normal package build command succeeds with its dependency checks intact.
+- Patch changeset: `.changeset/tiny-math-empty-preview.md`. No package was published.
+- Remaining: CKEditor, Slate, Gutenberg, TinyMCE iframe mode, native OS
+  IME/clipboard and other browser/input environments. Editor.js document history
+  remains unverified because its demo has no host history integration.
+
+
+## EDIT-019 CKEditor — workspace, 2026-09-10
+
+- Run: `2026-09-09T23-44-59-263Z`, stable source fingerprint.
+- [Report](../../output/playwright/editing-scenarios/2026-09-09T23-44-59-263Z/REPORT.md) and
+  [checkpoints and hashes](../../output/playwright/editing-scenarios/2026-09-09T23-44-59-263Z/report.json).
+- **14 targets PASS / 411 checkpoints:** React block (28), Quill/Tiptap/
+  ProseMirror/Lexical/TinyMCE/CKEditor block and inline (29/30 each),
+  Editor.js block (29).
+- Chromium 152 on macOS, English UI, workspace source. CKEditor 48.5.0 uses the
+  local ClassicEditor demo. Fingerprints include CKEditor plugin source and
+  package metadata. This run does not cover other CKEditor builds or collaboration.
+- CKEditor passes the sustained fraction/root/matrix chain, keyboard suggestion
+  selection, two formula Undo/Redo chains, empty-root deletion/restoration,
+  unchanged host data during drafts, Apply as one host Undo event and host Redo.
+- Save/reload/Restore retains the complete serialized HTML and editable math
+  structure. Re-edit and Cancel leave that HTML unchanged. Inline also passes
+  Enter commit without another paragraph, Right-arrow exit, focus return,
+  prose input immediately after the formula and host Undo.
+- The fixture reuses the detached HTML parser for prose/container checks and
+  copies parsed units when constructing expectations. Full saved-state equality
+  remains required for history and persistence checks.
+- Test-source formatting passes. Only tests and documentation changed in this
+  extension; no runtime fix, additional build or package publication was needed.
+- Next: Slate and Gutenberg. TinyMCE iframe hosts, other CKEditor builds,
+  native OS IME/clipboard and other browser/input environments remain separate
+  targets. Editor.js document history is still outside its demo's configuration.
+
+
+## EDIT-019 all integration demos — workspace, 2026-09-10
+
+- Run: `2026-09-09T23-55-26-302Z`, stable source fingerprint.
+- [Report](../../output/playwright/editing-scenarios/2026-09-09T23-55-26-302Z/REPORT.md) and
+  [checkpoints and hashes](../../output/playwright/editing-scenarios/2026-09-09T23-55-26-302Z/report.json).
+- **17 targets PASS / 499 checkpoints**, covering all nine integration demos
+  plus standalone React block. Chromium 152 on macOS, English UI, workspace source.
+
+| Editor | Tested math modes | Checkpoints | Host Undo/Redo |
+| --- | --- | ---: | --- |
+| React standalone | Block | 28 | Not applicable |
+| Quill | Block + inline | 59 | PASS |
+| Tiptap | Block + inline | 59 | PASS |
+| ProseMirror | Block + inline | 59 | PASS |
+| Lexical | Block + inline | 59 | PASS |
+| Editor.js | Block | 29 | Not configured; unverified |
+| TinyMCE | Block + inline, inline host | 59 | PASS |
+| CKEditor | Block + inline, ClassicEditor | 59 | PASS |
+| Slate | Block + inline | 59 | PASS |
+| Gutenberg | Block, standalone provider | 29 | PASS |
+
+- Slate passes the sustained nested editing chain, two formula Undo/Redo chains,
+  Apply as one host history event, Save/reload/Restore, re-edit and Cancel.
+  Inline also passes Enter commit, Right-arrow exit, host focus, exact prose
+  insertion position and host Undo. Comparisons retain the saved descendant
+  array and formula objects; prose checks also preserve paragraph boundaries.
+- Gutenberg passes the same block chain and provider host Undo/Redo. Full saved
+  HTML equality includes WordPress comments and encoded math data. A separate
+  detached DOM comparison checks prose and block order; comments are not prose.
+- Both new hosts keep saved document data unchanged while editing a draft.
+  Restore reproduces the full saved state and reopens the same editable model.
+- Fingerprints now include Slate and Gutenberg source/package metadata, as well
+  as the previously covered hosts, core, shared helpers, demos and test runner.
+- Formatting passes. This extension changed only tests and documentation; no
+  runtime fix, new build or publication was needed.
+- This run covers local demo configurations. It does not replace the separate
+  WordPress admin/plugin ZIP checks. TinyMCE iframe, other CKEditor builds,
+  collaboration, native OS IME/clipboard, Firefox/WebKit, touch, accessibility
+  and performance remain separate targets. Editor.js/Gutenberg are block tools;
+  no inline mode is claimed for them.

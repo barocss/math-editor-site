@@ -1,6 +1,55 @@
 {
   "package": "@barocss/math-editor",
-  "version": "0.2.1",
-  "integrity": "sha512-mLk33FgxQhiKWjXqniMVYev4+kpEBfz3ns6+xOD/nXs4nOARIY8f5SioTRAr/5L9Bto9VNzOQN40etU4fEWUJg==",
-  "builtAt": "2026-09-08T13:14:42.774Z"
+  "version": "0.5.0",
+  "source": "workspace-source",
+  "publicationChecked": false,
+  "builtAt": "2026-09-10T01:21:16.118Z",
+  "integrations": {
+    "packages": [
+      {
+        "name": "@barocss/math-editor-tiptap",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-prosemirror",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-lexical",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-editorjs",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-tinymce",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-ckeditor",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-quill",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-slate",
+        "version": "1.0.0"
+      },
+      {
+        "name": "@barocss/math-editor-gutenberg",
+        "version": "1.0.0"
+      }
+    ],
+    "status": "workspace-source-build",
+    "source": "workspace-source",
+    "path": "/integrations/",
+    "docs": "/docs/integrations/index.html",
+    "hostLicenseConfigurationRequired": [
+      "tinymce",
+      "ckeditor"
+    ]
+  }
 }

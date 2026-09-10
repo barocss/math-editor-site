@@ -1,0 +1,133 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WordPress Gutenberg · Barocss Math Editor</title><meta name="description" content="WordPress Gutenberg for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" aria-current="page">WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="wordpress-gutenberg-integration-development-preview">WordPress Gutenberg integration (development preview)</h1>
+<p>The examples below use its public entry points. See the <a href="/docs/integrations/releasing.html">release guide</a>.</p>
+<p><a href="/integrations/?editor=gutenberg">Open the Gutenberg example</a> · <a href="/docs/integrations/host-support.html">Host support</a> · <a href="/docs/integrations/validation.html">Validation</a></p>
+<p><code>registerBarocssMathBlock(options)</code> registers the real <code>barocss/math</code> block through
+WordPress's block API. This first version supports block formulas. Its editing
+surface uses the shared Barocss math field inside the block; it does not add an
+inline formula format to RichText paragraphs.</p>
+<pre><code class="language-ts">import { createBlock } from &quot;@wordpress/blocks&quot;;
+import { dispatch } from &quot;@wordpress/data&quot;;
+import { store as blockEditorStore } from &quot;@wordpress/block-editor&quot;;
+import {
+  registerBarocssMathBlock,
+  encodeGutenbergMathData,
+} from &quot;@barocss/math-editor-gutenberg&quot;;
+import { mathAttributes } from &quot;@barocss/math-editor-gutenberg/shared&quot;;
+import &quot;@barocss/math-editor/style.css&quot;;
+import &quot;@barocss/math-editor-gutenberg/style.css&quot;;
+
+registerBarocssMathBlock({ locale: &quot;en&quot;, editing: &quot;panel&quot; });
+dispatch(blockEditorStore).insertBlocks(
+  createBlock(&quot;barocss/math&quot;, {
+    mathData: encodeGutenbergMathData(
+      mathAttributes(String.raw`\frac{x^2}{y}`, &quot;block&quot;)!
+    ),
+  })
+);
+</code></pre>
+<p>Register before the block editor mounts. Repeated registration returns the existing
+block type, so the first options supplied in that WordPress blocks registry win.
+Pass the common <code>locale</code>, <code>messages</code>, toolbar and preview <code>render</code> options. A custom
+renderer is editor-only and must use the provided element's <code>ownerDocument</code> when
+creating nodes. Load math and renderer CSS in the editor canvas as well as the
+outer document when WordPress uses an iframe.</p>
+<p>The React edit wrapper uses WordPress's <code>useBlockProps</code> and public block store. Draft typing and font-size changes stay outside block attributes until
+Apply. Cancel discards the draft. An Apply updates <code>mathData</code> with one
+<code>updateBlock</code> action, preserving the other attributes and block identity. This
+keeps consecutive Apply operations as separate history steps instead of grouping
+them as continuous attribute typing. See the official
+<a href="https://developer.wordpress.org/block-editor/reference-guides/data/data-core-block-editor/#updateblock"><code>updateBlock</code> action</a>. The field closes when its attributes change externally or
+its inherited block editing mode becomes <code>disabled</code>. WordPress retains control of
+block selection, ordering, deletion, and document history. See the official
+<a href="https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/">Edit and Save API</a>
+and <a href="https://developer.wordpress.org/block-editor/reference-guides/data/data-core-block-editor/#getblockeditingmode">block editing modes</a>.</p>
+<h2 id="stored-data">Stored data</h2>
+<p>The block uses API version 3, category <code>text</code>, and disables HTML editing and custom
+class names. Its complete attribute schema is exported as
+<code>barocssMathBlockAttributes</code>:</p>
+<pre><code class="language-json">{ &quot;mathData&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;default&quot;: &quot;&quot; } }
+</code></pre>
+<p><code>mathData</code> is UTF-8 base64 encoding of this versioned JSON envelope:</p>
+<pre><code class="language-ts">{
+  version: 1,
+  value: {
+    latex: string,
+    mathDocument: MathDocument | null,
+    fontSize: number // 50–200; default 100
+  }
+}
+</code></pre>
+<p>The authoritative math JSON and LaTeX fallback are encoded together because
+WordPress recursively filters strings inside parsed block attributes. Raw model
+text such as <code>&lt;widget&gt;</code> could otherwise be treated as HTML by KSES. Encoding is a
+data-preservation format; it does not authorize executing decoded content. The
+adapter does not disable WordPress sanitization. See
+<a href="https://developer.wordpress.org/reference/functions/filter_block_kses_value/"><code>filter_block_kses_value</code></a>.</p>
+<p>The pure <code>@barocss/math-editor-gutenberg/data</code> entry exports
+<code>encodeGutenbergMathData</code> and <code>decodeGutenbergMathData</code> without importing WordPress
+or React. Empty data decodes to an editable empty formula. Invalid or newer
+envelopes return <code>undefined</code> and remain byte-for-byte preserved. Newer math-model
+versions retain their source and cannot be edited by an older math editor. Valid
+JSON controls the editor preview even if its stored LaTeX fallback differs.</p>
+<p>The pure save function writes a <code>div.wp-block-barocss-math</code> with
+<code>data-barocss-math=&quot;block&quot;</code>, the original <code>data-math-data</code>, <code>data-math-size</code>, and
+escaped LaTeX fallback text. WordPress's block comment also contains <code>mathData</code>.
+Preview HTML, toolbar controls, and live inputs never enter the saved content.
+Keep this save output stable: WordPress validates saved block HTML on reload.
+See <a href="https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/">block registration</a>.</p>
+<h2 id="standalone-host-and-wordpress-deployment">Standalone host and WordPress deployment</h2>
+<p>The local demo uses actual <code>BlockEditorProvider</code>, <code>BlockList</code>, <code>BlockTools</code>, core
+paragraph blocks, and WordPress <code>parse</code>/<code>serialize</code>. A private document store made
+with <code>@wordpress/data</code> tracks persistent provider changes for Undo/Redo. That
+standalone host history is separate from the native WordPress post editor's
+history. The readonly demo toggles the public block editing mode. See the official
+<a href="https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/">standalone block editor example</a>
+and <a href="https://developer.wordpress.org/block-editor/reference-guides/packages/packages-data/">data registry API</a>.</p>
+<p>The development package set uses <code>@wordpress/blocks</code> 15.27.0,
+<code>@wordpress/block-editor</code> 17.0.0, <code>@wordpress/components</code> 40.0.0,
+<code>@wordpress/data</code> 10.54.0, <code>@wordpress/element</code> 8.6.0, and React 19.2.8. These npm
+versions do not establish a minimum compatible WordPress installation version.
+WordPress SDKs and React remain peer imports in the integration package's <code>tsc</code>
+output; consumers load the dependencies for their chosen adapter. A WordPress
+plugin build should use the host's <code>wp</code> script dependencies and separately register
+the server-side block metadata. The installable plugin scaffold and its runtime
+validation have their own documentation and acceptance checks.</p>
+<p>The <a href="/docs/integrations/wordpress.html">WordPress preview ZIP guide</a>
+provides the build and installation steps. The local wrapper was verified with
+WordPress 7.1 / PHP 8.3, including its iframe editor, restricted author saves,
+consecutive Apply/Undo, full reload/re-edit and frontend KaTeX rendering. See
+<a href="/docs/integrations/validation.html">VALIDATION</a> for the evidence and untested environments.</p>
+<p>The WordPress packages declare GPL-2.0-or-later. Review the applicable distribution
+terms for your combined plugin; the Barocss core's MIT license is unchanged. The Gutenberg adapter is distributed through its own public package; shared
+workspace helpers remain private. See
+<a href="https://wordpress.org/about/license/">WordPress's license</a>.</p>
+<h2 id="continuous-editing-checks">Continuous editing checks</h2>
+<p>The workspace EDIT-019 run on 2026-09-10 passes Gutenberg math blocks in the
+standalone BlockEditorProvider demo, using Chromium on macOS. It covers nested
+fraction/root/matrix input, two formula Undo/Redo chains, unchanged saved data
+during drafts, Apply as one provider history event, Save/reload/Restore, re-edit
+and Cancel. The demo's Undo/Redo callbacks are included in the test.</p>
+<p>Persistence and history checks compare the full serialized block HTML, including
+WordPress comments and encoded math data. Prose checks also retain block order.
+See <a href="/docs/integrations/validation.html#edit-019-all-integration-demos--workspace-2026-09-10">validation evidence</a>.
+This run is separate from installed WordPress admin/plugin ZIP validation. It
+does not establish WordPress version compatibility or cover native OS input.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/slate.html"><small>Previous</small>Slate </a><a href="/docs/integrations/host-support.html"><small>Next</small>Host support →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#stored-data">Stored data</a><a class="h2" href="#standalone-host-and-wordpress-deployment">Standalone host and WordPress deployment</a><a class="h2" href="#continuous-editing-checks">Continuous editing checks</a></nav></aside></div></body></html>

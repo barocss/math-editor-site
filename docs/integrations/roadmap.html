@@ -1,0 +1,314 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Integration roadmap · Barocss Math Editor</title><meta name="description" content="Integration roadmap for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" aria-current="page">Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="integration-product-roadmap">Integration product roadmap</h1>
+<p>The developer SDK now has development-preview adapters for Tiptap, ProseMirror,
+Lexical, Editor.js, TinyMCE, CKEditor 5, Quill, Slate, and WordPress Gutenberg. The common math editor remains
+the source of truth for notation, parsing, and draft editing. Each adapter owns
+its host's document representation, commands, selection, history, and teardown.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Stage</th>
+<th>Status</th>
+<th>Scope / remaining criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ProseMirror NodeView and Tiptap 3 extension</td>
+<td>Implemented preview</td>
+<td>Inline/block nodes, insertion, host JSON/HTML storage</td>
+</tr>
+<tr>
+<td>Common native math field</td>
+<td>Implemented preview</td>
+<td>Draft Apply/Cancel, previews, display scale, compact/panel layouts, optional shared toolbar</td>
+</tr>
+<tr>
+<td>Native toolbar and pointer selection parity</td>
+<td>Implemented in workspace; awaiting release</td>
+<td>All-symbol search, templates/presets, active-grid row/column/delimiter controls, partial-text highlights and drag from the active input across structures</td>
+</tr>
+<tr>
+<td>Additional host adapters</td>
+<td>Development previews</td>
+<td>Lexical, Editor.js, TinyMCE, CKEditor, Quill, Slate and Gutenberg; host-specific limits below</td>
+</tr>
+<tr>
+<td>Installable WordPress plugin</td>
+<td>Development preview</td>
+<td>ZIP build, server-side block registration and local assets; actual WordPress 7.1 author save/reload and frontend rendering verified</td>
+</tr>
+<tr>
+<td>Tiptap/ProseMirror keyboard boundaries</td>
+<td>Implemented preview</td>
+<td>Adjacent inline entry, deletion policy, one active draft per EditorView, IME switch protection</td>
+</tr>
+<tr>
+<td>Unified developer sample</td>
+<td>Implemented preview</td>
+<td>All nine hosts in one selector, shared save/restore/readonly/history controls, preserved older links</td>
+</tr>
+<tr>
+<td>Main-site integration documentation</td>
+<td>Implemented preview</td>
+<td>Rendered setup guides for all nine hosts, support/validation/release guides and the unified sample under <code>/integrations/</code></td>
+</tr>
+<tr>
+<td>Individual npm artifacts</td>
+<td>Published 0.1.0</td>
+<td>Nine public host packages with MIT, external core/host peers and no private runtime dependency or source maps</td>
+</tr>
+<tr>
+<td>Plugin source ownership</td>
+<td>Implemented in workspace</td>
+<td>Each plugin owns source, tests and build configuration; common helpers contain no host SDK imports; Tiptap depends on the public ProseMirror package</td>
+</tr>
+<tr>
+<td>Product-scoped Changesets and publishing</td>
+<td>Implemented</td>
+<td>Independent versions, scoped version preview and one local pnpm batch release for the core and nine public plugins</td>
+</tr>
+<tr>
+<td>Integration verification</td>
+<td>In progress</td>
+<td>Record unit and browser evidence per adapter in VALIDATION and HOST-SUPPORT; availability is not certification</td>
+</tr>
+<tr>
+<td>Embedding polish</td>
+<td>Planned</td>
+<td>Mobile controls, keyboard entry parity where supported by the host, insertion/focus refinements</td>
+</tr>
+<tr>
+<td>Compatibility certification</td>
+<td>Planned</td>
+<td>Pinned host/browser matrix, Safari/Firefox, OS IME and accessibility audit</td>
+</tr>
+<tr>
+<td>Document interoperability</td>
+<td>Planned</td>
+<td>Sanitizer recipes, clipboard tests, Markdown hooks, migration from other math extensions</td>
+</tr>
+<tr>
+<td>Collaborative editing</td>
+<td>Planned</td>
+<td>Document-level conflict UX and host-specific collaboration tests; no math-token merge guarantee</td>
+</tr>
+<tr>
+<td>Package licensing</td>
+<td>Implemented</td>
+<td>MIT LICENSE and metadata in the core, all nine plugins, and the shared source package; copyright barocss.com</td>
+</tr>
+<tr>
+<td>Paid distribution</td>
+<td>Deferred</td>
+<td>No paid integration license or billing in the current release scope</td>
+</tr>
+<tr>
+<td>Public launch</td>
+<td>Not released</td>
+<td>Release criteria and customer pilot completed</td>
+</tr>
+</tbody>
+</table></div><p>The integration package remains private and unreleased. The core, all nine host
+plugins, and the shared integration source use MIT. Each includes its own LICENSE
+file. Private package metadata prevents accidental npm publishing; it does not
+make a public repository private. Generated integration modules leave host imports
+external. Each prepared public package requires the core and its own host SDKs;
+the internal workspace has no host SDK peers. Tiptap also depends on the public
+ProseMirror plugin. The local demo consumes the public package exports and
+bundles its host dependencies separately. See the <a href="/docs/integrations/releasing.html">release guide</a>.</p>
+<h2 id="scoped-style-customization--workspace-2026-09-09">Scoped style customization — workspace, 2026-09-09</h2>
+<p>Implemented: inherited CSS variables for UI/token colors, slot backgrounds,
+controls, toolbar density and floating menus. Both renderers retain per-editor
+palette values on suggestion/selection portals and follow live ancestor theme
+switches. Shared plugin panels/actions use the same palette; persisted host
+formula sizing remains document data. The site includes default/dark/monochrome,
+base-size and compact-spacing controls. See <a href="/docs/styling.html">Styling &amp; themes</a>.</p>
+<h2 id="tinymce-in-place-editing--workspace-2026-09-09">TinyMCE in-place editing — workspace, 2026-09-09</h2>
+<p>TinyMCE now defaults to <code>editing: &quot;inline&quot;</code> in both inline and classic iframe
+hosts. Existing formulas open in place; new formulas use a temporary marker at
+the selection. The explicit external panel remains available. Transient UI is
+excluded from normal serialization and raw Undo snapshots, and pending openings
+respect Cancel, reload, read-only and destruction. See the <a href="/docs/integrations/tinymce.html">TinyMCE guide</a>
+for iframe style loading and the normal serialization lifecycle contract.</p>
+<p>The shared field prevents a host's synchronous focus changes during Apply from
+reapplying the same draft. A visible wrapping menu uses Up/Down to navigate
+while retaining the selection. Left/Right restores the caret; Shift+arrows
+adjusts the range. Alt+Up/Down also navigates the menu.
+This work is implemented in the workspace and awaits release.</p>
+<h2 id="native-editing-progress--workspace-2026-09-09">Native editing progress — workspace, 2026-09-09</h2>
+<p>The shared native editor now supplies searchable All symbols, templates and matrix
+presets through More tools. Its active-grid controls edit matrix rows, columns and
+delimiters, with row controls for aligned/cases. Precise partial-text highlights and
+dragging from an active input across structures use the existing model selection
+and clipboard rules. These additions await the planned core release; they do not
+change host persistence formats or add LaTeX syntax.</p>
+<p>Toolbar panels remain inside their editing/toolbar host so browsing can keep the
+draft open. The native toolbar's <code>setDisabled</code> and <code>setSession</code> methods support
+composition and active-draft coordination; adapters retain their Apply/Cancel,
+focus restoration and host-history responsibilities. See the
+<a href="/docs/api-session.html#independent-toolbar-and-outputs">native toolbar API</a>.</p>
+<p>Shift+arrow model ranges are implemented. Native input now uses one lexical token, with matching role colors and token-boundary editing. Rectangular
+matrix selection, shape-checked clipboard and transpose are now implemented in both
+renderers in the workspace; broader host/browser validation remains. Complete bundled locales remain
+English/Korean; native OS IME validation is deferred. The website's PNG download/copy
+controls are preview features, not a library or host-adapter image-export API.
+Workspace utilities now add explicit LaTeX paste, recent/favorite symbols/templates and contextual presentation settings through the common core. These changes do not alter host storage.
+Host/browser evidence continues to be recorded in <a href="/docs/integrations/validation.html">VALIDATION.md</a>.</p>
+<h2 id="current-host-scope">Current host scope</h2>
+<p>The versions below are development targets. Local Chromium workflows have been
+checked for all nine adapters, including Gutenberg in WordPress 7.1. These
+results are not broad compatibility claims.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Host</th>
+<th>Target</th>
+<th>Delivery scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/docs/integrations/index.html#tiptap">Tiptap</a></td>
+<td>3</td>
+<td>Extension over the ProseMirror NodeView and draft coordinator; inline/block formulas</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/index.html#prosemirror">ProseMirror</a></td>
+<td>1</td>
+<td>Node specs, plugin, commands and NodeView; inline/block formulas</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/lexical.html">Lexical</a></td>
+<td>0.50.0</td>
+<td>DecoratorNode, commands and native math field; inline/block formulas; host history configured separately</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/editorjs.html">Editor.js</a></td>
+<td>2.31.6</td>
+<td>Block Tool and native math field; block formulas only; no built-in document Undo/Redo</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/tinymce.html">TinyMCE</a></td>
+<td>8.9.0</td>
+<td>Plugin, toolbar/menu/command, atomic inline/block HTML formulas; in-place editing in inline/iframe hosts; optional external panel</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/ckeditor.html">CKEditor 5</a></td>
+<td>48.5.0</td>
+<td>Model objects, conversion, commands and native widgets; inline/block formulas</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/quill.html">Quill</a></td>
+<td>2.0.3</td>
+<td>Inline Embed and BlockEmbed, Delta persistence and native math field; development preview</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/slate.html">Slate</a></td>
+<td>slate 0.126.2 / slate-react 0.126.4</td>
+<td>Inline/block void elements, React rendering, node JSON, insertion and Slate history batches</td>
+</tr>
+<tr>
+<td><a href="/docs/integrations/gutenberg.html">Gutenberg</a></td>
+<td>npm blocks 15.27.0 / block-editor 17.0.0; WordPress 7.1</td>
+<td>Dedicated math block, encoded <code>mathData</code>, deterministic save markup and <a href="/docs/integrations/wordpress.html">installable WordPress preview ZIP</a>; local author persistence and frontend checks passed</td>
+</tr>
+</tbody>
+</table></div><p>Inline <strong>formula placement</strong> does not promise in-place editing, and a shared math
+field does not promise identical clipboard or keyboard behavior across hosts.
+Editor.js's separate block model needs its own inline proposal and host-history
+solution before either capability can be advertised. See
+<a href="/docs/integrations/host-support.html">host support</a> and <a href="/docs/integrations/validation.html">VALIDATION.md</a> for evidence
+and the checks still required.
+Gutenberg's current block support does not include inline formulas inside RichText
+paragraphs. Its encoded storage format preserves model text through WordPress
+sanitization; use the adapter's versioned codec rather than raw comment attributes.</p>
+<p>TinyMCE and CKEditor license configuration belongs to the host application. Local
+demo GPL/evaluation settings are not a deployment entitlement. Follow the
+<a href="https://www.tiny.cloud/docs/tinymce/latest/license-key/">TinyMCE license-key documentation</a>
+and <a href="https://ckeditor.com/docs/ckeditor5/latest/getting-started/licensing/license-and-legal.html">CKEditor licensing guide</a>
+when choosing the applicable host configuration. Barocss distribution terms do
+not replace those SDK terms, and the adapters do not supply paid keys or features.</p>
+<h2 id="future-host-expansion">Future host expansion</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Host / surface</th>
+<th>Status</th>
+<th>Separate work required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gutenberg RichText inline math</td>
+<td>Future</td>
+<td>Inline format registration, paragraph caret/selection behavior, serialization and interoperability</td>
+</tr>
+<tr>
+<td>CodeMirror</td>
+<td>Future source-editor adapter</td>
+<td>LaTeX source ranges, decorations, explicit math editing and source transaction mapping</td>
+</tr>
+<tr>
+<td>Monaco</td>
+<td>Future source-editor adapter</td>
+<td>LaTeX source model ranges, decorations/widgets, selection and undo mapping</td>
+</tr>
+<tr>
+<td>Google Docs</td>
+<td>Future, separate add-on track</td>
+<td>Google Workspace APIs, document insertion/update, authorization and add-on distribution</td>
+</tr>
+<tr>
+<td>Google Slides</td>
+<td>Future, separate add-on track</td>
+<td>Slide object insertion/update, authorization and add-on distribution</td>
+</tr>
+</tbody>
+</table></div><p>CodeMirror and Monaco edit source text; their planned scope is distinct from rich
+text inline atoms. Google Docs and Slides require separate add-on delivery, not
+a drop-in JavaScript plugin attached to their web editors. No implementations,
+release dates, or compatibility certification are implied by this future list.</p>
+<h2 id="licensing">Licensing</h2>
+<p>The current release uses MIT for the core and all Barocss host plugins. Paid
+integration licensing is deferred. The earlier free/paid proposal is not an active
+distribution policy. See the <a href="/docs/integrations/commercial-model.html">licensing guide</a> and the LICENSE
+included in each package. Host SDKs retain their own licenses.</p>
+<h2 id="suggested-first-customer-scope">Suggested first customer scope</h2>
+<p>Choose one host and a pinned supported version range for the initial pilot. Verify
+its supported formula placements, local editing, LaTeX import, native document
+round trips, configured host history, HTML/clipboard preservation where applicable,
+read-only behavior and teardown. Define the browser and support policy around
+that evidence before making a maintenance commitment. Additional editor hosts,
+source-editor adapters and Google Workspace add-ons need their own delivery and
+verification criteria.</p>
+<h2 id="continuous-editing-evidence--workspace-2026-09-10">Continuous editing evidence — workspace, 2026-09-10</h2>
+<p>EDIT-019 covers all nine integration demos: Quill, Tiptap, ProseMirror, Lexical,
+TinyMCE, CKEditor and Slate in block/inline modes, plus Editor.js and Gutenberg
+block modes. With standalone React block, 17 targets pass 499 checkpoints.
+The chain verifies nested editing, formula history, persistence and inline prose
+continuation. Apply is one host history event where host history is configured.
+Editor.js document Undo/Redo remains unverified because its demo has no history
+integration.</p>
+<p>The Tiptap demo separates Restore from subsequent typing in history. TinyMCE
+keeps empty formulas clickable through a localized preview placeholder. The
+Slate/Gutenberg extension required no runtime fixes.</p>
+<p>This baseline uses Chromium on macOS. TinyMCE classic iframe, other CKEditor
+builds, installed WordPress admin and native OS input require separate runs.
+Next: range clipboard, populated/grid deletion and broader browser/input coverage.
+Passing this one chain does not certify every integration scenario.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/releasing.html"><small>Previous</small>Integration release guide </a><a href="/docs/integrations/commercial-model.html"><small>Next</small>Licensing →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#scoped-style-customization--workspace-2026-09-09">Scoped style customization — workspace, 2026-09-09</a><a class="h2" href="#tinymce-in-place-editing--workspace-2026-09-09">TinyMCE in-place editing — workspace, 2026-09-09</a><a class="h2" href="#native-editing-progress--workspace-2026-09-09">Native editing progress — workspace, 2026-09-09</a><a class="h2" href="#current-host-scope">Current host scope</a><a class="h2" href="#future-host-expansion">Future host expansion</a><a class="h2" href="#licensing">Licensing</a><a class="h2" href="#suggested-first-customer-scope">Suggested first customer scope</a><a class="h2" href="#continuous-editing-evidence--workspace-2026-09-10">Continuous editing evidence — workspace, 2026-09-10</a></nav></aside></div></body></html>

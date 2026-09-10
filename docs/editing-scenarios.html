@@ -1,0 +1,429 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Editing scenarios · Barocss Math Editor</title><meta name="description" content="Editing scenarios for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" aria-current="page">Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="editing-scenarios">Editing scenarios</h1>
+<p>Use this document to manage editing behavior. <a href="/docs/support.html">Supported features</a>
+lists notation; this register describes what a person does with that notation.
+<a href="/docs/validation.html">Validation</a> stores dated execution evidence. Neither the number
+of features nor the number of unit tests proves that an editing flow works.</p>
+<h2 id="status-and-ownership">Status and ownership</h2>
+<p>Keep each scenario ID stable. Add the ID to the browser fixture that exercises
+it and to a bug report when that flow fails. The person changing the behavior
+updates its expected result, test mapping and execution record in the same change.
+The release owner reviews unresolved cases before publishing.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recorded</td>
+<td>A dated run is recorded for the stated scope. This is not a pass for every adapter or a future build.</td>
+</tr>
+<tr>
+<td>Rerun</td>
+<td>Related browser checks exist, but this register does not certify the full scenario on the current source.</td>
+</tr>
+<tr>
+<td>Extend</td>
+<td>Some assertions exist; additional browser steps or checks are required.</td>
+</tr>
+<tr>
+<td>Manual</td>
+<td>Requires a person or device. No automated pass is claimed.</td>
+</tr>
+</tbody>
+</table></div><p>P0 covers loss of content, blocked input, invalid output and host persistence.
+P1 covers discoverability, navigation and presentation. P2 covers additional
+platform coverage. A known P0 failure blocks release for the affected scope.
+An unrun or unsupported case must never be counted as passed.</p>
+<h2 id="scenario-register">Scenario register</h2>
+<p>Start each case with a fresh editor unless the steps specify saved content.
+Use actual key presses for typing and actual pointer movement for drag cases.
+<code>Cmd</code> applies on macOS; <code>Ctrl</code> applies on Windows/Linux. Do not substitute a
+programmatic value assignment for a focus or typing assertion.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>ID</th>
+<th>Priority / flow</th>
+<th>Steps</th>
+<th>Required result</th>
+<th>Status / test mapping</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EDIT-001</td>
+<td>P0 — Continuous input</td>
+<td>Enter <code>4ab+12</code>, one key at a time. Pause after <code>4</code>. Resume while suggestions are visible. Move left, insert <code>x</code>, then delete it.</td>
+<td>Each key appears once. The input retains focus. Numbers and variables remain in order; no key changes host prose.</td>
+<td>Rerun — <code>quill-typing-check.js</code>, <code>typing-check.js</code>, <code>token-paste-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-002</td>
+<td>P0 — Operand wrapping</td>
+<td>Type <code>4ab</code>. Choose absolute value for the <code>ab</code> operand. Continue typing after the structure. Repeat with parentheses, fraction and root.</td>
+<td><code>ab</code> remains inside the chosen structure; <code>4</code> remains outside. The cursor reaches the intended slot or following boundary. No operand disappears.</td>
+<td>Rerun — <code>operand-size-check.js</code>; <code>suggestions.test.ts</code></td>
+</tr>
+<tr>
+<td>EDIT-003</td>
+<td>P0 — Selected suggestion</td>
+<td>Type <code>abcd</code>. Select <code>cd</code> with Shift+Left twice. Use Down/Up, choose root, then Enter. Repeat with mouse drag.</td>
+<td>The range stays selected while options change. Only <code>cd</code> is wrapped. The input receives focus after acceptance.</td>
+<td>Rerun — <code>selection-suggestions-check.js</code>. Recorded 2026-09-09 for React and nine hosts before radical suggestions were added; rerun after suggestion changes.</td>
+</tr>
+<tr>
+<td>EDIT-004</td>
+<td>P0 — Return to a caret</td>
+<td>Select part of <code>abcd</code>, press Left or Right, then type <code>q</code>. Repeat with a selection that includes a fraction. In the native field, dismiss the menu with Escape before testing Up/Down collapse.</td>
+<td>Left uses the ordered start; Right uses the ordered end. Typing inserts at that edge instead of replacing the old range. A fraction boundary does not enter the wrong slot.</td>
+<td>Rerun — <code>selection-collapse-check.js</code>, <code>tinymce-inline-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-005</td>
+<td>P0 — Radical conversion</td>
+<td>Load <code>\sqrt{x+1}</code>. Choose Change to Indexed root. Replace the selected <code>2</code> with <code>3</code>. Return to the radicand, then edit the index to <code>2</code> and convert back. Undo and Redo.</td>
+<td>The radicand and nested nodes survive. Index <code>2</code> is selected on conversion. Index <code>3</code> cannot be silently discarded. One conversion is one Undo step.</td>
+<td>Recorded, partial scope — <code>root-transform-check.js</code> (React/Quill, pointer and keyboard acceptance, 2026-09-09); <code>root-transform.test.ts</code> (Undo/Redo and nested trees). Browser Undo/Redo and the other hosts still need a run.</td>
+</tr>
+<tr>
+<td>EDIT-006</td>
+<td>P0 — Structure deletion</td>
+<td>Create a fraction, scripts, aligned equations and cases. Test Backspace/Delete at inner and outer boundaries with empty and populated slots. Undo each deletion.</td>
+<td>Behavior matches the documented boundary rule. Populated grid cells are not silently merged or lost. Undo restores content and structure.</td>
+<td>Extend — <code>empty-slot-deletion-check.js</code> recorded React/DOM Delete, Backspace and Undo for empty roots, fractions, exponents and root indices on 2026-09-09. Grid and populated-boundary checks remain separate: <code>grid-deletion.test.ts</code>, <code>native-parity-check.js</code>.</td>
+</tr>
+<tr>
+<td>EDIT-007</td>
+<td>P0 — Copy and paste a range</td>
+<td>Select text plus a nested fraction. Copy, move the caret, paste, then cut and Undo. Repeat across two editor instances.</td>
+<td>The selected structure is preserved; unselected content stays unchanged. Cut can be undone. A rejected paste leaves the document unchanged.</td>
+<td>Extend — <code>native-parity-check.js</code>, <code>token-paste-check.js</code>, <code>range.test.ts</code>; real OS clipboard coverage remains separate.</td>
+</tr>
+<tr>
+<td>EDIT-008</td>
+<td>P0 — LaTeX import failure</td>
+<td>Import <code>\frac{x}{y}+z</code>. Edit <code>x</code>. Attempt an unsupported command and malformed braces. Cancel, then reopen.</td>
+<td>Valid input is editable. Invalid or unsupported input reports a diagnostic and retains the previous formula. Cancel does not replace host content.</td>
+<td>Rerun — <code>latex-paste-host-check.js</code>, <code>latex-insertion.test.ts</code>, <code>latex.test.ts</code></td>
+</tr>
+<tr>
+<td>EDIT-009</td>
+<td>P0 — Apply, Cancel and history</td>
+<td>Open an existing host formula. Edit and Cancel. Reopen, edit and Apply. Run host Undo and Redo.</td>
+<td>Cancel leaves the stored host data unchanged. Apply creates one host history operation. Host serialization contains formula data, not input/menu DOM.</td>
+<td>Rerun — host fixtures, including <code>tinymce-inline-check.js</code>, <code>quill-composition-check.js</code>, <code>ckeditor-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-010</td>
+<td>P0 — Save and reopen</td>
+<td>Edit nested content, Apply, Save and Restore. Reload the stored host document and reopen the formula.</td>
+<td>Structure, LaTeX and configured presentation survive. The formula is editable after restoration. Do not claim persistence from a preview-only check.</td>
+<td>Rerun — <code>unified-check.js</code> and host-specific fixtures; record each supported storage format.</td>
+</tr>
+<tr>
+<td>EDIT-011</td>
+<td>P0 — Host boundary and read-only</td>
+<td>Move from prose into an inline formula with a boundary arrow. Edit, exit and continue prose. Switch the host to read-only with a draft open.</td>
+<td>Math key events do not edit prose. Read-only closes or disables the draft according to the host contract and prevents new mutations.</td>
+<td>Rerun — <code>shared-boundary-check.js</code>, <code>host-check.js</code>, host-specific fixtures</td>
+</tr>
+<tr>
+<td>EDIT-012</td>
+<td>P1 — Suggestion scrolling</td>
+<td>Type <code>matrix</code>. Park the pointer over a menu item. Press Down repeatedly with pauses; reverse with Up. Test near the bottom of the viewport and in an iframe.</td>
+<td>Each press moves one option. The selected option stays visible. The list does not jump back; the page and host do not scroll unexpectedly.</td>
+<td>Rerun — <code>suggestion-arrow-check.js</code>, <code>suggestion-menu-clipping-check.js</code>, <code>iframe-field-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-013</td>
+<td>P1 — Nested navigation</td>
+<td>Enter <code>x_i^2</code>, a fraction inside a root, and a limit. Move with Left/Right, Up/Down and Tab at every slot boundary.</td>
+<td>The nearest structure owns vertical movement when no suggestion menu is active. Selection and caret positions remain valid.</td>
+<td>Rerun — <code>react-vertical-check.js</code>, <code>vertical-check.js</code>, <code>vertical-navigation.test.ts</code></td>
+</tr>
+<tr>
+<td>EDIT-014</td>
+<td>P1 — Rectangular matrix</td>
+<td>Type <code>3x7</code> and accept the matrix. Fill cells; add/delete rows and columns. Test <code>1x2</code> and <code>2x1</code> boundaries.</td>
+<td>Dimensions match the request. Existing cells retain their content. Cursor movement follows the resulting grid.</td>
+<td>Rerun — <code>matrix-size-shortcut-check.js</code>, <code>matrix.test.ts</code>, <code>native-tools-host-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-015</td>
+<td>P0 — Matrix range editing</td>
+<td>Select a cell rectangle. Copy/paste, clear, Undo and transpose. Test a mismatched or oversized paste.</td>
+<td>Cell boundaries and nested structures survive. Invalid operations leave the matrix unchanged. Draft operations do not create host history entries.</td>
+<td>Rerun — <code>matrix-range-check.js</code>, <code>matrix-range-host-check.js</code>, <code>matrix-range.test.ts</code></td>
+</tr>
+<tr>
+<td>EDIT-016</td>
+<td>P1 — Lines, alignment and cases</td>
+<td>Create two lines. Insert aligned equations and cases; add a row and edit both columns. Try Enter in inline mode.</td>
+<td>Block layouts retain their rows. Inline mode does not create an extra formula line. Enter follows the configured host commit policy.</td>
+<td>Extend — <code>typing-check.js</code>, <code>lines.test.ts</code>, <code>equation.test.ts</code>, <code>embedding.test.ts</code>; add a combined browser flow.</td>
+</tr>
+<tr>
+<td>EDIT-017</td>
+<td>P1 — Preview agreement</td>
+<td>Edit a nested root, scripts, tall fences, integrals with limits, and a chemical formula. Compare exported LaTeX in KaTeX at a matched base size. Repeat with the input active.</td>
+<td>Mathematical structure agrees. Baselines, fences, indices and limits remain readable. Focus backgrounds and hit areas do not obscure notation.</td>
+<td>Recorded metric baseline — 77 formulas / 288 React/DOM mode-size comparisons passed on 2026-09-10. See the source-only <code>test/rendering/STATUS.md</code> ledger. Selected metrics and active-input checks do not certify every glyph or every editing flow.</td>
+</tr>
+<tr>
+<td>EDIT-018</td>
+<td>P1 — Language and multiple instances</td>
+<td>Switch en/ko with a draft open. Open another editor and its suggestions. Repeat with a registered custom locale.</td>
+<td>Labels resolve, formulas do not change, focus and menus stay with the right instance, and search aliases use the locale fallback rules.</td>
+<td>Rerun — <code>plugins-locale-check.js</code>, <code>shared-symbol-tools-check.js</code>, <code>locale-discovery.test.ts</code></td>
+</tr>
+<tr>
+<td>EDIT-019</td>
+<td>P0 — Long edit session</td>
+<td>Build a fraction, wrap a selection, convert a radical, insert a matrix, undo five steps, redo five, Apply, Save and reopen. Repeat without resetting the page.</td>
+<td>No stuck focus, lost selection, duplicated operation or draft leakage. All checkpoints retain the expected formula.</td>
+<td>Recorded, scoped — <code>test/editing/continuous.browser.js</code>, run with <code>pnpm --filter @barocss/math-editor test:editing</code>. React standalone block, Quill/Tiptap/ProseMirror/Lexical/TinyMCE/CKEditor/Slate in-place block/inline, and Editor.js/Gutenberg block passed on 2026-09-10 (17 targets, 499 checkpoints); includes two uninterrupted formula history chains and host Apply/Save/reload/Restore/Cancel. Editor.js has no host history integration, so document Undo/Redo remains unverified there. Inline additionally verifies Enter commit without new paragraphs, right-boundary exit, prose caret position and host Undo. TinyMCE uses its inline host, CKEditor uses ClassicEditor, and Gutenberg uses the standalone provider demo. Other configurations and native OS input remain unverified by this run.</td>
+</tr>
+<tr>
+<td>EDIT-020</td>
+<td>P2 — Native IME and clipboard</td>
+<td>On a real OS, compose Korean text, move the caret, use suggestions, cancel composition and paste with the system clipboard.</td>
+<td>Composed text appears once; composition keys do not apply suggestions or host commands prematurely. Clipboard data is preserved according to the documented formats.</td>
+<td>Manual — previously deferred by the user. Synthetic composition/DataTransfer checks do not certify OS behavior.</td>
+</tr>
+</tbody>
+</table></div><h2 id="contextual-structure-tools">Contextual structure tools</h2>
+<p>These scenarios specify the footer independently from the suggestion list. The
+footer has a single target: the nearest enclosing radical or fence. It is shown only
+while that editor is active, outside literal text and model/matrix selections.
+Native text selection within the active slot is allowed, including the selected
+index produced by conversion.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>ID</th>
+<th>Priority / flow</th>
+<th>Steps</th>
+<th>Required result</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EDIT-021</td>
+<td>P1 — Discover without search</td>
+<td>Click inside a root. Put the caret at the start of its text. Dismiss suggestions with Escape. Move outside the root.</td>
+<td>Footer shows the current structure and conversion even with no query or no open suggestions. Leaving the radical hides it.</td>
+<td><code>context-tools-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-022</td>
+<td>P0 — Footer conversion and index edit</td>
+<td>Convert a root using the footer. Replace selected index <code>2</code> with <code>3</code>. Click the radicand, choose Edit index, type <code>2</code>, convert back and Undo.</td>
+<td>Content survives, index editing selects the existing index, a non-square index blocks reverse conversion with a visible reason, and Undo restores the structure.</td>
+<td><code>context-tools-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-023</td>
+<td>P0 — Keyboard-only footer</td>
+<td>From input, press F6, Escape, F6 and Enter. Tab between available buttons.</td>
+<td>F6 enters tools; Escape returns to the same input. Button activation edits the intended structure. Keys do not reach host prose. Tab uses native button order.</td>
+<td>F6/Escape/Enter recorded in <code>context-tools-check.js</code>; explicit Tab-order assertion remains to add.</td>
+</tr>
+<tr>
+<td>EDIT-024</td>
+<td>P0 — Nearest nested target</td>
+<td>Open <code>\sqrt[3]{a+\sqrt{x}}</code>. Move between <code>a</code> and <code>x</code>.</td>
+<td>Footer identifies the outer indexed root at <code>a</code> and inner square root at <code>x</code>. Index editing targets the corresponding root.</td>
+<td><code>context-tools-options-check.js</code>, <code>root-transform.test.ts</code></td>
+</tr>
+<tr>
+<td>EDIT-025</td>
+<td>P1 — Locale without model changes</td>
+<td>Show tools, change en to ko, then edit the index.</td>
+<td>Structure name, actions, disabled reason and keyboard hint update together. Stored formula content is unchanged by locale selection.</td>
+<td><code>context-tools-options-check.js</code>; direct document equality on locale switch remains to add.</td>
+</tr>
+<tr>
+<td>EDIT-026</td>
+<td>P0 — Scope and focus</td>
+<td>Create a model range, collapse it, blur the field, reopen, then destroy the instance. Repeat focus navigation inside an iframe.</td>
+<td>Range mode does not show stale caret actions. Collapse restores context; blur hides it; destroy removes it. Focus stays in the iframe's own document.</td>
+<td><code>context-tools-check.js</code>, <code>context-tools-options-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-027</td>
+<td>P0 — Composition guard</td>
+<td>Dispatch composition start and end in the native field with context visible.</td>
+<td>Actions are disabled during composition and resume afterward. This guard test is not OS IME certification.</td>
+<td>Synthetic coverage in <code>context-tools-options-check.js</code>; real OS behavior remains EDIT-020.</td>
+</tr>
+<tr>
+<td>EDIT-028</td>
+<td>P1 — Embedding opt-out</td>
+<td>Set <code>contextTools: false</code>, then update to true. Repeat with <code>context-tools=&quot;false&quot;</code> on a Web Component.</td>
+<td>Footer hides without changing the formula or removing suggestion-based conversions. Attribute updates take effect without remounting.</td>
+<td>Visibility/update coverage in <code>context-tools-options-check.js</code>; per-framework wrapper smoke checks remain to add.</td>
+</tr>
+</tbody>
+</table></div><h2 id="inline-transformation-suggestions">Inline transformation suggestions</h2>
+<p>The suggestion list is the primary keyboard entry point for structural changes.
+It remains available when both toolbar and context footer are hidden. Alt+Down
+opens or reopens suggestions and highlights the first available transformation;
+Up/Down browses, Enter applies, and Escape dismisses without editing the formula.
+Automatic context-only suggestions require navigation before Enter can apply them,
+so an inline host's commit key is not silently replaced.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>ID</th>
+<th>Priority / scenario</th>
+<th>Steps</th>
+<th>Expected result</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EDIT-029</td>
+<td>P0 — Fence suggestions in inline fields</td>
+<td>Type inside parentheses. Press Alt+Down, Enter, then continue typing. Repeat after dismissing the menu.</td>
+<td>The list distinguishes changing a fence from wrapping an operand. Existing content and caret are preserved; the menu does not take DOM focus.</td>
+<td><code>fence-suggestions-check.js</code>, <code>context-tools.test.ts</code></td>
+</tr>
+<tr>
+<td>EDIT-030</td>
+<td>P0 — Browse, cancel and Undo</td>
+<td>Open changes, browse with Up/Down, cancel with Escape. Reopen, apply, type, then undo typing and conversion separately.</td>
+<td>Browsing and cancellation do not change the formula. Conversion makes one history entry.</td>
+<td><code>fence-suggestions-check.js</code></td>
+</tr>
+<tr>
+<td>EDIT-031</td>
+<td>P0 — Nearest wrapper and all fence pairs</td>
+<td>Change each of eight fence types. Test nested fractions, roots, mixed delimiters and stale targets. Use F6/Left/Right/Enter if the optional footer is enabled.</td>
+<td>Only the nearest supported wrapper changes. Slot IDs, content and caret remain stable. Explicit left/right metadata is removed when selecting a standard pair.</td>
+<td><code>context-tools.test.ts</code>, <code>fence-context-check.js</code>; browser nested targeting in EDIT-032</td>
+</tr>
+<tr>
+<td>EDIT-032</td>
+<td>P0 — No-toolbar inline iframe</td>
+<td>Hide toolbar/footer in an inline iframe field. Change an inner fence with suggestions, switch ko/en and continue typing. Destroy the editor.</td>
+<td>The complete workflow works without auxiliary UI. Locale changes leave the document unchanged. Focus uses the iframe document; teardown removes suggestions.</td>
+<td><code>fence-inline-options-check.js</code>; installed host/browser breadth remains separate validation work</td>
+</tr>
+</tbody>
+</table></div><p>Execution scope is recorded in <a href="/docs/validation.html">Validation</a>. A mapped case may
+still contain pending assertions, as stated in the Coverage column.</p>
+<p>Browser fixture names above refer to <code>apps/math-integrations/tests/</code>. Unit fixture
+names refer to <code>packages/math-editor/test/</code>. A mapping identifies related coverage,
+not an assertion that every step already exists in that file. Extend cases need
+explicit browser assertions before they can receive a full pass.</p>
+<h2 id="test-environments">Test environments</h2>
+<p>Record renderer, adapter, mode and browser separately. An integration using the
+native DOM field does not prove the rich React field, and an iframe can have its
+own focus, event and CSS failures.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Layer</th>
+<th>Required scope when that layer changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shared model / suggestions</td>
+<td>Unit checks plus affected editing scenarios on rich React and native DOM.</td>
+</tr>
+<tr>
+<td>Framework adapter</td>
+<td>The affected adapter: pure JS, Web Component, Vue, Svelte, Solid, or React wrapper. Record the actual renderer used.</td>
+</tr>
+<tr>
+<td>Host integration</td>
+<td>Every affected host. Shared field changes need the nine-host smoke set: Tiptap, ProseMirror, Lexical, Editor.js, TinyMCE, CKEditor, Quill, Slate, Gutenberg.</td>
+</tr>
+<tr>
+<td>Mode / container</td>
+<td>Inline and block where supported; TinyMCE classic iframe as well as inline. Editor.js and Gutenberg block-only scenarios are N/A for inline tests.</td>
+</tr>
+<tr>
+<td>Browser</td>
+<td>Record Chromium, Firefox or WebKit explicitly. Current Chromium evidence does not cover the other engines.</td>
+</tr>
+<tr>
+<td>Build source</td>
+<td>Workspace source for development; packed artifacts for release checks. Neither implies the other.</td>
+</tr>
+</tbody>
+</table></div><h2 id="per-run-record">Per-run record</h2>
+<p>Append detailed evidence to <a href="/docs/validation.html">Validation</a>, using this template.
+Record an immutable revision when possible. For an uncommitted workspace, record
+that fact and save the tested patch or a source fingerprint with the run artifacts.
+A date alone does not identify the tested code.</p>
+<pre><code class="language-text">Run ID: edit-YYYYMMDD-NN
+Scenario IDs:
+Source: commit / workspace fingerprint / package versions and archive hashes
+Fixture revision:
+Renderer and host:
+Mode and container:
+Browser, OS, locale:
+Input formula and steps:
+Expected result:
+Observed result:
+Outcome: PASS / FAIL / BLOCKED / NOT RUN / N/A
+Evidence: log, screenshot pair, trace or recorded host data
+Remaining steps and excluded environments:
+Issue / follow-up:
+</code></pre>
+<p>A scenario passes only when all required assertions pass in the recorded scope.
+For partial coverage, report the passing steps and keep the rest unverified.
+Do not convert historical validation totals into a current release pass.</p>
+<h2 id="change-workflow">Change workflow</h2>
+<ol>
+<li>Assign a scenario ID to each editing bug before changing its behavior.</li>
+<li>Reproduce the smallest failing input sequence. Capture the caret, selection,
+highlighted suggestion, document and host data where relevant.</li>
+<li>Add or update a regression fixture with the same ID. Check the final model,
+cursor/focus and history behavior, not only whether an element is visible.</li>
+<li>Implement the change. Run its model tests, affected browser scenarios and the
+nearest negative case. Compare editor/KaTeX output when notation changes.</li>
+<li>Record the result and its scope. Mark related scenarios for rerun if later
+changes touch their input, selection, suggestions, history or host handling.</li>
+<li>Before release, run the applicable P0 cases against the release candidate and
+check packed imports. Any excluded host/browser must be stated explicitly.</li>
+</ol>
+<p>The Markdown register is the source of truth for scope and acceptance criteria.
+The browser fixtures contain executable assertions. The validation report holds
+run evidence. The documentation site renders this register; it does not execute
+the browser checks. Automated release enforcement is not implemented by this
+register alone.</p>
+<h2 id="next-work">Next work</h2>
+<ol>
+<li>Maintain the EDIT-019 baseline across all nine integration demos and React
+standalone block. Extend it separately to TinyMCE iframe, WordPress admin and
+other host configurations. Preserve exact checkpoints and host-history assertions.</li>
+<li>Add missing browser steps for EDIT-006, EDIT-007 and EDIT-016. Include negative
+cases and real host Undo/Redo rather than testing only model transformations.</li>
+<li>Reuse the EDIT-019 runner pattern for additional scenario IDs. It already
+records source fingerprints and fails on changed source or failed assertions.
+CI/release enforcement remains separate work.</li>
+<li>Schedule Firefox/WebKit and real OS IME/clipboard coverage separately. Keep
+manual requirements visible without representing synthetic events as a substitute.</li>
+</ol>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/implementation.html"><small>Previous</small>Implementation </a><a href="/docs/rendering-tests.html"><small>Next</small>Rendering checks →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#status-and-ownership">Status and ownership</a><a class="h2" href="#scenario-register">Scenario register</a><a class="h2" href="#contextual-structure-tools">Contextual structure tools</a><a class="h2" href="#inline-transformation-suggestions">Inline transformation suggestions</a><a class="h2" href="#test-environments">Test environments</a><a class="h2" href="#per-run-record">Per-run record</a><a class="h2" href="#change-workflow">Change workflow</a><a class="h2" href="#next-work">Next work</a></nav></aside></div></body></html>

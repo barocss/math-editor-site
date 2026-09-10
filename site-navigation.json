@@ -1,0 +1,24 @@
+{
+  "en": {
+    "main": "Main navigation",
+    "playground": "Playground",
+    "install": "Installation",
+    "integrations": "Editor integrations",
+    "samples": "Samples",
+    "adapters": "Framework adapters",
+    "layouts": "Layout examples",
+    "docs": "Guides",
+    "language": "Language"
+  },
+  "ko": {
+    "main": "주요 메뉴",
+    "playground": "직접 써보기",
+    "install": "설치",
+    "integrations": "에디터 연동",
+    "samples": "샘플",
+    "adapters": "프레임워크 샘플",
+    "layouts": "레이아웃 샘플",
+    "docs": "가이드",
+    "language": "언어"
+  }
+}

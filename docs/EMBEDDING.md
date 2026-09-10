@@ -100,3 +100,7 @@ The browser tests cover panel synchronization without extra change events, singl
 Note opts into the shared `LatexEditor` visual mode with `MathEditorSurface`. Existing tex-only atoms load through `parseLatex`; unsupported input stays in the original source editor. Visual draft changes produce `tex` plus JSON-encoded `mathDocument`. `setMathSource` validates the structure, source equality and inline policy, then applies one host transaction. Cancellation writes nothing. Direct source changes clear stale structure, while font/alignment-only edits retain it.
 
 Other products must use the same [import scope](LATEX-SCOPE.md) and core parser. Do not add product-specific regex conversions. Existing Word OMML and Site/Slide ownership boundaries still need their own host adapters; the Note trial does not integrate those products automatically.
+
+## Style customization
+
+Use inherited CSS variables for colors, slot backgrounds, typography, toolbar density and menu appearance. Scoped themes also follow portaled suggestions in both renderers. See [Styling & themes](STYLING.md) for the public variables, dark/monochrome examples, shared toolbars and iframe/plugin sizing.

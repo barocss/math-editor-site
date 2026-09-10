@@ -5,7 +5,7 @@ The `mathEditor` directive mounts the native editor, updates options in a reacti
 ## Install
 
 ```sh
-npm install @barocss/math-editor@0.2.1 solid-js
+npm install @barocss/math-editor@0.4.0 solid-js
 ```
 
 ## Complete component

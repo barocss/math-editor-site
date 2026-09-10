@@ -1,9 +1,22 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Session &amp; DOM API · Barocss Math Editor</title><meta name="description" content="Session &amp; DOM API for Barocss Math Editor 0.2.1."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Session &amp; DOM API · Barocss Math Editor</title><meta name="description" content="Session &amp; DOM API for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.1</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" aria-current="page">Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" aria-current="page">Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="session-and-native-dom-api-reference">Session and native DOM API reference</h1>
-<p>This reference applies to pure JavaScript, <code>MathEditorSurface</code>, Web Component, Vue, Svelte and Solid native integrations in 0.2.0. Rich React <code>MathEditor</code> owns separate history and has its own <a href="/docs/api-react.html">props</a>.</p>
+<p>This reference applies to pure JavaScript, <code>MathEditorSurface</code>, Web Component, Vue, Svelte and Solid native integrations. The base session/DOM API is available in 0.2.0; the native discovery/context toolbar, <code>setDisabled</code> and precise pointer-selection changes below are additions in 0.4.0. Rich React <code>MathEditor</code> owns separate history and has its own <a href="/docs/api-react.html">props</a>.</p>
 <h2 id="imports">Imports</h2>
 <pre><code class="language-ts">import { createMathSession, createMathDocument } from '@barocss/math-editor/core';
 import { mountMathEditor, mountMathToolbar, mountMathLatex, mountMathPreview }
@@ -44,7 +57,7 @@ import '@barocss/math-editor/style.css';
 <tbody>
 <tr>
 <td><code>getSnapshot()</code></td>
-<td>Copy containing <code>state</code>, optional <code>range</code>, <code>locale</code>, <code>mode</code>, <code>canUndo</code>, <code>canRedo</code>, <code>latex</code></td>
+<td>Copy containing <code>state</code>, optional <code>range</code> / <code>matrixRange</code>, <code>locale</code>, <code>mode</code>, <code>canUndo</code>, <code>canRedo</code>, <code>latex</code></td>
 </tr>
 <tr>
 <td><code>subscribe(listener)</code></td>
@@ -52,7 +65,7 @@ import '@barocss/math-editor/style.css';
 </tr>
 <tr>
 <td><code>execute(command)</code></td>
-<td>Boolean result; text/structure/template/newline/undo/redo</td>
+<td>Boolean result; text/structure/template/newline/undo/redo and matrix selection/clear/transpose</td>
 </tr>
 <tr>
 <td><code>apply(state)</code></td>
@@ -67,6 +80,18 @@ import '@barocss/math-editor/style.css';
 <td>Set/clear <code>MathRange</code>, emit non-document change</td>
 </tr>
 <tr>
+<td><code>selectMatrixRange(range?)</code></td>
+<td>Validate and set/clear a cell rectangle; clear structural range, emit non-document change; false leaves state unchanged</td>
+</tr>
+<tr>
+<td><code>copyMatrix()</code></td>
+<td>Copy selected cells as <code>MathMatrixFragment</code>, or undefined</td>
+</tr>
+<tr>
+<td><code>pasteMatrix(fragment)</code></td>
+<td>Paste at the selected rectangle or active matrix cell as one edit; false leaves document, selection and history unchanged</td>
+</tr>
+<tr>
 <td><code>configure({ locale?, mode? })</code></td>
 <td>Keep document/history; throws on multiline-to-inline change</td>
 </tr>
@@ -76,7 +101,7 @@ import '@barocss/math-editor/style.css';
 </tr>
 <tr>
 <td><code>copy()</code></td>
-<td><code>MathFragment</code> for structural range, or undefined</td>
+<td><code>MathFragment</code> for structural range; matrix rectangle becomes a single-matrix fragment; otherwise undefined</td>
 </tr>
 <tr>
 <td><code>paste(fragment)</code></td>
@@ -88,6 +113,68 @@ import '@barocss/math-editor/style.css';
 </tr>
 </tbody>
 </table></div><p>A snapshot's <code>state</code> contains <code>document</code> and <code>caret</code>. Never mutate a snapshot expecting it to affect the session. Use a command or <code>apply</code> instead. <code>false</code> is also returned for undo/redo when no history change occurs; it is not always an error.</p>
+<h2 id="matrix-cell-selections">Matrix cell selections</h2>
+<p>Available in 0.4.0. <code>MathRange</code> and <code>MathMatrixRange</code> are
+mutually exclusive. <code>select(caret)</code>, document changes, load and Undo/Redo clear cell
+selection. Selecting cells does not emit a document change or create history.</p>
+<pre><code class="language-ts">import { createMathSession } from '@barocss/math-editor/core';
+
+const session = createMathSession({ document: savedDocument });
+// Assume a loaded matrix has three columns; select rows 1–2, columns 2–3.
+session.selectMatrixRange({ matrixId, anchor: 1, focus: 5 });
+const cells = session.copyMatrix();
+// Move to another matrix/cell or select its destination rectangle first.
+if (cells &amp;&amp; !session.pasteMatrix(cells)) {
+  // The destination shape or 20 × 20 bound rejected this paste; no partial write.
+}
+session.execute({ type: 'matrix-select' }); // Current cell, ready for Shift+arrows.
+session.execute({ type: 'matrix-select', all: true });
+session.execute({ type: 'matrix-clear' });
+session.execute({ type: 'matrix-transpose' }); // Entire selected/active matrix.
+</code></pre>
+<p><code>MathMatrixRange</code> is <code>{ matrixId: string, anchor: number, focus: number }</code>.
+Endpoints are zero-based row-major cell indices. Reversed endpoints work; bounds
+are derived from row and column coordinates, not the linear span between indices.
+<code>MathMatrixFragment</code> is <code>{ version: 1, columns, cells: MathRow[], environment }</code>.
+Its <code>cells</code> are row-major and may contain any supported nested formula.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Destination</th>
+<th>Paste behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Caret in a matrix or one selected cell</td>
+<td>Replace whole cells from that anchor; grow/pad the matrix up to 20 × 20</td>
+</tr>
+<tr>
+<td>Larger selected rectangle</td>
+<td>Require matching dimensions; a single copied cell fills every selected cell</td>
+</tr>
+<tr>
+<td>Different rectangle dimensions, invalid payload or size overflow</td>
+<td>Return false with no write, selection change or history entry</td>
+</tr>
+<tr>
+<td>Outside a matrix in the browser UI</td>
+<td>Insert the copied rectangle as a new matrix through its normal math-fragment fallback</td>
+</tr>
+</tbody>
+</table></div><p>Pasting keeps the destination delimiter, preserves unselected cells, and assigns
+fresh IDs recursively to inserted content. Typing over a cell selection clears
+its contents and inserts text into the upper-left cell. Delete/Cut clear contents
+without deleting rows or columns. Enter/Escape resumes editing; Shift+arrows
+extends the rectangle. Transpose reorders the entire matrix, retaining existing
+cell IDs, delimiter and nested caret. Each content operation takes one Undo.</p>
+<p>Browser clipboard handlers write <code>MATH_MATRIX_CLIPBOARD_TYPE</code>
+(<code>application/x-barocss-math-matrix+json</code>), the existing math fragment MIME, and
+plain LaTeX. Read external matrix payloads with <code>parseMatrixFragment</code>; normal
+<code>parseFragment</code> remains the structural clipboard parser. <code>paste(fragment)</code> does
+not overwrite a cell rectangle: use <code>pasteMatrix</code> for that operation. Tab-separated
+spreadsheet data inside a matrix is treated as cell text, not interpreted LaTeX.
+Clipboard formats can be stripped by other applications; OS interoperability is
+a separate check. Neither selection nor clipboard metadata changes MathDocument v1.</p>
 <h2 id="commands">Commands</h2>
 <pre><code class="language-ts">session.execute({ type: 'text', value: 'x + α' });
 session.execute({ type: 'structure', kind: 'fraction' });
@@ -96,7 +183,7 @@ session.execute({ type: 'newline' });
 session.execute({ type: 'undo' });
 session.execute({ type: 'redo' });
 </code></pre>
-<p>These examples assume an existing session. Structure kinds: <code>fraction</code>, <code>root</code>, <code>superscript</code>, <code>subscript</code>, <code>parentheses</code>, <code>brackets</code>, <code>absolute</code>, <code>sum</code>, <code>product</code>, <code>integral</code>, <code>matrix</code>, <code>aligned</code>, <code>cases</code>. A selected structural range can only wrap in supported wrapping kinds. Use exported grid helpers plus <code>apply()</code> for grid resizing; there is no <code>execute({ type: 'resizeMatrix' })</code> command.</p>
+<p>These examples assume an existing session. <code>kind</code> accepts the exported <code>StructureKind</code>; see the <a href="/docs/json-model.html">structure catalog</a> for the current kinds and slot contracts. A selected structural range can only wrap in supported wrapping kinds. Use exported grid helpers plus <code>apply()</code> for grid resizing; there is no <code>execute({ type: 'resizeMatrix' })</code> command.</p>
 <h2 id="mountmatheditorhost-options">mountMathEditor(host, options)</h2>
 <p><code>host</code> must be a real HTMLElement. Mount on the client, once per surface.</p>
 <div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
@@ -119,12 +206,20 @@ session.execute({ type: 'redo' });
 <td>Suggestion portal HTMLElement; mount-only; nearest native dialog or body by default</td>
 </tr>
 <tr>
+<td><code>menuAvoidElements</code></td>
+<td>Workspace: optional callback returning host controls the suggestion menu should avoid; measured in their current position when the menu opens or moves</td>
+</tr>
+<tr>
 <td><code>locale</code>, <code>mode</code></td>
 <td>Configure locale/mode; same defaults as session</td>
 </tr>
 <tr>
 <td><code>toolbar</code></td>
 <td>Boolean or readonly structure kind list; block defaults on, inline off</td>
+</tr>
+<tr>
+<td><code>toolbarMaxItems</code></td>
+<td>Initially visible structure buttons; defaults to eight; More tools reveals the expanded controls</td>
 </tr>
 <tr>
 <td><code>showLineNumbers</code></td>
@@ -137,6 +232,10 @@ session.execute({ type: 'redo' });
 <tr>
 <td><code>onChange(document, latex)</code></td>
 <td>Committed document changes</td>
+</tr>
+<tr>
+<td><code>onRender()</code></td>
+<td>Workspace: final DOM/caret notification, including focus and selection-only updates; no automatic model write</td>
 </tr>
 <tr>
 <td><code>onCommit(snapshot)</code></td>
@@ -152,7 +251,14 @@ session.execute({ type: 'redo' });
 </tr>
 </tbody>
 </table></div><p>Return value: <code>{ session, focus(), update(options), destroy() }</code>. <code>update</code> accepts mutable options only and merges them. Locale updates preserve history. Do not pass a fresh session to <code>update</code>; recreate the renderer if changing ownership.</p>
+<p><code>onRender</code> runs synchronously after the native surface/menu update, before host mutation observers reconcile their selections. It can also run during initial mounting, before <code>mountMathEditor</code> returns. Hosts can inspect the current input and schedule caret restoration; avoid issuing commands or calling <code>focus()</code> from the callback, which can trigger another render. This notification is distinct from <code>onChange</code> and does not imply a document or history change. It is available in 0.4.0.</p>
+<p>Notifications are suppressed during composition and after teardown. A notification does not guarantee that an input is focused. Any deferred caret restoration should check that its input is still connected and focused, so a later callback cannot revive a closed draft or steal focus from another control.</p>
 <p>Inline mode means one top-level row, not a fixed visual height. It rejects newline commands and multiline paste and throws when loading multiline documents. Enter accepts suggestions first; grid keyboard operations have their own priority. CSS alone cannot establish these model constraints.</p>
+<p>For a compact draft, pass <code>menuAvoidElements: () =&gt; [actionsElement]</code> to keep
+suggestions clear of Apply, Cancel and tool-expansion controls. The callback can
+return elements added after mounting. Placement remains constrained by the
+viewport and clipping ancestors; the menu scrolls when the available gap is short.
+This option changes presentation only and adds no model data.</p>
 <h2 id="saving-without-caret-only-writes">Saving without caret-only writes</h2>
 <pre><code class="language-ts">const unsubscribe = session.subscribe((snapshot, documentChanged) =&gt; {
   if (!documentChanged) return;
@@ -162,8 +268,45 @@ session.execute({ type: 'redo' });
 </code></pre>
 <p>If a server persists changes asynchronously, debounce/serialize writes and handle failed saves in your host. The library does not resolve write races or validate arbitrary documents returned by a server.</p>
 <h2 id="independent-toolbar-and-outputs">Independent toolbar and outputs</h2>
-<p><code>mountMathToolbar(host, session, { kinds?, onExecute? })</code> exposes <code>destroy()</code>. Use <code>onExecute: () =&gt; editor.focus()</code> to return keyboard focus after choosing a tool. <code>mountMathLatex(host, session)</code> renders derived LaTeX and returns <code>destroy()</code>.</p>
+<p><code>mountMathToolbar(host, sessionOrNull, { kinds?, maxItems?, locale?, onExecute? })</code> mounts a toolbar whose current workspace handle exposes:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Method</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setSession(sessionOrNull)</code></td>
+<td>Switch the active draft subscription; <code>null</code> disables mutations; switching/detaching closes symbol search</td>
+</tr>
+<tr>
+<td><code>setDisabled(boolean)</code></td>
+<td>Disable mutations while keeping the session attached; disabling closes symbol search; restore with <code>false</code> after composition</td>
+</tr>
+<tr>
+<td><code>destroy()</code></td>
+<td>Remove the toolbar, its panels and session subscription</td>
+</tr>
+</tbody>
+</table></div><p><code>maxItems</code> defaults to eight. <code>locale</code> supplies labels before a session is attached; an active session supplies its own locale. Use <code>onExecute: () =&gt; editor.focus()</code> to return focus after a successful command. Opening or searching the symbol browser leaves focus in that browser. The toolbar uses the session's caret/range even when the math input has blurred.</p>
+<p>The workspace More tools section exposes the full symbol catalog with search, templates, matrix/identity presets and symbol shortcuts. <code>kinds</code> filters structure buttons, templates containing excluded kinds, and grid presets/context controls; it does not limit model or parser support. Active matrices provide row/column operations and delimiter selection; aligned/cases provide row operations. Grid mutations are disabled while text or a model range is selected. The symbol panel stays inside its toolbar host, and Escape closes it without requesting host Cancel.</p>
+<p>An internally mounted toolbar is disabled during native formula composition. Hosts mounting an independent toolbar must coordinate composition with <code>setDisabled</code>, or temporarily detach with <code>setSession(null)</code>. Host integrations also own containment: keep the toolbar and its panels inside the declared <code>toolbarHost</code> so an outside-click handler does not commit the draft while browsing. See <a href="/docs/adapters.html">adapter embedding</a> for lifecycle ownership.</p>
+<p><code>mountMathLatex(host, session)</code> renders derived LaTeX and returns <code>destroy()</code>.</p>
 <p><code>mountMathPreview(host, session, { render(host, snapshot) })</code> delegates rendering to your application. <code>render</code> may return a cleanup function. The math-editor package does not ship KaTeX as a runtime requirement; import your chosen renderer separately. All output handles must be destroyed when their hosts are removed.</p>
+<p>The website's sized PNG download/copy controls belong to its preview renderer. They are not native DOM/session image-export methods; a reusable library SVG/PNG export API remains future work.</p>
+<h2 id="native-selection-behavior">Native selection behavior</h2>
+<p>Shift+Left/Right extends or shrinks a model range; Shift+Up/Down extends across top-level lines using logical offsets. In the workspace, passive highlights cover exact selected text endpoints. Dragging within the active input keeps native text selection; crossing its boundary can extend a model range across structures. Structural normalization remains unchanged: a <code>MathRange</code> crossing fraction slots or matrix cells selects their common structure. Cross-cell pointer gestures instead create a separate <code>MathMatrixRange</code> in the workspace; see the matrix selection contract above.</p>
+<p>After a model selection, plain Left/Up restores the caret at its document-ordered
+start; Right/Down restores it at the end. The same rule applies to reverse drags
+and Shift+arrow selections, without consuming another character or changing the
+formula. Alt+Up/Down browses the wrapping suggestions while retaining the range;
+Enter applies a candidate. Ordinary input suggestions still use Up/Down.</p>
+<p>The first Escape dismisses a selection's wrapping suggestions while preserving
+the selection and draft. A subsequent Escape reaches the host Cancel callback.
+Changing the selection or beginning a new pointer gesture makes suggestions
+available again.</p>
+<p>The active native input still edits a whole logical text run with one role color. Passive runs retain lexical colors. The cell-selection work adds full-matrix transpose through existing model structures; no new LaTeX grammar is needed. Native OS IME validation and additional complete locale packs remain deferred; see <a href="/docs/adapters.html#current-renderer-parity">renderer parity</a> for remaining limits.</p>
 <h2 id="reusable-browser-storage-adapter-with-restore-and-error-reporting">Reusable browser-storage adapter with restore and error reporting</h2>
 <p>This adapter avoids writes for caret changes, debounces edits, flushes on page hide, and removes its listeners on teardown. Restore runs before subscribing so opening saved content does not immediately write it back. It does not validate documents itself: supply your application's schema validator as <code>decode</code>, which must throw for invalid or unsupported JSON. Use a different key per document. Call <code>dispose()</code> before changing the session's document/key.</p>
 <pre><code class="language-ts">import type { MathDocument } from '@barocss/math-editor/core';
@@ -227,5 +370,71 @@ if (!result.ok) {
 </code></pre>
 <p>This operation replaces the current formula in one undo step; redo restores the imported formula. Inline sessions reject multiple top-level lines before modifying state. All framework adapters using a session share this API; Web Components expose it as <code>element.session.importLatex(source)</code>.</p>
 <p>For state-independent inspection, use <code>parseLatex(source, { multiline?, excludedStructures? })</code> from <code>/core</code>. For opening a different saved document, validate JSON with <code>parseMathDocument</code> and call <code>session.load</code>. Loading deliberately resets history, importing does not. See <a href="/docs/latex-scope.html">the exact syntax contract</a>; arbitrary LaTeX macros are not supported. These APIs are available in 0.2.0.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-solid.html"><small>Previous</small>Solid </a><a href="/docs/support.html"><small>Next</small>Supported features →</a></nav><footer>Barocss Math Editor · 0.2.1 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#imports">Imports</a><a class="h2" href="#createmathsessionoptions">createMathSession(options)</a><a class="h2" href="#commands">Commands</a><a class="h2" href="#mountmatheditorhost-options">mountMathEditor(host, options)</a><a class="h2" href="#saving-without-caret-only-writes">Saving without caret-only writes</a><a class="h2" href="#independent-toolbar-and-outputs">Independent toolbar and outputs</a><a class="h2" href="#reusable-browser-storage-adapter-with-restore-and-error-reporting">Reusable browser-storage adapter with restore and error reporting</a><a class="h2" href="#failure-and-compatibility-boundaries">Failure and compatibility boundaries</a><a class="h2" href="#latex-import-020">LaTeX import (0.2.0)</a></nav></aside></div></body></html>
+<h2 id="editing-utilities--workspace">Editing utilities — workspace</h2>
+<p>These additions are included in 0.4.0. Earlier releases do not provide these APIs.</p>
+<h3 id="latex-insertion">LaTeX insertion</h3>
+<p><code>session.pasteLatex(source)</code> inserts at the current caret or replaces the selected model range. It returns <code>LatexInsertionResult</code>: success includes the parsed document and resulting state; failure includes source offsets and diagnostics. It creates one Undo entry, leaves the caret after the inserted fragment, and generates fresh IDs. It does not reset history or replace the entire document. <code>importLatex(source)</code> continues to replace the whole formula.</p>
+<pre><code class="language-ts">const result = session.pasteLatex(String.raw`\frac{a}{b} + x_i^2`);
+if (!result.ok) console.log(result.diagnostics);
+</code></pre>
+<p>Empty input, unsupported syntax, multiline insertion inside a nested slot or inline session, structures in literal text, and matrix-rectangle targets are rejected without changing document, caret, selection or history. Ordinary clipboard paste is still literal. More tools → Paste as LaTeX opens a nonmodal source field. Alt+Shift+V opens it even when the toolbar is hidden; Ctrl/Cmd+Enter inserts and Escape closes. The UI accepts a user paste and does not read the system clipboard automatically.</p>
+<p>The pure <code>insertLatex(state, source, range?, options?)</code> helper supplies the same behavior without a session. The rich React <code>MathEditorHandle.pasteLatex</code> method applies the same helper with its multiline/excluded-structure policy.</p>
+<h3 id="recent-items-and-favorites">Recent items and favorites</h3>
+<p><code>createMathPreferences(saved?)</code> creates a UI-only store. Each session has <code>session.preferences</code>; pass an existing store in <code>createMathSession({ preferences })</code> to share it. An internally owned native session also accepts mount-only <code>DOMMathEditorOptions.preferences</code>. Rich React accepts <code>preferences</code> as a prop.</p>
+<pre><code class="language-ts">import { createMathPreferences, createMathSession } from '@barocss/math-editor/core';
+
+const preferences = createMathPreferences();
+const first = createMathSession({ preferences });
+const second = createMathSession({ preferences });
+preferences.toggleFavorite('symbol-α');
+preferences.toggleFavorite('template-quadratic');
+const saved = preferences.getSnapshot(); // { version: 1, recent: [], favorites: [...] }
+const restored = createMathPreferences(saved);
+</code></pre>
+<p>The default store lives in memory. The host can serialize <code>getSnapshot()</code> and use <code>subscribe(listener)</code> to persist changes; unsubscribe when finished. No localStorage, cookies, network calls or user identity are implicit. <code>record(id)</code> moves a known item to the front of the 12-entry recent list. <code>toggleFavorite(id)</code> adds/removes a favorite, bounded to 100. <code>clearRecent()</code> clears recents. Unknown IDs are ignored; restored lists are validated and deduplicated. These actions do not change formula JSON, document change callbacks or Undo.</p>
+<p>More tools → Recent &amp; favorites supplies search, All/Recent/Favorites filters and separate star buttons. Symbol/template selections are recorded; arbitrary typed text and full imported formulas are not stored. Toolbar template filters still apply. A preference store can outlive an individual editor.</p>
+<h3 id="contextual-presentation-settings">Contextual presentation settings</h3>
+<p>Place the caret inside a fence, fraction/binomial, or supported limit/sum/product/integral. The toolbar displays settings for the nearest applicable structure. Nested contents, IDs and caret remain unchanged. A structural or matrix range disables these settings.</p>
+<pre><code class="language-ts">import { activePresentation } from '@barocss/math-editor/core';
+const target = activePresentation(session.getSnapshot().state);
+if (target) session.execute({
+  type: 'presentation', id: target.id, change: { mathStyle: 'text' },
+});
+</code></pre>
+<p>Choose the change appropriate to the target:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Change</th>
+<th>Accepted values</th>
+<th>Applies to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fence</code></td>
+<td><code>parentheses</code>, <code>brackets</code>, <code>braces</code>, <code>angle</code>, <code>absolute</code>, <code>norm</code>, <code>openClosed</code>, <code>closedOpen</code></td>
+<td>Structural fences; changes both ends together</td>
+</tr>
+<tr>
+<td><code>mathStyle</code></td>
+<td><code>default</code>, <code>display</code>, <code>text</code></td>
+<td>Fractions and binomials</td>
+</tr>
+<tr>
+<td><code>limits</code></td>
+<td><code>default</code>, <code>above-below</code>, <code>side</code></td>
+<td>Supported limit, sum/product and integral variants</td>
+</tr>
+</tbody>
+</table></div><p><code>default</code> removes the explicit metadata. <code>setMathPresentation(state, id, change)</code> is the pure equivalent. Unsupported changes or stale IDs return the original state; the session command returns false. This is presentation editing of existing syntax, not algebraic conversion or general TeX styling.</p>
+<p>Toolbars expose <code>closePanels()</code> to dismiss their nonmodal utilities without editing the formula. <code>onOpenPanel</code> and <code>onPasteLatex</code> are optional mounting callbacks for a host that coordinates its own utility panels. Built-in surfaces keep only one utility/discovery panel open at a time.</p>
+<h3 id="keyboard-access-to-transformations">Keyboard access to transformations</h3>
+<p>In React and native DOM fields, <strong>Alt+Down</strong> opens or reopens suggestions and
+selects the first available contextual transformation. Up/Down browses and Enter
+applies; Escape dismisses. On macOS, Alt is the Option key. Root and bracket
+transformations preserve the existing operand. The shortcut works with
+<code>toolbar: false</code> and <code>contextTools: false</code>, including inline mode. Normal text
+input continues to use the standard suggestion ordering; a context-only menu
+requires navigation before Enter can apply a change instead of a host commit.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/wordpress.html"><small>Previous</small>WordPress plugin ZIP </a><a href="/docs/support.html"><small>Next</small>Supported features →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#imports">Imports</a><a class="h2" href="#createmathsessionoptions">createMathSession(options)</a><a class="h2" href="#matrix-cell-selections">Matrix cell selections</a><a class="h2" href="#commands">Commands</a><a class="h2" href="#mountmatheditorhost-options">mountMathEditor(host, options)</a><a class="h2" href="#saving-without-caret-only-writes">Saving without caret-only writes</a><a class="h2" href="#independent-toolbar-and-outputs">Independent toolbar and outputs</a><a class="h2" href="#native-selection-behavior">Native selection behavior</a><a class="h2" href="#reusable-browser-storage-adapter-with-restore-and-error-reporting">Reusable browser-storage adapter with restore and error reporting</a><a class="h2" href="#failure-and-compatibility-boundaries">Failure and compatibility boundaries</a><a class="h2" href="#latex-import-020">LaTeX import (0.2.0)</a><a class="h2" href="#editing-utilities--workspace">Editing utilities — workspace</a><a class="h3" href="#latex-insertion">LaTeX insertion</a><a class="h3" href="#recent-items-and-favorites">Recent items and favorites</a><a class="h3" href="#contextual-presentation-settings">Contextual presentation settings</a><a class="h3" href="#keyboard-access-to-transformations">Keyboard access to transformations</a></nav></aside></div></body></html>

@@ -28,8 +28,10 @@ Navigation does not create a document history entry. Locale changes do not remou
 | `tokens.ts` | Lexical variable/numeric/symbol segmentation and boundary affinity |
 | `math-editor.tsx` | Native input lifecycle, IME, pointer hit testing, selection UI, keyboard routing and portal |
 | `range.ts` | Endpoint ordering, balanced selection resolution, slicing, insertion, wrapping and clipboard validation |
+| `matrix-range.ts` | Transient cell rectangles, clipboard shape validation, fresh subtree IDs, atomic paste/clear and full-matrix transpose |
 | `matrix.ts` | Innermost grid lookup, row/column changes, delimiters and grid navigation |
 | `lines.ts` | Top-level line split/join and vertical navigation |
+| `vertical-navigation.ts`, `dom/caret-geometry.ts` | Shared structural Up/Down movement and optional measurements of rendered insertion points |
 | `suggestions.ts` | Longest symbolic triggers, bilingual aliases, candidates and acceptance |
 | `symbols.ts` | Glyph, message key, search aliases, symbolic triggers and LaTeX mapping |
 | `templates.ts` | Fresh editable template trees and insertion through the range model |
@@ -59,6 +61,8 @@ Navigation does not create a document history entry. Locale changes do not remou
 Passive tokens render as spans. Only the active token renders an input. A hidden text mirror supplies browser-shaped width and pointer offset measurements. Variable, numeric constant and symbol colors do not change the stored text. Logical text runs remain intact when the UI displays several tokens.
 
 During composition, the token partition and input element are held stable. Suggestions are visible but disabled. Enter and arrows remain with the IME; parent handlers do not receive editing keystrokes. On composition end, the complete text is committed as one history change and tokenization resumes. Synthetic composition tests are not a substitute for actual OS input-method validation.
+
+`moveVertical` walks slot ancestors from the inside out: fractions, scripts, indexed roots, annotations and operator bounds precede enclosing grids and document lines. Grid targets stay in the same column. Both keyboard handlers pass caret measurements from the existing hidden mirrors; React token offsets are translated back to their logical text run. The target is the nearest horizontal insertion point in the requested direction, with vertical distance breaking ties. Paired scripts and operator bounds also consider their base/body, so movement can follow their shared script column. Missing layout uses the first target text run with a clamped UTF-16 offset, avoiding surrogate splits. Navigation preserves the document and undo history. It does not add persistent preferred-column state or change Shift+arrow selection.
 
 ## Ranges and transformations
 
@@ -175,7 +179,7 @@ The parser accepts a bare brace body and creates an empty annotation. Export alw
 
 ## Compact and filtered toolbars (workspace)
 
-Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and `toolbarEnd` stay visible. Native toolbars contain structure buttons and history only and show a toggle when needed. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.
+Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and `toolbarEnd` stay visible. Native toolbars also expose symbol search, templates and presets behind More tools; both renderers provide contextual matrix controls and cell selection/transpose. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.
 
 ```tsx
 <MathEditor toolbar={['fraction', 'root', 'superscript', 'matrix']}
@@ -214,7 +218,7 @@ Each is a structure with a unique `id` and exactly one MathRow in `slots: [body]
 
 All limit-family, sum/product and integral nodes accept a single `\limits` or `\nolimits` immediately after the command, before scripts. The optional `limits` field is now boolean: omitted means default, `true` is stacked placement, `false` is side placement. Both explicit values survive JSON validation, copying and LaTeX export. Repeated/conflicting directives are rejected. Existing `limits: true` remains valid; older package builds do not accept `false` or the new limit kinds.
 
-Placement is currently selected through imported LaTeX/model metadata, not a dedicated toolbar switch. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.
+Placement is selected through imported LaTeX/model metadata or the workspace contextual toolbar. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.
 
 ## Fine mathematical spacing (workspace)
 
@@ -240,3 +244,119 @@ Reuse the existing two-slot structures with optional `mathStyle: 'display' | 'te
 ## Labeled arrows
 
 The `xrightarrow` and `xleftarrow` structures have two slots in upper/lower order. Parse the optional lower bracket before the required upper argument, then store in model order. Render the generic slots in three CSS grid rows, with a pseudo-element shaft and a fixed-size head in the middle row. Labels drive grid width; the decoration cannot intercept pointer events. These commands are inserted through the shared catalog and do not require a separate dialog.
+
+## Cell selection and grid transformations
+
+`MathMatrixRange` is separate from `MathRange`: `{ matrixId, anchor, focus }` uses
+row-major cell indices and resolves to a rectangle. Neither selection is persisted.
+Cross-cell pointers use the nearest shared matrix ancestor; within-cell pointers
+retain text/structure selection. The DOM renderer keeps selection in MathSession;
+rich React owns its view state and calls the same pure matrix operations.
+
+Clipboard data has its own bounded matrix MIME payload, plus a regular math
+fragment and LaTeX fallback. Incoming cells receive fresh IDs recursively. Paste
+validates all dimensions before cloning or writing the destination; unselected
+cells and the destination delimiter survive. Transpose reorders existing slots
+and changes `columns`; preserving IDs keeps a nested caret valid. None of these
+operations needs a new model version or parser command.
+
+## Shared editing utilities — workspace
+
+Native text rows are tokenized with the same `tokenizeMathText`/`tokenIndexAt` rules as rich React. Every rendered run retains its model ID and UTF-16 token start/end. Input events replace only that token's slice. Pointer/keyboard offsets are translated to model coordinates; boundary deletion joins neighboring text without discarding it. IME preedit updates the stable input/mirror and is committed before re-tokenizing. Literal text/operator names remain one input.
+
+`latex-insertion.ts` parses before applying a range insertion. `preferences.ts` owns validated UI lists independently of formula sessions/history. `presentation.ts` changes only supported metadata while preserving subtree IDs and caret. The nonmodal native panels are reused by React wrappers, so diagnostics and favorites use one implementation. Host clipboard boundaries stay intact and no system clipboard reads are implicit.
+
+### Contextual radical conversions
+
+`findStateSuggestions(state, locale, caret?)` augments text search with the nearest
+enclosing radical's conversion actions. `transformRootId` binds an action to that
+structure; `acceptSuggestion` validates the current target before conversion and
+does not remove the query. `root-transform.ts` clones the document, preserves the
+radicand tree and structure ID, and updates the slots. Converting to an indexed
+root adds a selected index `2`; converting to a square root rejects any nonempty
+index other than `2`. Both renderers use this shared path and their normal history
+commit mechanism. Context-only actions require pointer acceptance or arrow-key
+selection before Enter can apply them.
+
+### Empty-slot deletion and script fractions
+
+`unwrapEmptySlot` removes a non-grid wrapper from inside a truly empty slot.
+Both Delete and Backspace call it before boundary-specific deletion. The other
+slots are retained; an empty root index collapses to a square root, and an empty
+paired script preserves the other script. A populated row or ordinary structural
+boundary is not an empty slot. Grid cells keep their shape and their existing
+explicit deletion controls. The edit uses the normal history commit.
+
+Fractional script presentation uses compact row heights and term metrics in both
+renderers. See [Rendering checks](RENDERING-TESTS.md) for the bounded geometry
+comparison and remaining layout work.
+
+### Query-independent context footer
+
+`rootEditingContext(state)` derives the nearest radical, conversion availability
+and index caret from the model. React and DOM render the same actions below the
+surface. The footer does not use suggestion text, dismissal or candidate indices.
+Transformations use `transformRoot` and normal history; Edit index only moves
+and selects the caret. Model/matrix selections and blur hide context actions.
+F6 and Escape are handled within the editor to retain host/iframe focus. Native
+composition disables footer actions without replacing the composing input.
+
+### Shared fence transformations
+
+`structureEditingContext` selects the nearest supported radical or fence and
+excludes literal text. `findStateSuggestions` adds fence transformations before
+operand-wrapping actions, while retaining explicit symbol/command matches first.
+`transformFenceId` distinguishes metadata changes from new structure insertion.
+Acceptance validates the current target before preserving content, IDs and caret.
+
+React and native DOM handle Alt+Down before modifier-key fallthrough. The shortcut
+reopens a dismissed list and arms the first context action. Normal contextual
+menus still require navigation before Enter overrides host commit behavior.
+The footer is optional; suggestions do not depend on its visibility.
+
+
+## Contextual operator layout
+
+`src/math-layout.ts` derives display, text, script and scriptscript contexts from
+model slots on each render. It does not mutate or persist presentation metadata.
+Fractions reduce the style of their terms; scripts reduce their labels; indexed
+root indices use scriptscript style. Explicit fraction styles reset that context. Aligned cells enter display style; matrix and cases cells enter text style.
+
+Both React and native DOM consume the same row/operator map. Operator attributes
+select the large or small font and side or stacked limits. Explicit limits remain
+authoritative. Scoped row attributes keep a nested operator body at its own size
+while reducing its bounds. This replaces the inline-only CSS decision, which
+could not identify operators inside fractions or nested scripts.
+
+The current CSS application is scoped to operators. Other structures still use
+their existing layout rules; this is not a complete TeX layout engine.
+
+### Horizontal text spacing
+
+`math-spacing.ts` computes spacing between lexical runs without changing the
+saved document, token boundaries or caret offsets. Both renderers use the same
+values. Common binary operators use 4 mu, relations use 5 mu and punctuation
+uses 3 mu before the next atom (18 mu = 1 em). Neighboring atoms distinguish
+unary signs from binary operators. Binary, relation and punctuation gaps are
+suppressed in script and scriptscript rows.
+
+Measuring spans use glyph width instead of adding padding to every math token.
+Literal text fields retain their text layout. Named-function fields use unpadded glyph measurement. Inactive model
+boundaries use 1 px; empty expression slots and the active boundary keep their
+existing input hit areas. Other structure interiors and full TeX atom classification are separate work. These rules do not provide a complete
+TeX horizontal layout engine.
+
+
+### Named functions and fraction boundaries
+
+Named functions and fractions participate in the same horizontal-spacing pass as
+text runs. A named function uses a thin gap next to an ordinary atom or another
+named function, and no gap before a plain opening parenthesis. These thin gaps
+remain in script styles at the corresponding reduced font size. Binary and
+relation gaps still disappear in scripts. Fractions contribute an ordinary atom
+and receive their external gap once, rather than adding fixed margins on both
+sides. The function name's measuring span adds no glyph padding.
+
+The spacing map contains structure IDs for these two families and token-offset
+keys for text. Other structure families keep their existing outer layout. This
+change does not alter LaTeX output, JSON, selection offsets or editing commands.

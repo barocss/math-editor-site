@@ -1,9 +1,129 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Testing &amp; validation · Barocss Math Editor</title><meta name="description" content="Testing &amp; validation for Barocss Math Editor 0.2.1."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Testing &amp; validation · Barocss Math Editor</title><meta name="description" content="Testing &amp; validation for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.1</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" aria-current="page">Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" aria-current="page">Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="validation-report">Validation report</h1>
-<h2 id="current-release-status--020">Current release status — 0.2.0</h2>
+<h2 id="inline-fence-transformation-suggestions--workspace-2026-09-09">Inline fence transformation suggestions — workspace, 2026-09-09</h2>
+<p>Core: <strong>584 tests in 36 files passed</strong>. Core type checking and the main site/docs
+build passed. <code>fence-suggestions-check.js</code> passed in Chromium for rich React and
+all nine host demos, including menu reopening, keyboard acceptance, cancellation,
+retained caret, continued typing and separate Undo entries. Editor.js is a block
+host; this run does not claim an inline placement for that adapter.</p>
+<p><code>fence-context-check.js</code> passed all eight bracket choices through the optional
+footer in the same ten editor views. <code>fence-inline-options-check.js</code> passed in a
+native inline iframe with toolbar and footer disabled, including nearest nested
+fence targeting, ko/en switching, unchanged document on locale changes, retained
+input focus/caret, continued typing and teardown.</p>
+<p>Existing root conversion suggestions were rerun in React and Quill and passed.
+<code>fence-rendering-check.js</code> verifies the exported source after changing a bracket
+around a fraction. The editor and KaTeX screenshots were visually inspected:
+<code>output/playwright/fence-transform-editor.png</code> and
+<code>output/playwright/fence-transform-katex.png</code>. This uses the existing delimiter
+renderer and does not claim pixel-identical layout.</p>
+<p>See EDIT-029 through EDIT-032 for acceptance criteria. This is local Chromium
+workspace evidence, not a release, real OS IME or cross-browser certification.</p>
+<h2 id="contextual-radical-tools--workspace-2026-09-09">Contextual radical tools — workspace, 2026-09-09</h2>
+<p>Core: <strong>570 tests passed in 35 files</strong>. Type checking and the main documentation/demo build passed.</p>
+<p><code>context-tools-check.js</code> passed in local Chromium for rich React and all nine
+host examples: Tiptap, ProseMirror, Lexical, Editor.js, TinyMCE, CKEditor, Quill,
+Slate and Gutenberg. It covers query-independent discovery, retained tools after
+suggestion dismissal, F6/Escape focus, conversion, selected index editing, a
+non-square-index explanation, radicand retention, Undo, leaving a radical and
+hiding tools during model range selection.</p>
+<p><code>context-tools-options-check.js</code> passed for nearest nested targeting, native DOM
+inside an iframe, owner-document keyboard focus, dynamic <code>contextTools</code>, en/ko
+labels, synthetic composition guards, outside blur, teardown, and dynamic Web
+Component <code>context-tools</code> attributes. Synthetic events do not certify OS IME.</p>
+<p>The footer was visually inspected separately from the suggestion popup. Evidence
+is in <code>output/playwright/context-tools-footer.png</code> and the two browser fixtures.
+EDIT-021 through EDIT-028 record acceptance criteria and remaining checks: native
+Tab order, document equality across locale changes, individual framework-wrapper
+option smoke tests, and broader browsers/platforms. The new footer currently
+covers square/indexed roots. Other structure families remain roadmap work.
+These are workspace-source checks; no package or site was published.</p>
+<h2 id="fractional-scripts-and-empty-slot-deletion--workspace-2026-09-09">Fractional scripts and empty-slot deletion — workspace, 2026-09-09</h2>
+<p>Core: 568 tests passed in 35 files; type checking and formatting passed. The
+main documentation/demo build passed. <code>empty-slot-deletion-check.js</code> passed
+16 real-key checks across React/native DOM: Delete and Backspace from empty
+root, fraction, exponent and root-index slots, retained content, focus and Undo.
+Grid cells and populated rows are protected by the added core tests.</p>
+<p><code>rendering-regression-check.js</code> passed 12 Chromium comparisons: three formulas,
+two base sizes and two renderers. Fraction terms matched KaTeX font sizes;
+vertical offset differences were at most 0.109em against a 0.25em threshold.
+Horizontal gap, active-input size and focus assertions passed. Matching-size
+editor/KaTeX screenshots were visually inspected for the indexed-root power
+and simple fractional power. Full pixel identity is not claimed.</p>
+<p>Local evidence: <code>output/playwright/math-rendering-regression-evidence.json</code>
+records metrics and source SHA-256 values. Screenshot pairs use the paths in
+<a href="/docs/rendering-tests.html">Rendering checks</a>. This is workspace-source evidence, not
+packed-release, all-host, cross-browser or full notation certification.</p>
+<p>See <a href="/docs/editing-scenarios.html">Editing scenarios</a> for stable scenario IDs, acceptance criteria, coverage gaps and per-run reporting.</p>
+<h2 id="radical-conversion-suggestions--workspace-2026-09-09">Radical conversion suggestions — workspace, 2026-09-09</h2>
+<p>Core tests: 558 passed in 34 files; type checking passed. Ten added cases cover
+nested radicands, retained node IDs, selected index <code>2</code>, safe reverse conversion,
+non-square and structured indices, nearest-root targeting, stale targets, empty
+slots, localization, literal text and Undo/Redo.</p>
+<p><code>root-transform-check.js</code> passed in Chromium for rich React and Quill's native
+DOM field. It checks pointer and arrow/Enter acceptance, selected index editing,
+radicand preservation, reverse conversion, and rejection of index <code>3</code> conversion.
+The generated LaTeX and KaTeX preview match; editor/KaTeX radical screenshots
+were inspected. This does not certify every browser or every host adapter.</p>
+<h2 id="selection-suggestion-navigation--workspace-2026-09-09">Selection suggestion navigation — workspace, 2026-09-09</h2>
+<p><code>apps/math-integrations/tests/selection-suggestions-check.js</code> passed in Chromium
+for rich React and all nine host integrations. The check covers Shift+arrow
+ranges, Up/Down navigation, the Alt+Down alias, Enter wrapping the selected
+characters, retained input focus after wrapping, and native mouse-drag selection.
+No page errors were reported. Core tests: 548 passed; core type check passed.
+<code>selection-collapse-check.js</code> also passed for React horizontal caret recovery,
+fraction boundaries and resumed typing. <code>tinymce-inline-check.js</code> passed for
+inline and classic iframe hosts, including vertical caret recovery after Escape
+dismisses the wrapping menu, Apply/Cancel, serialization and Undo/Redo.</p>
+<p>A visible wrapping menu now owns vertical arrows. Left/Right still collapses
+a model selection to its ordered edge. This replaces the Alt-only menu
+navigation policy in the historical selection-collapse record below.</p>
+<h2 id="styling-and-themes--workspace-2026-09-09">Styling and themes — workspace, 2026-09-09</h2>
+<p>Release browser regression: all 385 existing Chromium cases passed across the
+full run and a focused rerun. Three stale expectations were updated for locale
+query parameters, the explicit toolbar overflow button and Alt+arrow wrapping
+navigation; all 26 cases in those three files passed on rerun. Shared integration
+unit tests: 52 passing. No notation/model changes were needed for theming.</p>
+<p><code>apps/math-integrations/tests/style-customization-check.js</code> passed in Chromium:
+independent light/dark instances, resolved host <code>var()</code> aliases, isolation from
+unrelated portal-container variables, external toolbar styling, native iframe
+menus, rich React suggestions/selection menus, and live theme switches preserving
+input focus, document state and history. The site controls and styling reader
+were also checked in Korean; English controls are covered by the fixture.</p>
+<p><code>tinymce-inline-check.js</code> additionally passed palette/action styling and the
+existing typing, Apply/Cancel, serialization, history and cleanup cases in both
+inline and classic iframe TinyMCE. The Apply control now has an explicit class,
+so prepended size controls cannot prevent its primary style. These checks do not
+certify arbitrary customer CSS palettes or browser/assistive-technology contrast.</p>
+<h2 id="selection-collapse--workspace-2026-09-09">Selection collapse — workspace, 2026-09-09</h2>
+<p>Core unit regression: 503 tests in 31 files. The added cases cover ordered edges
+for forward/reversed structural ranges, partial-text and collapsed ranges,
+absent ranges/non-arrow keys and unchanged source. Plain arrows now restore
+a caret from model selection in both renderers; Alt+Up/Down retains a range for
+wrapping-suggestion navigation.</p>
+<p>Real Chromium checks in <code>apps/math-integrations/tests/selection-collapse-check.js</code>
+passed for rich React, including subsequent typing and fraction-boundary collapse.
+<code>tinymce-inline-check.js</code> passed all four plain arrows and subsequent typing in
+both inline TinyMCE and its classic iframe. Native selection/toolbar, shared iframe
+and all nine matrix host regressions also passed. Wider browser and OS IME checks
+remain open. This is workspace evidence, not a new published package version.</p>
+<h2 id="current-release-status--021">Current release status — 0.2.1</h2>
 <p>The dated entries below are historical verification records, not current release availability claims. Note inline editing is resolved according to the user; this release does not change or deploy Note. Math-editor release checks and site validation are recorded separately at the end of this document.</p>
 <p>Updated: 2026-09-07. Scope: independent math editor prototype, Korean/English UI, active-input rendering, model selection, wrapping and editable templates.</p>
 <p><strong>Result:</strong> 71 unit tests and 61 Chromium tests passed (132 total, no skipped tests). Package/demo builds and package/demo/browser-test type checks passed.</p>
@@ -78,12 +198,64 @@
 <li>Real OS Korean IME testing is deferred at the user's request. Synthetic composition events verify guarding and draft handling only.</li>
 <li>Automated browser coverage is Chromium on macOS. Narrow viewport checks are not mobile-browser or touch validation.</li>
 <li>Full screen-reader math navigation, high contrast, and every theme are not certified.</li>
-<li>There is no saved-document validator, persistence/restart-recovery test, migration path or host-wide undo integration.</li>
-<li>Rectangular matrix selections, keyboard model range extension, general LaTeX import and symbolic computation are not implemented.</li>
+<li>Saved-document validation, bounded LaTeX import and keyboard model ranges are implemented; model-version migration and recovery remain open. Host persistence/Undo evidence is recorded separately in the integration validation guide.</li>
+<li>Matrix rectangles and transpose are implemented in the workspace; full TeX interpretation and symbolic computation are not implemented.</li>
 <li>Deep nesting and very large expressions have no agreed performance budget yet.</li>
 </ul>
 <h2 id="integration-gates">Integration gates</h2>
 <p>Before shipping inside a host product, test actual input methods and target browsers, establish a single undo owner, validate saved documents, verify focus across host/math boundaries, and define recoverable clipboard/import failures. Every new structure must have localized labels, deterministic transformations, one-step structural undo, browser interaction coverage and supported LaTeX output.</p>
+<h2 id="matrix-cell-ranges-and-transpose--2026-09-09-workspace">Matrix cell ranges and transpose — 2026-09-09 workspace</h2>
+<ul>
+<li>498 core tests pass, including 16 cell-rectangle/model/history cases and a grid
+hit-test regression for tall fractions. Selection snapshots stay isolated;
+invalid shapes and oversized pastes preserve the entire document/history.</li>
+<li><code>apps/math-integrations/tests/matrix-range-check.js</code> passes in both rich React
+and the native renderer with zero page errors. It covers active-input drag,
+reversed corners, keyboard extension/shrinking, Shift+click, exact nested-cell
+clipboard payloads, mismatched paste rejection, paste/cut/clear/typing Undo,
+anchored TSV growth, full transpose and resumed nested-denominator editing.</li>
+<li>The same exported transposed matrix was inspected in both editors and KaTeX.
+Screenshots: <code>output/playwright/matrix-range-native-katex.png</code> and
+<code>output/playwright/matrix-range-react-katex.png</code>. Cell order and nested structure
+match; editing retains its existing spacing and caret targets.</li>
+<li>Pointer hit testing uses row and column tracks independently once a cell range
+starts. A tall fraction no longer attracts the pointer away from a neighboring
+cell during edge scrolling. Pointer focus uses <code>preventScroll</code>, and the React
+selection hint is below the expression to avoid moving it mid-drag.</li>
+<li>Clipboard checks dispatch ClipboardEvent with DataTransfer; they do not certify
+system clipboard transfer to other applications. OS IME, touch, Safari/Firefox
+and screen-reader coverage remain open. No new LaTeX syntax or model version was
+introduced; neither npm publication nor site deployment is part of this run.</li>
+</ul>
+<h2 id="native-controls-and-precise-selection--2026-09-09-workspace">Native controls and precise selection — 2026-09-09 workspace</h2>
+<p>The native surface now exposes symbol search, templates and matrix presets behind
+More tools, plus contextual row/column/delimiter controls. Selected passive text
+is highlighted at its exact endpoints. Pointer drags can start in the live input
+and extend through structures while ordinary within-input selection stays native.</p>
+<ul>
+<li>The core suite passes 481 tests, including toolbar catalog restrictions,
+partial-text intersections, Shift-drag anchors, selection-menu dismissal and
+suggestion placement around reserved host controls.</li>
+<li><code>apps/math-integrations/tests/native-parity-check.js</code> passes in Chromium with
+zero page errors: exact partial highlights, native within-input replacement,
+cross-fraction selection in both directions, Shift-drag forward/backward anchors,
+shrinking the range back, replacement and Undo, symbol insertion into selected
+text, editable templates, matrix edits, filtered/hidden toolbars and teardown.</li>
+<li>Selection Escape checks preserve the model/native range on the first Escape,
+reopen suggestions for a changed selection, and notify host Cancel on the second.</li>
+<li>The browser clipboard check dispatches a ClipboardEvent with DataTransfer and
+verifies both exact LaTeX endpoints and the structured MIME payload. This is
+handler validation, not an OS clipboard compatibility claim.</li>
+<li>Synthetic formula composition disables toolbar mutations and restores them on
+composition end. Real OS IME testing remains deferred.</li>
+<li>The existing fraction fixture is shown alongside its KaTeX output in
+<code>output/playwright/native-parity-editor-katex.png</code>; this addition changes
+controls and selection presentation, not supported notation or glyph geometry.</li>
+</ul>
+<p>These are workspace changes awaiting release. Whole logical-run active inputs,
+one active-run role color, additional
+complete locale packs and broader browser/accessibility certification remain open.
+Host-specific browser findings are recorded in the integration validation guide.</p>
 <h2 id="line-numbers-and-symbol-discovery">Line numbers and symbol discovery</h2>
 <p>Three browser tests verify the UI-only line gutter through split/join/undo, its exclusion from LaTeX and model clipboard, the complete 90-symbol grid, bilingual search, insertion before typing, range replacement, undo, Escape and clipboard isolation in the search field. A native Home key did not move the caret in the macOS test environment; the test uses the supported Left arrow to reach the line start. The in-app browser visually confirmed the full symbol grid with names and search focus.</p>
 <h2 id="framework-neutral-integration--2026-09-07">Framework-neutral integration — 2026-09-07</h2>
@@ -94,7 +266,12 @@
 <li>A packed tarball was extracted into a temporary directory. Five entry points (<code>core</code>, <code>dom</code>, <code>web-component</code>, <code>vue</code>, <code>svelte</code>) imported without framework peers or browser globals; main/React/Solid entries imported after installing links to only their relevant local peers. All eight JS export paths and declared CSS/type targets exist. This is a local packaging smoke test, not publication or an exhaustive downstream TypeScript/bundler matrix.</li>
 <li>The in-app browser visually verified the adapter lab and actual pure-JS <code>x/ → ↓ → Enter → 2</code> input, producing <code>\frac{x}{2}</code>. Inline mode displays without the block editor's large surface and toolbar.</li>
 </ul>
-<p>Remaining adapter gates: exact range highlighting, active-input cross-structure dragging, token-level edit colors, composition preview parity, native all-symbol/context toolbars, reactive-option/version matrix and accessibility/browser coverage. Native <code>MathEditorSurface</code> is not advertised as complete rich React parity. OS IME testing remains deferred.</p>
+<p>Updated 2026-09-09: exact range highlighting, active-input cross-structure dragging
+and native symbol/template/grid controls are implemented in the workspace.
+Remaining adapter gates include token-level active input/colors, composition
+preview parity, framework/version coverage and accessibility/browser coverage.
+Native <code>MathEditorSurface</code> is not advertised as complete rich React parity.
+OS IME testing remains deferred.</p>
 <h2 id="composition-source-readability-and-json-locales--2026-09-08">Composition, source readability and JSON locales — 2026-09-08</h2>
 <ul>
 <li>81 unit tests pass. New coverage checks host Enter precedence, inline grid row editing, JSON key/parameter parity, JSON-only dynamic translations and regional fallback. The JSON registration example also passes a strict TypeScript check without a direction cast.</li>
@@ -277,5 +454,297 @@
 </ul>
 <h2 id="021-release-verification">0.2.1 release verification</h2>
 <p>Formatting, types, 390 unit tests and all eight packed entry points passed. Thirty-nine related Chromium cases passed for keyboard and drag selection, clipboard, wrapping, tokens, brace/cases discovery, preview and bundled locales. Website PNG download/copy checks validate dimensions and nonblank raster pixels. Long-formula fitting and transparent alpha were checked separately. Image generation is a demo dependency, not a library API.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/implementation.html"><small>Previous</small>Implementation </a><a href="/docs/roadmap.html"><small>Next</small>Roadmap →</a></nav><footer>Barocss Math Editor · 0.2.1 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#current-release-status--020">Current release status — 0.2.0</a><a class="h2" href="#automated-coverage">Automated coverage</a><a class="h2" href="#manual-in-app-checks">Manual in-app checks</a><a class="h2" href="#explicit-limits">Explicit limits</a><a class="h2" href="#integration-gates">Integration gates</a><a class="h2" href="#line-numbers-and-symbol-discovery">Line numbers and symbol discovery</a><a class="h2" href="#framework-neutral-integration--2026-09-07">Framework-neutral integration — 2026-09-07</a><a class="h2" href="#composition-source-readability-and-json-locales--2026-09-08">Composition, source readability and JSON locales — 2026-09-08</a><a class="h2" href="#english-message-keys-and-literal-symbol-ordering--2026-09-08">English message keys and literal-symbol ordering — 2026-09-08</a><a class="h2" href="#key-only-localization-and-external-language-discovery--2026-09-08">Key-only localization and external-language discovery — 2026-09-08</a><a class="h2" href="#workspace-latex--note-trial--2026-09-08">Workspace LaTeX / Note trial — 2026-09-08</a><a class="h2" href="#latex-compatibility-completion-pass--2026-09-08">LaTeX compatibility completion pass — 2026-09-08</a><a class="h2" href="#imported-latex-editing-regression--2026-09-08">Imported LaTeX editing regression — 2026-09-08</a><a class="h2" href="#combined-scripts-and-contextual-selection--2026-09-08">Combined scripts and contextual selection — 2026-09-08</a><a class="h2" href="#selection-suggestions--2026-09-08">Selection suggestions — 2026-09-08</a><a class="h2" href="#literal-text-and-functions--2026-09-08">Literal text and functions — 2026-09-08</a><a class="h2" href="#sequential-typing-regression--2026-09-08">Sequential typing regression — 2026-09-08</a><a class="h2" href="#indexed-roots--2026-09-08">Indexed roots — 2026-09-08</a><a class="h2" href="#accents-and-reported-inequality--2026-09-08">Accents and reported inequality — 2026-09-08</a><a class="h3" href="#binomial-operand-wrapping-and-function-spacing-workspace">Binomial, operand wrapping and function spacing (workspace)</a><a class="h3" href="#limits-and-function-colors-workspace">Limits and function colors (workspace)</a><a class="h3" href="#imported-notation-and-scalable-delimiter-regression-workspace">Imported notation and scalable delimiter regression (workspace)</a><a class="h3" href="#fences-annotations-and-indexed-root-geometry-workspace">Fences, annotations and indexed-root geometry (workspace)</a><a class="h2" href="#latest-workspace-typography-and-discovery-checks--2026-09-08">Latest workspace typography and discovery checks — 2026-09-08</a><a class="h2" href="#editor-versus-katex-spacing-audit--2026-09-08">Editor versus KaTeX spacing audit — 2026-09-08</a><a class="h3" href="#spacing-implementation-follow-up">Spacing implementation follow-up</a><a class="h3" href="#norm-fences--2026-09-08">Norm fences — 2026-09-08</a><a class="h3" href="#triple-and-contour-integrals--workspace">Triple and contour integrals — workspace</a><a class="h3" href="#overunder-braces--workspace">Over/under braces — workspace</a><a class="h3" href="#six-additional-accents--workspace">Six additional accents — workspace</a><a class="h3" href="#limit-variants-and-explicit-side-placement--workspace">Limit variants and explicit side placement — workspace</a><a class="h2" href="#explicit-size-validation--2026-09-08">Explicit size validation — 2026-09-08</a><a class="h2" href="#math-alphabets--2026-09-08">Math alphabets — 2026-09-08</a><a class="h2" href="#labeled-arrows--2026-09-08">Labeled arrows — 2026-09-08</a><a class="h2" href="#locale-correction-and-equation--2026-09-08">Locale correction and equation* — 2026-09-08</a><a class="h2" href="#020-release-verification">0.2.0 release verification</a><a class="h2" href="#021-release-verification">0.2.1 release verification</a></nav></aside></div></body></html>
+<h2 id="editing-utilities--workspace-2026-09-09">Editing utilities — workspace, 2026-09-09</h2>
+<p>Core unit regression: <strong>548 tests</strong>. Shared integrations: <strong>52 tests</strong>. Core, integration package and both demo applications pass TypeScript checks. The main demo documentation/site build and the integration demo production build pass. The integration demo retains its existing large host-SDK chunk warnings.</p>
+<ul>
+<li><code>token-paste-check.js</code>: Vue and rich React pass continuous token typing, middle insertion, boundary deletion, range replacement through explicit LaTeX paste, atomic diagnostics, continued typing and Undo.</li>
+<li><code>quick-presentation-check.js</code>: Vue, rich React and Quill pass symbol/template favorites, recent items, insertion focus, bracket/size/limit changes and Undo. Editor views and the live KaTeX output were visually compared.</li>
+<li><code>host-composition-check.js</code>: 16 supported inline/block combinations across nine host demos preserve browser preedit, commit/cancel and subsequent typing without per-key refocusing.</li>
+<li><code>latex-paste-host-check.js</code>: the same 16 combinations keep Ctrl/Cmd+Enter inside the paste form. Inserted fractions remain local drafts, typing resumes, and Cancel preserves host serialization.</li>
+<li><code>native-parity-check.js</code>: exact text and cross-structure selection, Shift-drag, shrinkback, structured copy, discovery, grid controls, restrictions and teardown pass. Its coordinate helper now maps logical text across token spans.</li>
+<li>Quill composition and typing regression fixtures pass, including read-only recovery, host history and matrix-cell entry.</li>
+</ul>
+<p>This is local Chromium evidence. OS IME, Safari/Firefox, installed WordPress and cross-application system clipboard checks were not repeated. No new mathematical grammar or numerical behavior is introduced. Release artifacts prepared before these changes require regeneration; nothing was published by this work.</p>
+<h2 id="edit-019-continuous-editing--workspace-2026-09-10">EDIT-019 continuous editing — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T17-47-53-597Z</code>; source fingerprint remained stable.</li>
+<li>Evidence: <span title="Evidence retained in the source workspace">report (local evidence)</span>, <span title="Evidence retained in the source workspace">checkpoints and source hashes (local evidence)</span>.</li>
+<li>Command: <code>pnpm --filter @barocss/math-editor test:editing</code>.</li>
+<li>Environment: Chromium 152 / macOS, English locale, workspace source.</li>
+<li><strong>React standalone block: PASS, 28 checkpoints. Quill in-place block: PASS, 29 checkpoints.</strong></li>
+<li>Real key input creates <code>fraction(indexedRoot(3, ab), 2) + matrix(1, 2; 3, 4)</code>;
+an explicit tree assertion checks content and nesting. The last cell becomes
+<code>456789</code> in a second uninterrupted typing chain.</li>
+<li>Both surfaces pass two five-step Undo/Redo chains, retained typing focus,
+empty-root Delete/Undo/Redo and unchanged retained content. Each first history
+step is compared with its recorded structural checkpoint.</li>
+<li>Quill draft operations leave host data unchanged. Apply is one host Undo step;
+Redo restores it. Save, page reload, Restore and reopen preserve the Delta and
+formula structure. The restored matrix remains editable; Cancel preserves the
+saved document. React has no host persistence lifecycle, so that part is N/A.</li>
+<li>The runner fails on either scenario failure or a changed source fingerprint.
+It stores the executed fixture, failure screenshots, diagnostics and final data.</li>
+<li>No runtime library changes were required. Earlier fixture failures exposed OS
+<code>End</code> assumptions and selection of the wrong saved block; the final fixture
+verifies caret offsets with arrows and reopens the uniquely identified formula.</li>
+<li>Not covered: other hosts, Quill inline mode, real OS IME/clipboard,
+Firefox/WebKit, touch, accessibility and performance budgets. No release-wide
+pass or new rendering pass is claimed.</li>
+</ul>
+<h2 id="edit-019-quill-inline-extension--workspace-2026-09-10">EDIT-019 Quill inline extension — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T22-30-59-017Z</code>; source fingerprint remained stable.</li>
+<li><span title="Evidence retained in the source workspace">Report (local evidence)</span> and
+<span title="Evidence retained in the source workspace">checkpoints (local evidence)</span>.</li>
+<li><strong>React block: PASS (28 checkpoints); Quill block: PASS (29); Quill inline: PASS (30).</strong></li>
+<li>The unchanged continuous editing chain runs in all three targets. Renderer and
+mode are recorded separately, including artifact names and the failure summary.</li>
+<li>Quill inline commits with Enter from the outer boundary. No extra formula line
+or host paragraph appears; prose is unchanged by math editing.</li>
+<li>Apply/host Undo/Redo, Save/reload/Restore, re-edit and Cancel preserve the
+inline formula. A later Right-arrow exit returns focus to Quill; typing <code>q</code>
+inserts exactly one character immediately after that formula. Host Undo
+restores the committed Delta, including formula data.</li>
+<li>Runtime library code was unchanged. The runner and scenario documentation were
+extended; no npm publication or new rendering audit was required.</li>
+<li>Other hosts, standalone inline adapters, OS IME/clipboard, Firefox/WebKit,
+touch, accessibility and performance remain outside this run.</li>
+</ul>
+<h2 id="edit-019-tiptap-and-prosemirror--workspace-2026-09-10">EDIT-019 Tiptap and ProseMirror — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T22-39-51-097Z</code>, stable source fingerprint.</li>
+<li><span title="Evidence retained in the source workspace">Report (local evidence)</span> and
+<span title="Evidence retained in the source workspace">checkpoints and hashes (local evidence)</span>.</li>
+<li><strong>7 targets PASS / 205 checkpoints:</strong> React block (28), Quill block/inline
+(29/30), Tiptap block/inline (29/30), ProseMirror block/inline (29/30).</li>
+<li>Chromium 152 on macOS, English UI, workspace source. The extended runner hashes
+both newly covered plugin sources and package metadata.</li>
+<li>Each target passes the existing continuous formula chain. Integrated hosts
+additionally check Apply/host Undo/Redo, Save/reload/Restore, re-edit/Cancel,
+retained formula data and unchanged prose/container structure. Inline targets
+check Enter commit, right-boundary exit, exact prose position and host Undo.</li>
+<li>Initial integrated run <code>2026-09-09T22-36-38-459Z</code>: six PASS, Tiptap inline FAIL.
+A quick prose edit after Restore shared the restored document's history event;
+Undo removed both. The sample now brackets <code>setContent</code> with <code>closeHistory</code>
+transactions, keeping the replacement and subsequent typing separate.</li>
+<li>Corrected run <code>2026-09-09T22-38-26-544Z</code>: seven PASS. The final run above repeats
+all seven targets with the final runner documentation and source hashes.</li>
+<li>Integration-demo TypeScript and production build pass. Existing large-chunk
+build warnings remain. Test source formatting passes. Core/plugin runtime
+code was unchanged; the fix belongs to the Tiptap demo's restoration callback.</li>
+<li>Remaining: Lexical, Editor.js, TinyMCE, CKEditor, Slate and Gutenberg; native OS
+IME/clipboard, other browser engines, touch, accessibility and performance.</li>
+</ul>
+<h2 id="edit-019-lexical--workspace-2026-09-10">EDIT-019 Lexical — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T23-08-15-353Z</code>, stable source fingerprint.</li>
+<li><span title="Evidence retained in the source workspace">Report (local evidence)</span> and
+<span title="Evidence retained in the source workspace">checkpoints and hashes (local evidence)</span>.</li>
+<li><strong>9 targets PASS / 264 checkpoints:</strong> React block (28), Quill block/inline
+(29/30), Tiptap block/inline (29/30), ProseMirror block/inline (29/30),
+Lexical block/inline (29/30).</li>
+<li>Chromium 152 on macOS, English UI, workspace source. Fingerprints now include
+the Lexical plugin source and package metadata.</li>
+<li>Lexical passes the full nested editing and two history chains, Apply as one
+host Undo event, Redo, Save/reload/Restore, re-edit and Cancel. Inline also
+passes Enter commit without a new paragraph, right-boundary exit, focus return,
+typing immediately after the formula and host Undo.</li>
+<li>Host checks read Lexical serialized state and retain container boundaries and
+formula atoms. Drafts must not change saved host state. Restoration must match
+the complete saved JSON; math rendering alone is not the persistence check.</li>
+<li>The initial run <code>2026-09-09T23-06-35-494Z</code> reached Save/Restore in both Lexical
+modes but used an incorrect locator for reopening. Lexical uses a mounted
+<code>.bme-lexical-node</code> widget; <code>data-barocss-math</code> belongs to its HTML export.
+The fixture now locates its live widget. No product code change was needed.</li>
+<li>Runner formatting passes. This change only extends tests and documentation;
+no new build, package publication or rendering audit was required.</li>
+<li>Next: Editor.js, TinyMCE, CKEditor, Slate and Gutenberg. Native OS IME/clipboard,
+other browser engines, touch, accessibility and performance remain outside this run.</li>
+</ul>
+<h2 id="edit-019-editorjs--workspace-2026-09-10">EDIT-019 Editor.js — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T23-25-26-845Z</code>, stable source fingerprint.</li>
+<li><span title="Evidence retained in the source workspace">Report (local evidence)</span> and
+<span title="Evidence retained in the source workspace">checkpoints and hashes (local evidence)</span>.</li>
+<li><strong>10 targets PASS / 293 checkpoints:</strong> React block (28), Quill/Tiptap/
+ProseMirror/Lexical block and inline (29/30 each), Editor.js block (29).</li>
+<li>Chromium 152 on macOS, English UI, workspace source. Fingerprints include
+Editor.js plugin source and package metadata.</li>
+<li>Editor.js passes nested fraction/root/matrix editing, suggestion selection,
+two uninterrupted formula Undo/Redo chains, empty-root deletion/restoration,
+Apply, Save/reload/Restore, re-edit and Cancel. Draft checks confirm saved host
+data stays unchanged until Apply; prose blocks and block order remain intact.</li>
+<li>Async <code>save()</code> comparisons exclude only the generated <code>time</code> field. Block IDs,
+saved model data, paragraph data and version remain in persistence assertions.</li>
+<li><strong>Editor.js host Undo/Redo is not covered:</strong> the demo has no document history
+integration. The runner records this limitation in <code>hostHistory</code>; it retains
+the mandatory host Undo/Redo assertions for other configured hosts. Editor.js
+inline mode is outside the block tool's contract.</li>
+<li>Test-source formatting passes. Only the runner, fixture and documentation
+changed; no runtime fix, build, publication or new rendering audit was needed.</li>
+<li>Next: TinyMCE, CKEditor, Slate and Gutenberg. Native OS IME/clipboard, other
+browser engines, touch, accessibility and performance remain separate work.</li>
+</ul>
+<h2 id="edit-019-tinymce--workspace-2026-09-10">EDIT-019 TinyMCE — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T23-39-57-339Z</code>, stable source fingerprint.</li>
+<li><span title="Evidence retained in the source workspace">Report (local evidence)</span> and
+<span title="Evidence retained in the source workspace">checkpoints and hashes (local evidence)</span>.</li>
+<li><strong>12 targets PASS / 352 checkpoints:</strong> React block (28), Quill/Tiptap/
+ProseMirror/Lexical/TinyMCE block and inline (29/30 each), Editor.js block (29).</li>
+<li>Chromium 152 on macOS, English UI, workspace source. TinyMCE 8.9.0 uses
+<code>inline: true</code> for its host. Both math modes are covered; classic iframe mode
+is not covered by this run. Fingerprints include TinyMCE source and metadata.</li>
+<li>TinyMCE passes the sustained fraction/root/matrix chain, formula history,
+draft isolation, one host Undo/Redo for Apply, Save/reload/Restore, re-edit and
+Cancel. Inline also passes Enter commit, right-boundary exit, focus return,
+typing immediately after the formula and host Undo.</li>
+<li>The fixture applies and reopens an empty atom before the chain because TinyMCE
+inserts on Apply. This exposed a real bug: the empty preview renderer returned
+no visible content, leaving no click target. The adapter now shows the existing
+localized empty-formula message and skips the renderer for empty LaTeX.
+Serialized content stays empty; the test checks the label does not leak into HTML.</li>
+<li>HTML comparisons retain the complete serialized document. A detached parser
+reads prose and element boundaries for caret checks. Live locators exclude
+TinyMCE's <code>.mce-offscreen-selection</code> clone inside the editable body.</li>
+<li>Diagnostic run <code>2026-09-09T23-38-20-112Z</code> confirmed that a reported prose Undo
+failure was in the fixture: saved and actual HTML were identical, but building
+the expected prose result had mutated the saved units array. The fixture now
+copies that array. No timing wait or product history change is used to pass it.</li>
+<li>TinyMCE package TypeScript, two unit tests, build and changed-source formatting
+pass. Package-local build also exposed a metafile path check using the wrong
+working directory. The build now sets esbuild's working directory to the repo
+root; the normal package build command succeeds with its dependency checks intact.</li>
+<li>Patch changeset: <code>.changeset/tiny-math-empty-preview.md</code>. No package was published.</li>
+<li>Remaining: CKEditor, Slate, Gutenberg, TinyMCE iframe mode, native OS
+IME/clipboard and other browser/input environments. Editor.js document history
+remains unverified because its demo has no host history integration.</li>
+</ul>
+<h2 id="edit-019-ckeditor--workspace-2026-09-10">EDIT-019 CKEditor — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T23-44-59-263Z</code>, stable source fingerprint.</li>
+<li><span title="Evidence retained in the source workspace">Report (local evidence)</span> and
+<span title="Evidence retained in the source workspace">checkpoints and hashes (local evidence)</span>.</li>
+<li><strong>14 targets PASS / 411 checkpoints:</strong> React block (28), Quill/Tiptap/
+ProseMirror/Lexical/TinyMCE/CKEditor block and inline (29/30 each),
+Editor.js block (29).</li>
+<li>Chromium 152 on macOS, English UI, workspace source. CKEditor 48.5.0 uses the
+local ClassicEditor demo. Fingerprints include CKEditor plugin source and
+package metadata. This run does not cover other CKEditor builds or collaboration.</li>
+<li>CKEditor passes the sustained fraction/root/matrix chain, keyboard suggestion
+selection, two formula Undo/Redo chains, empty-root deletion/restoration,
+unchanged host data during drafts, Apply as one host Undo event and host Redo.</li>
+<li>Save/reload/Restore retains the complete serialized HTML and editable math
+structure. Re-edit and Cancel leave that HTML unchanged. Inline also passes
+Enter commit without another paragraph, Right-arrow exit, focus return,
+prose input immediately after the formula and host Undo.</li>
+<li>The fixture reuses the detached HTML parser for prose/container checks and
+copies parsed units when constructing expectations. Full saved-state equality
+remains required for history and persistence checks.</li>
+<li>Test-source formatting passes. Only tests and documentation changed in this
+extension; no runtime fix, additional build or package publication was needed.</li>
+<li>Next: Slate and Gutenberg. TinyMCE iframe hosts, other CKEditor builds,
+native OS IME/clipboard and other browser/input environments remain separate
+targets. Editor.js document history is still outside its demo's configuration.</li>
+</ul>
+<h2 id="edit-019-all-integration-demos--workspace-2026-09-10">EDIT-019 all integration demos — workspace, 2026-09-10</h2>
+<ul>
+<li>Run: <code>2026-09-09T23-55-26-302Z</code>, stable source fingerprint.</li>
+<li><span title="Evidence retained in the source workspace">Report (local evidence)</span> and
+<span title="Evidence retained in the source workspace">checkpoints and hashes (local evidence)</span>.</li>
+<li><strong>17 targets PASS / 499 checkpoints</strong>, covering all nine integration demos
+plus standalone React block. Chromium 152 on macOS, English UI, workspace source.</li>
+</ul>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Editor</th>
+<th>Tested math modes</th>
+<th style="text-align:right">Checkpoints</th>
+<th>Host Undo/Redo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>React standalone</td>
+<td>Block</td>
+<td style="text-align:right">28</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Quill</td>
+<td>Block + inline</td>
+<td style="text-align:right">59</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Tiptap</td>
+<td>Block + inline</td>
+<td style="text-align:right">59</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>ProseMirror</td>
+<td>Block + inline</td>
+<td style="text-align:right">59</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Lexical</td>
+<td>Block + inline</td>
+<td style="text-align:right">59</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Editor.js</td>
+<td>Block</td>
+<td style="text-align:right">29</td>
+<td>Not configured; unverified</td>
+</tr>
+<tr>
+<td>TinyMCE</td>
+<td>Block + inline, inline host</td>
+<td style="text-align:right">59</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>CKEditor</td>
+<td>Block + inline, ClassicEditor</td>
+<td style="text-align:right">59</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Slate</td>
+<td>Block + inline</td>
+<td style="text-align:right">59</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Gutenberg</td>
+<td>Block, standalone provider</td>
+<td style="text-align:right">29</td>
+<td>PASS</td>
+</tr>
+</tbody>
+</table></div><ul>
+<li>Slate passes the sustained nested editing chain, two formula Undo/Redo chains,
+Apply as one host history event, Save/reload/Restore, re-edit and Cancel.
+Inline also passes Enter commit, Right-arrow exit, host focus, exact prose
+insertion position and host Undo. Comparisons retain the saved descendant
+array and formula objects; prose checks also preserve paragraph boundaries.</li>
+<li>Gutenberg passes the same block chain and provider host Undo/Redo. Full saved
+HTML equality includes WordPress comments and encoded math data. A separate
+detached DOM comparison checks prose and block order; comments are not prose.</li>
+<li>Both new hosts keep saved document data unchanged while editing a draft.
+Restore reproduces the full saved state and reopens the same editable model.</li>
+<li>Fingerprints now include Slate and Gutenberg source/package metadata, as well
+as the previously covered hosts, core, shared helpers, demos and test runner.</li>
+<li>Formatting passes. This extension changed only tests and documentation; no
+runtime fix, new build or publication was needed.</li>
+<li>This run covers local demo configurations. It does not replace the separate
+WordPress admin/plugin ZIP checks. TinyMCE iframe, other CKEditor builds,
+collaboration, native OS IME/clipboard, Firefox/WebKit, touch, accessibility
+and performance remain separate targets. Editor.js/Gutenberg are block tools;
+no inline mode is claimed for them.</li>
+</ul>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/rendering-tests.html"><small>Previous</small>Rendering checks </a><a href="/docs/roadmap.html"><small>Next</small>Roadmap →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#inline-fence-transformation-suggestions--workspace-2026-09-09">Inline fence transformation suggestions — workspace, 2026-09-09</a><a class="h2" href="#contextual-radical-tools--workspace-2026-09-09">Contextual radical tools — workspace, 2026-09-09</a><a class="h2" href="#fractional-scripts-and-empty-slot-deletion--workspace-2026-09-09">Fractional scripts and empty-slot deletion — workspace, 2026-09-09</a><a class="h2" href="#radical-conversion-suggestions--workspace-2026-09-09">Radical conversion suggestions — workspace, 2026-09-09</a><a class="h2" href="#selection-suggestion-navigation--workspace-2026-09-09">Selection suggestion navigation — workspace, 2026-09-09</a><a class="h2" href="#styling-and-themes--workspace-2026-09-09">Styling and themes — workspace, 2026-09-09</a><a class="h2" href="#selection-collapse--workspace-2026-09-09">Selection collapse — workspace, 2026-09-09</a><a class="h2" href="#current-release-status--021">Current release status — 0.2.1</a><a class="h2" href="#automated-coverage">Automated coverage</a><a class="h2" href="#manual-in-app-checks">Manual in-app checks</a><a class="h2" href="#explicit-limits">Explicit limits</a><a class="h2" href="#integration-gates">Integration gates</a><a class="h2" href="#matrix-cell-ranges-and-transpose--2026-09-09-workspace">Matrix cell ranges and transpose — 2026-09-09 workspace</a><a class="h2" href="#native-controls-and-precise-selection--2026-09-09-workspace">Native controls and precise selection — 2026-09-09 workspace</a><a class="h2" href="#line-numbers-and-symbol-discovery">Line numbers and symbol discovery</a><a class="h2" href="#framework-neutral-integration--2026-09-07">Framework-neutral integration — 2026-09-07</a><a class="h2" href="#composition-source-readability-and-json-locales--2026-09-08">Composition, source readability and JSON locales — 2026-09-08</a><a class="h2" href="#english-message-keys-and-literal-symbol-ordering--2026-09-08">English message keys and literal-symbol ordering — 2026-09-08</a><a class="h2" href="#key-only-localization-and-external-language-discovery--2026-09-08">Key-only localization and external-language discovery — 2026-09-08</a><a class="h2" href="#workspace-latex--note-trial--2026-09-08">Workspace LaTeX / Note trial — 2026-09-08</a><a class="h2" href="#latex-compatibility-completion-pass--2026-09-08">LaTeX compatibility completion pass — 2026-09-08</a><a class="h2" href="#imported-latex-editing-regression--2026-09-08">Imported LaTeX editing regression — 2026-09-08</a><a class="h2" href="#combined-scripts-and-contextual-selection--2026-09-08">Combined scripts and contextual selection — 2026-09-08</a><a class="h2" href="#selection-suggestions--2026-09-08">Selection suggestions — 2026-09-08</a><a class="h2" href="#literal-text-and-functions--2026-09-08">Literal text and functions — 2026-09-08</a><a class="h2" href="#sequential-typing-regression--2026-09-08">Sequential typing regression — 2026-09-08</a><a class="h2" href="#indexed-roots--2026-09-08">Indexed roots — 2026-09-08</a><a class="h2" href="#accents-and-reported-inequality--2026-09-08">Accents and reported inequality — 2026-09-08</a><a class="h3" href="#binomial-operand-wrapping-and-function-spacing-workspace">Binomial, operand wrapping and function spacing (workspace)</a><a class="h3" href="#limits-and-function-colors-workspace">Limits and function colors (workspace)</a><a class="h3" href="#imported-notation-and-scalable-delimiter-regression-workspace">Imported notation and scalable delimiter regression (workspace)</a><a class="h3" href="#fences-annotations-and-indexed-root-geometry-workspace">Fences, annotations and indexed-root geometry (workspace)</a><a class="h2" href="#latest-workspace-typography-and-discovery-checks--2026-09-08">Latest workspace typography and discovery checks — 2026-09-08</a><a class="h2" href="#editor-versus-katex-spacing-audit--2026-09-08">Editor versus KaTeX spacing audit — 2026-09-08</a><a class="h3" href="#spacing-implementation-follow-up">Spacing implementation follow-up</a><a class="h3" href="#norm-fences--2026-09-08">Norm fences — 2026-09-08</a><a class="h3" href="#triple-and-contour-integrals--workspace">Triple and contour integrals — workspace</a><a class="h3" href="#overunder-braces--workspace">Over/under braces — workspace</a><a class="h3" href="#six-additional-accents--workspace">Six additional accents — workspace</a><a class="h3" href="#limit-variants-and-explicit-side-placement--workspace">Limit variants and explicit side placement — workspace</a><a class="h2" href="#explicit-size-validation--2026-09-08">Explicit size validation — 2026-09-08</a><a class="h2" href="#math-alphabets--2026-09-08">Math alphabets — 2026-09-08</a><a class="h2" href="#labeled-arrows--2026-09-08">Labeled arrows — 2026-09-08</a><a class="h2" href="#locale-correction-and-equation--2026-09-08">Locale correction and equation* — 2026-09-08</a><a class="h2" href="#020-release-verification">0.2.0 release verification</a><a class="h2" href="#021-release-verification">0.2.1 release verification</a><a class="h2" href="#editing-utilities--workspace-2026-09-09">Editing utilities — workspace, 2026-09-09</a><a class="h2" href="#edit-019-continuous-editing--workspace-2026-09-10">EDIT-019 continuous editing — workspace, 2026-09-10</a><a class="h2" href="#edit-019-quill-inline-extension--workspace-2026-09-10">EDIT-019 Quill inline extension — workspace, 2026-09-10</a><a class="h2" href="#edit-019-tiptap-and-prosemirror--workspace-2026-09-10">EDIT-019 Tiptap and ProseMirror — workspace, 2026-09-10</a><a class="h2" href="#edit-019-lexical--workspace-2026-09-10">EDIT-019 Lexical — workspace, 2026-09-10</a><a class="h2" href="#edit-019-editorjs--workspace-2026-09-10">EDIT-019 Editor.js — workspace, 2026-09-10</a><a class="h2" href="#edit-019-tinymce--workspace-2026-09-10">EDIT-019 TinyMCE — workspace, 2026-09-10</a><a class="h2" href="#edit-019-ckeditor--workspace-2026-09-10">EDIT-019 CKEditor — workspace, 2026-09-10</a><a class="h2" href="#edit-019-all-integration-demos--workspace-2026-09-10">EDIT-019 all integration demos — workspace, 2026-09-10</a></nav></aside></div></body></html>

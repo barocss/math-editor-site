@@ -79,7 +79,7 @@ import { MathEditorSurface } from '@barocss/math-editor/react';
 <MathEditorSurface locale="en" mode="inline" toolbar={false} onChange={save} />
 ```
 
-Keep `MathEditor` for the existing full editor, including the symbol browser and richer selection UI. `MathEditorSurface` uses the new native renderer and options. They share document formats, not a live history instance. Do not assume feature parity; see below.
+`MathEditor` keeps the rich React renderer and token-level active input. `MathEditorSurface` uses the native renderer and session options. The workspace native toolbar now includes the symbol browser, templates and grid context controls described below; these additions are included in 0.4.0. The renderers share document formats but own separate history instances. See the remaining differences below.
 
 ## Web Component
 
@@ -141,20 +141,24 @@ The directive reads its accessor in a reactive effect and cleans up with `onClea
 
 | Capability | Existing React `MathEditor` | Native surface and all wrappers |
 |---|---|---|
-| 13 structure kinds / 90 symbol suggestions / templates | Yes | Same model and suggestion catalog |
+| Structure, symbol and template catalog | Yes | Same model and suggestion catalog |
+| Suggestion and selection menu presentation | Glyph, name, detail and keyboard guidance | Same presentation in the 0.4.0 release; options scroll independently of the host |
 | Multiline block, grids and grid keyboard commands | Yes | Implemented; representative Chromium coverage |
 | Single top-level row inline policy | No dedicated prop | Yes |
 | Separately mounted/custom toolbar | Not a session API | Yes |
 | English/Korean/custom locale registry | Yes | Yes |
-| Active input granularity | Lexical token | Whole logical text run |
-| Variable/constant/symbol colors | Editing and preview | Preview segments; active run uses one color |
-| Pointer range, structural clipboard, wrapping | Rich implementation | Initial implementation; whole-run visual highlight |
-| Drag starting inside the active input across structures | Yes | Pending; start in preview |
-| Searchable all-symbol panel, matrix context toolbar | Yes | Pending; suggestions/core commands available |
-| Composition candidate preview | Disabled choices while composing | Menu hidden while composing |
-| Keyboard model ranges / OS IME matrix / full accessibility audit | Pending | Pending |
+| Active input granularity | Lexical token | Lexical token (workspace) |
+| Variable/constant/symbol colors | Editing and preview | Editing and preview (workspace); named functions retain their own color |
+| Pointer range, structural clipboard, wrapping | Yes | Exact partial-text highlights included in 0.4.0 |
+| Drag starting inside the active input across structures | Yes | Implemented in workspace; local input selection becomes a model range after leaving the input |
+| Searchable all-symbol panel, templates and matrix presets | Yes | Available through More tools in 0.4.0 |
+| Matrix rectangles, shape-checked clipboard and transpose | Implemented in workspace | Implemented in workspace |
+| Active grid row/column and delimiter controls | Yes | Implemented in workspace; aligned/cases expose row controls |
+| Shift+arrow model ranges | Yes | Yes; vertical extension uses logical line offsets |
+| Composition candidate preview | Disabled choices while composing | Menu hidden and toolbar mutations disabled while composing |
+| OS IME matrix / full accessibility audit | Deferred / pending | Deferred / pending |
 
-The native renderer is an integration preview, not a replacement of the rich React editor. Completing parity before switching the main entry is the next release gate. Use `parseMathDocument` to validate schema and IDs before trusted document loading. Bounded LaTeX import is available through `importLatex`; ordinary plain-text paste remains literal.
+The native renderer remains an integration preview. Its active input now covers one lexical token, with model offsets mapped across token boundaries. Composition keeps that input stable until commit. A persistent preferred column for vertical navigation, and a full accessibility/browser audit remain open. Complete English/Korean packs are bundled; additional complete packs and native OS IME validation remain deferred work. The new toolbar and selection UI use existing model operations and add no LaTeX syntax. Use `parseMathDocument` to validate schema and IDs before trusted document loading. Bounded LaTeX import is available through `importLatex`; ordinary plain-text paste remains literal. The workspace adds explicit `pasteLatex` and Alt+Shift+V insertion, recent/favorite items, and contextual presentation controls; see [editing utilities](API-SESSION.md#editing-utilities--workspace).
 
 ## Local verification and packaging
 
@@ -178,7 +182,9 @@ The DOM entry also exports `mountMathLatex` and `mountMathPreview`. See [Embeddi
 
 ## Compact and filtered toolbars (workspace)
 
-Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and `toolbarEnd` stay visible. Native toolbars contain structure buttons and history only and show a toggle when needed. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.
+Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the expanded section without changing the formula or history. In the workspace, native More tools also exposes the searchable All symbols panel, templates, 2×2/3×3/4×4 matrix and identity presets, and symbol shortcuts. It remains available when every selected structure button already fits. Undo and Redo stay visible; rich React also retains its `toolbarEnd` slot. The layout wraps on narrow screens.
+
+The native grid toolbar follows the active caret: matrices expose row/column insertion and deletion plus delimiter selection; aligned/cases expose row operations. A text or model selection disables these grid mutations. These native toolbar additions are included in 0.4.0. See [the session toolbar API](API-SESSION.md#independent-toolbar-and-outputs) for attaching, disabling and destroying an external toolbar.
 
 ```tsx
 <MathEditor toolbar={['fraction', 'root', 'superscript', 'matrix']}
@@ -186,7 +192,8 @@ Toolbars initially show up to eight structure buttons. More tools / Fewer tools 
 ```
 
 ```js
-mountMathEditor(host, session, {
+mountMathEditor(host, {
+  session,
   toolbar: ['fraction', 'root', 'norm'],
   toolbarMaxItems: 2,
 });
@@ -196,4 +203,8 @@ mountMathToolbar(toolbarHost, session, {
 });
 ```
 
-`toolbar: false` hides the toolbar. A structure array filters its structure buttons only: it does not disable those structures in suggestions, parsing or the model, and does not filter React's auxiliary template/symbol controls. `toolbarMaxItems` (independent toolbar: `maxItems`) is a nonnegative count; zero initially hides all structure buttons behind More. A sufficiently large count shows all selected structure buttons initially. Expanded state belongs to the mounted toolbar and is not saved in the math document. The rich React `toolbar` array and compact behavior are available in 0.2.0.
+`toolbar: false` hides the toolbar. A structure array filters visible structure buttons. The workspace native toolbar also filters templates by all their structure kinds and limits matrix presets/context controls to allowed grid kinds; symbol search remains available. Rich React's auxiliary controls retain their existing behavior. Toolbar filtering does not restrict suggestions, parsing or the model. `toolbarMaxItems` (independent toolbar: `maxItems`) is a nonnegative count; zero initially hides all structure buttons behind More. A sufficiently large count shows all selected structure buttons initially. Expanded state belongs to the mounted toolbar and is not saved in the math document. The rich React `toolbar` array and compact behavior are available in 0.2.0; the native discovery/context additions are included in 0.4.0.
+
+## Style customization
+
+Use inherited CSS variables for colors, slot backgrounds, typography, toolbar density and menu appearance. Scoped themes also follow portaled suggestions in both renderers. See [Styling & themes](STYLING.md) for the public variables, dark/monochrome examples, shared toolbars and iframe/plugin sizing.

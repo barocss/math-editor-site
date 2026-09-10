@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rendering checks · Barocss Math Editor</title><meta name="description" content="Rendering checks for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" aria-current="page">Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="rendering-regression-checks">Rendering regression checks</h1>
+<p>Compare the editor with KaTeX using the same exported LaTeX, base font size and
+display mode. Keep <a href="/docs/editing-scenarios.html">editing scenarios</a> for input behavior;
+this guide defines the visual checks for EDIT-017. KaTeX is the reference image,
+not an editable DOM replacement.</p>
+<h2 id="three-checks-for-each-fixture">Three checks for each fixture</h2>
+<ol>
+<li><strong>Model/output:</strong> the editable tree exports the intended LaTeX and KaTeX accepts it.</li>
+<li><strong>Geometry:</strong> compare relative positions, font sizes and gaps. Absolute page
+coordinates are not comparable across different containers.</li>
+<li><strong>Visual review:</strong> save the editor, active-input and KaTeX images together.
+Check curves, stroke thickness, baselines and clipping. Numerical checks alone
+do not establish that the two images look equivalent.</li>
+</ol>
+<p>The active input, measuring element and passive glyph must use the same font
+metrics. A cursor or hover background must not move a fraction or hide a fence.
+Wait for <code>document.fonts.ready</code>. Disable preview fit scaling for comparison and
+set the KaTeX root's computed font size to the editor's base size; matching the
+parent container's font size is not sufficient.</p>
+<h2 id="initial-executable-fixtures">Initial executable fixtures</h2>
+<p>Run <code>apps/math-integrations/tests/rendering-regression-check.js</code> through the
+existing Playwright CLI browser workflow with the local site on port 5184.
+The file is an async <code>(page) =&gt; ...</code> fixture, not a standalone Node script.
+Omit its final semicolon when passing the function to <code>run-code</code>.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Fixture</th>
+<th>LaTeX</th>
+<th>Renderers / sizes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>indexed-root-power</code></td>
+<td><code>\left(\sqrt[20]{ab}\right)^{\frac{2}{3}}</code></td>
+<td>Rich React and native DOM; 22px and 36px</td>
+</tr>
+<tr>
+<td><code>fraction-power</code></td>
+<td><code>x^{\frac{2}{3}}</code></td>
+<td>Rich React and native DOM; 22px and 36px</td>
+</tr>
+<tr>
+<td><code>fraction-subscript</code></td>
+<td><code>x_{\frac{2}{3}}</code></td>
+<td>Rich React and native DOM; 22px and 36px</td>
+</tr>
+</tbody>
+</table></div><p>The 12 combinations currently assert:</p>
+<ul>
+<li>Fraction terms use half of the base font size and match KaTeX's computed term
+size within 0.1px. This applies to these implicit-style fixtures, not every
+explicit <code>\dfrac</code> or <code>\tfrac</code> expression.</li>
+<li>The exponent is above the base and the subscript is below it.</li>
+<li>The fraction center's vertical offset from the base glyph center differs from
+KaTeX by less than 0.25em. This is a regression threshold, not pixel equality.</li>
+<li>The gap from the base box to its fraction script is between 0 and 0.25em.</li>
+<li>Activating a numerator retains its font size, and typing retains focus.</li>
+<li>The formula does not produce a KaTeX error.</li>
+</ul>
+<p>Screenshots are saved as
+<code>output/playwright/{renderer}-{fixture}-{size}-{editor|katex|active}.png</code>.
+The returned metrics include editor and reference coordinates. Preserve them
+with the source fingerprint, browser version and screenshot pairs for a run.
+These filenames are overwritten on rerun; archive them if they are used as a
+release baseline. Do not update an accepted baseline simply to hide a failure.</p>
+<h2 id="why-the-first-correction-is-bounded">Why the first correction is bounded</h2>
+<p>Script fractions previously retained body-sized minimum row heights and spacing.
+They now have compact terms and rows. A simple base uses a small script offset;
+a tall structured base uses an offset proportional to the fraction height.
+Empty boundary nodes reserve only a narrow passive cursor position.</p>
+<p>This fixes the initial cases without changing the JSON model. It is not a
+complete TeX layout engine. Remaining comparison fixtures should cover paired
+scripts, nested fractions in both slots, explicit style overrides, multi-line
+collision, large operators, fences, accents and narrow host containers.</p>
+<p>As those fixtures grow, consolidate script levels, the math axis, baseline and
+stroke metrics into shared layout rules. Avoid extending a list of formula-
+specific CSS exceptions without a failing fixture and reference measurement.
+Both renderers must use the same rule, and every new notation feature needs
+an editor/KaTeX comparison in passive and active states.</p>
+<h2 id="release-use">Release use</h2>
+<p>Run changed fixtures during development. Run the rendering set and applicable
+editing scenarios against release candidate artifacts before publishing. The
+current fixture uses workspace sources and Chromium; it does not certify packed
+packages, all host containers, Firefox/WebKit or OS IME behavior. CI scheduling
+and automatic screenshot-diff approval are not implemented by this guide.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/editing-scenarios.html"><small>Previous</small>Editing scenarios </a><a href="/docs/validation.html"><small>Next</small>Testing &amp; validation →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#three-checks-for-each-fixture">Three checks for each fixture</a><a class="h2" href="#initial-executable-fixtures">Initial executable fixtures</a><a class="h2" href="#why-the-first-correction-is-bounded">Why the first correction is bounded</a><a class="h2" href="#release-use">Release use</a></nav></aside></div></body></html>

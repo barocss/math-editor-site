@@ -1,0 +1,1 @@
+import"./modulepreload-polyfill-B5Qt9EMX.js";const a=new URL("./",location.href);a.search=location.search;a.hash=location.hash;a.searchParams.has("editor")||a.searchParams.set("editor","lexical");location.replace(a.href);

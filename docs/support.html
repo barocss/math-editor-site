@@ -1,7 +1,20 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Supported features · Barocss Math Editor</title><meta name="description" content="Supported features for Barocss Math Editor 0.2.1."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Supported features · Barocss Math Editor</title><meta name="description" content="Supported features for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.1</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" aria-current="page">Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" aria-current="page">Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="supported-math-and-editing-features">Supported math and editing features</h1>
 <p>This is a presentation and editing scope, not a claim of full LaTeX or computer-algebra support. Blank slots remain editable and export as empty groups. All catalog symbols are exercised against KaTeX in unit tests.</p>
 <h2 id="editing--latex-parity-020">Editing / LaTeX parity (0.2.0)</h2>
@@ -91,7 +104,7 @@
 | Product | Lower limit, upper limit, body | <code>\prod_{i=1}^{n}x</code> | No evaluation |
 | Triple / contour integrals | Three editable slots; side bounds or explicit limits | <code>\iiint</code>, <code>\oint</code> | No computation; <code>\nolimits</code> supported in workspace |
 | Integral | Lower limit, upper limit, integrand | <code>\int_{a}^{b}x</code> | Differential entered as text; no integration engine |
-| Matrices / vectors | Editable nested cells; row/column changes | <code>matrix</code>, <code>pmatrix</code>, <code>bmatrix</code>, <code>Bmatrix</code>, <code>vmatrix</code>, <code>Vmatrix</code> | 1–20 rows and columns; no rectangular cell clipboard |
+| Matrices / vectors | Editable nested cells; row/column changes | <code>matrix</code>, <code>pmatrix</code>, <code>bmatrix</code>, <code>Bmatrix</code>, <code>vmatrix</code>, <code>Vmatrix</code> | 1–20 rows and columns; workspace rectangular clipboard and full-matrix transpose |
 | Aligned equations | Two columns, left side right-aligned and right side left-aligned | <code>aligned</code> | 1–20 rows, one alignment point; type the relation explicitly |
 | Cases | Expression and condition columns, left brace | <code>cases</code> | 1–20 rows; conditions accept math and literal text nodes |
 | Multiple document lines | Split/join top-level rows | <code>gathered</code> | No wrapping several document lines into one structure |</p>
@@ -108,6 +121,16 @@
 <td>Languages</td>
 <td>Korean and English UI, demo, accessible names, hints and suggestions</td>
 <td>Custom host labels require host translation</td>
+</tr>
+<tr>
+<td>Recent / favorites</td>
+<td>Shared UI preference store for known symbols/templates, up to 12 recent and 100 favorites</td>
+<td>Optional host persistence; no effect on formula JSON or Undo</td>
+</tr>
+<tr>
+<td>Presentation changes</td>
+<td>Fence type, fraction/binomial size and operator limits from the contextual toolbar</td>
+<td>Existing notation only; no arbitrary fonts or dimensions</td>
 </tr>
 <tr>
 <td>Discovery</td>
@@ -137,7 +160,7 @@
 <tr>
 <td>Selection</td>
 <td>Partial text, drag across tokens/structures, whole document in preview</td>
-<td>No keyboard Shift-arrow model expansion or rectangular cell selection</td>
+<td>Shift+arrow model ranges and workspace rectangular cell selection; touch/OS clipboard validation remains</td>
 </tr>
 <tr>
 <td>Wrapping</td>
@@ -147,12 +170,12 @@
 <tr>
 <td>Clipboard</td>
 <td>Structured internal fragment plus LaTeX text; cut/paste replacement</td>
-<td>External LaTeX is literal text; nested multiline paste rejected</td>
+<td>Ordinary paste is literal; explicit LaTeX insertion parses at the caret/range; nested multiline paste rejected</td>
 </tr>
 <tr>
 <td>History</td>
 <td>Undo/redo of model changes and caret, up to 100 prior states</td>
-<td>No shared host undo adapter yet</td>
+<td>Shared host adapters commit one formula edit; per-host history support varies</td>
 </tr>
 <tr>
 <td>Deletion</td>
@@ -162,7 +185,7 @@
 <tr>
 <td>Serialization</td>
 <td>Version-1 JSON document and change callback</td>
-<td>No persistence service, saved-document validator or migrations</td>
+<td><code>parseMathDocument</code> validates shape and IDs; persistence and future version migrations remain host work</td>
 </tr>
 <tr>
 <td>Preview</td>
@@ -192,19 +215,19 @@
 <tbody>
 <tr>
 <td>Empty matrix</td>
-<td>2×2, 3×3, 4×4</td>
+<td>1–20 rows × 1–20 columns via size shortcuts; 2×2/3×3/4×4 menu presets</td>
 <td><code>matrix</code>, <code>행</code>, <code>행렬</code>; matrix menu</td>
 <td>Editable empty cells</td>
 </tr>
 <tr>
 <td>Identity matrix</td>
-<td>2×2, 3×3, 4×4</td>
+<td>Square sizes 1–20 via size shortcuts; 2×2/3×3/4×4 menu presets</td>
 <td><code>identity</code>, <code>단위</code>, <code>단위행렬</code>; matrix menu</td>
 <td>Diagonal 1, other entries 0</td>
 </tr>
 <tr>
 <td>Zero matrix</td>
-<td>2×2, 3×3, 4×4</td>
+<td>1–20 rows × 1–20 columns via size shortcuts; 2×2/3×3/4×4 templates</td>
 <td><code>zero</code>, <code>영행렬</code>; template menu</td>
 <td>All entries 0, editable</td>
 </tr>
@@ -1165,7 +1188,7 @@
 </tr>
 </tbody>
 </table></div><h2 id="renderer-availability">Renderer availability</h2>
-<p>This formula catalog describes the shared model and the existing rich React editor. New native DOM/framework surfaces share the notation model but have a smaller interaction UI. See the <a href="/docs/adapters.html#current-renderer-parity">renderer parity table</a> before choosing an adapter.</p>
+<p>This formula catalog describes the shared model and the existing rich React editor. Native DOM/framework surfaces share the notation model, token editing, discovery and presentation utilities; host integration policies remain separate. See the <a href="/docs/adapters.html#current-renderer-parity">renderer parity table</a> before choosing an adapter.</p>
 <h3 id="combined-scripts-workspace">Combined scripts (workspace)</h3>
 <p><code>x_i^2</code> and <code>x^2_i</code> load into one <code>scripts</code> node with slots <code>[base, subscript, superscript]</code>. In either renderer, enter <code>^</code> at the end of a subscript and choose Exponent, or <code>_</code> at the end of an exponent and choose Subscript. The other script is added to the same base. Tab / Shift+Tab move between slots; Backspace in an empty script removes only that side. Explicit grouping such as <code>{x_i}^2</code> still represents nesting. Repeated scripts without grouping remain syntax errors. Available in 0.2.0.</p>
 <h3 id="contextual-selection-menu-workspace">Contextual selection menu (workspace)</h3>
@@ -1245,9 +1268,9 @@
 </tr>
 </tbody>
 </table></div><p>Select an expression and choose a fence or annotation in the regular suggestion menu. Fences wrap the expression and resume after it. Annotations keep the selected expression in the body and focus the empty annotation slot. Nested fractions, scripts and other editable structures are allowed in both annotation slots. Backspace after a structure removes its wrapper while preserving its content; Undo restores it.</p>
-<p>All structured fences scale with their contents. Short angle notation normalizes to scalable <code>\left\langle…\right\rangle</code> on export. Supported physical ends are <code>(</code>, <code>)</code>, <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code>, <code>⟨</code>, <code>⟩</code>, <code>|</code> and <code>.</code>. Plain punctuation stays literal unless imported with a structural command. Double norm bars, <code>\big</code>/<code>\Big</code>, <code>\overbrace</code> and <code>\underbrace</code> remain unsupported.</p>
+<p>All structured fences scale with their contents. Short angle notation normalizes to scalable <code>\left\langle…\right\rangle</code> on export. Supported physical ends are <code>(</code>, <code>)</code>, <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code>, <code>⟨</code>, <code>⟩</code>, <code>|</code> and <code>.</code>. Plain punctuation stays literal unless imported with a structural command. Double norm bars and brace annotations are supported. Explicit <code>\big</code>/<code>\Big</code> sizing remains unsupported.</p>
 <h3 id="double-integrals-workspace">Double integrals (workspace)</h3>
-<p><code>\iint_R f(x,y)</code> imports as <code>doubleIntegral</code> with exactly three slots: <code>[lower/domain, upper, body]</code>, matching integral navigation. Missing bounds remain editable empty slots. <code>\iint\limits</code> preserves the explicit placement directive. Export uses <code>\iint_{lower}^{upper}{body}</code>. Search <code>iint</code>, <code>이중적분</code> or <code>∬</code> to insert; Tab visits the domain, upper bound and body in order. The reported expression with <code>\rm dx \rm dy</code>, <code>\xi</code>, <code>\eta</code> and <code>\text{Area}</code> is covered by import/round-trip and browser editing fixtures. This is notation support, not numerical integration. Triple and contour integrals remain outside this addition.</p>
+<p><code>\iint_R f(x,y)</code> imports as <code>doubleIntegral</code> with exactly three slots: <code>[lower/domain, upper, body]</code>, matching integral navigation. Missing bounds remain editable empty slots. <code>\iint\limits</code> preserves the explicit placement directive. Export uses <code>\iint_{lower}^{upper}{body}</code>. Search <code>iint</code>, <code>이중적분</code> or <code>∬</code> to insert; Tab visits the domain, upper bound and body in order. The reported expression with <code>\rm dx \rm dy</code>, <code>\xi</code>, <code>\eta</code> and <code>\text{Area}</code> is covered by import/round-trip and browser editing fixtures. This is notation support, not numerical integration. Triple and contour integrals are also supported.</p>
 <p>Fine spacing: <code>\,</code>, <code>\:</code>, <code>\;</code>, <code>\!</code> are preserved as zero-slot structures. Positive spacing expands and negative thin spacing contracts the next boundary; these are not editable text spaces.</p>
 <h2 id="explicit-sizes-020">Explicit sizes (0.2.0)</h2>
 <p><code>\dfrac</code>, <code>\tfrac</code>, <code>\dbinom</code> and <code>\tbinom</code> can be imported and edited without losing their size choice on export. Type <code>dfrac</code>, <code>tfrac</code>, <code>dbinom</code> or <code>tbinom</code> and select the matching suggestion, then edit the two slots with Tab. See <a href="/docs/latex-model.html#explicit-fraction-and-binomial-sizes--workspace">JSON size mapping</a>. General <code>\displaystyle</code> and <code>\textstyle</code> declarations remain unsupported.</p>
@@ -1256,7 +1279,14 @@
 <h3 id="labeled-arrows-workspace">Labeled arrows (workspace)</h3>
 <p><code>\xrightarrow[below]{above}</code> and <code>\xleftarrow[below]{above}</code> support parsing, suggestions, editable math labels and export. See <a href="/docs/latex-guide.html#labeled-arrows--020">label syntax and slot order</a>. Available in 0.2.0.</p>
 <h2 id="keyboard-ranges-and-brace-discovery-021">Keyboard ranges and brace discovery (0.2.1)</h2>
-<p>Shift+Left/Right extends or shrinks the same model range used by dragging. Structures are crossed as balanced units; copied and deleted ranges use existing model normalization. Shift+Up/Down extends to an adjacent top-level document line, using a logical text offset rather than pixel-based column matching; grid-cell rectangular selection is not added. Copy, cut, wrapping, deletion and Undo use the existing range behavior. IME composition and modifier shortcuts retain their existing handling.</p>
+<p>Shift+Left/Right extends or shrinks the same model range used by dragging. Structures are crossed as balanced units; copied and deleted ranges use existing model normalization. Shift+Up/Down extends to an adjacent top-level document line, using a logical text offset rather than pixel-based column matching; an active matrix-cell selection instead uses Shift+arrows to move its rectangular focus corner. Copy, cut, wrapping, deletion and Undo use the existing range behavior. IME composition and modifier shortcuts retain their existing handling.</p>
+<p>After a model selection, plain Left/Up restores the caret at its document-ordered
+start; Right/Down restores it at the end. The same rule applies to reverse drags
+and Shift+arrow selections, without consuming another character or changing the
+formula. Alt+Up/Down browses the wrapping suggestions while retaining the range;
+Enter applies a candidate. Ordinary input suggestions still use Up/Down.</p>
 <p>Typing <code>{</code> offers both paired braces and cases. Paired braces remain the first candidate; choose Cases explicitly to insert its editable grid.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-session.html"><small>Previous</small>Session & DOM API </a><a href="/docs/json-model.html"><small>Next</small>JSON model specification →</a></nav><footer>Barocss Math Editor · 0.2.1 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#editing--latex-parity-020">Editing / LaTeX parity (0.2.0)</a><a class="h2" href="#structural-notation">Structural notation</a><a class="h2" href="#editing-discovery-and-integration">Editing, discovery and integration</a><a class="h2" href="#editable-templates-and-presets">Editable templates and presets</a><a class="h2" href="#symbol-catalog">Symbol catalog</a><a class="h2" href="#renderer-availability">Renderer availability</a><a class="h3" href="#combined-scripts-workspace">Combined scripts (workspace)</a><a class="h3" href="#contextual-selection-menu-workspace">Contextual selection menu (workspace)</a><a class="h3" href="#literal-text-and-functions-workspace">Literal text and functions (workspace)</a><a class="h3" href="#spacing-explicit-limits-and-upright-math-workspace">Spacing, explicit limits and upright math (workspace)</a><a class="h2" href="#additional-fences-and-annotations-workspace">Additional fences and annotations (workspace)</a><a class="h3" href="#double-integrals-workspace">Double integrals (workspace)</a><a class="h2" href="#explicit-sizes-020">Explicit sizes (0.2.0)</a><a class="h3" href="#math-alphabet-support-workspace">Math alphabet support (workspace)</a><a class="h3" href="#labeled-arrows-workspace">Labeled arrows (workspace)</a><a class="h2" href="#keyboard-ranges-and-brace-discovery-021">Keyboard ranges and brace discovery (0.2.1)</a></nav></aside></div></body></html>
+<h2 id="presentation-customization">Presentation customization</h2>
+<p>CSS variables support scoped palettes, token colors, slot focus/selection, toolbar density and menu chrome in both renderers and all framework adapters. Portaled suggestions follow their owning editor. See <a href="/docs/styling.html">Styling &amp; themes</a>; host integrations retain their own persisted formula-size attributes.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-session.html"><small>Previous</small>Session &amp; DOM API </a><a href="/docs/json-model.html"><small>Next</small>JSON model specification →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#editing--latex-parity-020">Editing / LaTeX parity (0.2.0)</a><a class="h2" href="#structural-notation">Structural notation</a><a class="h2" href="#editing-discovery-and-integration">Editing, discovery and integration</a><a class="h2" href="#editable-templates-and-presets">Editable templates and presets</a><a class="h2" href="#symbol-catalog">Symbol catalog</a><a class="h2" href="#renderer-availability">Renderer availability</a><a class="h3" href="#combined-scripts-workspace">Combined scripts (workspace)</a><a class="h3" href="#contextual-selection-menu-workspace">Contextual selection menu (workspace)</a><a class="h3" href="#literal-text-and-functions-workspace">Literal text and functions (workspace)</a><a class="h3" href="#spacing-explicit-limits-and-upright-math-workspace">Spacing, explicit limits and upright math (workspace)</a><a class="h2" href="#additional-fences-and-annotations-workspace">Additional fences and annotations (workspace)</a><a class="h3" href="#double-integrals-workspace">Double integrals (workspace)</a><a class="h2" href="#explicit-sizes-020">Explicit sizes (0.2.0)</a><a class="h3" href="#math-alphabet-support-workspace">Math alphabet support (workspace)</a><a class="h3" href="#labeled-arrows-workspace">Labeled arrows (workspace)</a><a class="h2" href="#keyboard-ranges-and-brace-discovery-021">Keyboard ranges and brace discovery (0.2.1)</a><a class="h2" href="#presentation-customization">Presentation customization</a></nav></aside></div></body></html>

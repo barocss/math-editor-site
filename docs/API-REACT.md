@@ -10,7 +10,7 @@ React offers two components. Choose intentionally: they share document structure
 ## Install
 
 ```sh
-npm install @barocss/math-editor@0.2.1 react react-dom
+npm install @barocss/math-editor@0.4.0 react react-dom
 ```
 
 ## Rich editor
@@ -200,3 +200,7 @@ Import validates the whole expression and host `multiline`/`excludedStructures` 
 Use `autoFocus`, `toolbar={false}`, `showTokenLegend={false}`, `showLineNumbers={false}` and `enterBehavior="commit"` for an in-place rich editor. Keep `onChange` in a local draft, commit that draft in `onCommit`, and discard it in `onCancel`. Suggestions and selection wrapping take priority over Enter; Escape closes suggestions before requesting cancellation. IME composition reserves its keys. `Shift+Enter` retains normal line/grid behavior subject to `multiline`.
 
 Wrap the editor in a non-editable island when embedding inside contenteditable. The host must exclude nested events, selections and renderer mutations from its own text pipeline. Do not save a host transaction for every math keystroke. Set `--me-font-size` on the wrapper to scale token previews and inputs together; its default is22px.
+
+## Workspace editing utilities
+
+The rich editor and native surface now share explicit LaTeX insertion, recent/favorite items and contextual presentation controls. `MathEditorHandle.pasteLatex(source)` inserts at the caret/range; `importLatex` still replaces the whole formula. Supply a `preferences` store from `createMathPreferences()` to share favorites across editor instances. The default is instance-local memory. See the [full utility API and keyboard behavior](API-SESSION.md#editing-utilities--workspace).

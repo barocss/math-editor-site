@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tiptap · Barocss Math Editor</title><meta name="description" content="Tiptap for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" aria-current="page">Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="tiptap-integration">Tiptap integration</h1>
+<p>The imports below use the public package entry points. The repository demo uses
+the same implementation from the private shared workspace. See the
+<a href="/docs/integrations/releasing.html">release guide</a> for package boundaries and verification.</p>
+<p>The adapter targets Tiptap 3 and supplies both inline and block formula nodes.
+It uses the same ProseMirror NodeView as the <a href="/docs/integrations/prosemirror.html">ProseMirror adapter</a>.
+The Tiptap host owns its document, selection, and configured history.</p>
+<p><a href="/integrations/?editor=tiptap">Open the Tiptap example</a> ·
+<a href="/docs/integrations/host-support.html">Host support</a> · <a href="/docs/integrations/validation.html">Validation</a></p>
+<pre><code class="language-ts">import { Editor } from &quot;@tiptap/core&quot;;
+import StarterKit from &quot;@tiptap/starter-kit&quot;;
+import { closeHistory } from &quot;prosemirror-history&quot;;
+import { BarocssMath } from &quot;@barocss/math-editor-tiptap&quot;;
+import katex from &quot;katex&quot;;
+import &quot;@barocss/math-editor/style.css&quot;;
+import &quot;@barocss/math-editor-tiptap/style.css&quot;;
+import &quot;katex/dist/katex.min.css&quot;;
+
+const editor = new Editor({
+  element: document.querySelector(&quot;#editor&quot;)!,
+  extensions: [
+    StarterKit,
+    BarocssMath.configure({
+      locale: &quot;en&quot;,
+      editing: &quot;inline&quot;,
+      render(latex, host, displayMode) {
+        katex.render(latex, host, {
+          displayMode,
+          throwOnError: false,
+          trust: false,
+        });
+      },
+    }),
+  ],
+});
+
+editor.commands.insertMath(String.raw`x_i^2`, &quot;inline&quot;);
+editor.commands.insertMath(String.raw`\frac{a}{b}`, &quot;block&quot;);
+const saved = editor.getJSON();
+const restoreDocument = (document: ReturnType&lt;typeof editor.getJSON&gt;) =&gt; {
+  const boundary = () =&gt; editor.view.dispatch(
+    closeHistory(editor.state.tr).setMeta(&quot;addToHistory&quot;, false)
+  );
+  boundary();
+  editor.commands.setContent(document);
+  boundary();
+};
+restoreDocument(saved);
+</code></pre>
+<p>The history boundaries keep document restoration separate from a quick subsequent
+text edit. The sample preserves an undoable document replacement instead of
+merging it with the next typed character.</p>
+<p>The host provides compatible Tiptap and ProseMirror dependencies; avoid duplicate
+ProseMirror model/state runtimes in a bundle. KaTeX is an optional preview renderer,
+not an adapter runtime dependency. Without a renderer, previews display LaTeX text.
+<code>BarocssMath</code> registers both formula node types, so do not register them twice.</p>
+<h2 id="editing-and-storage">Editing and storage</h2>
+<p><code>insertMath(source?, kind?)</code> accepts supported LaTeX or a validated <code>MathDocument</code>.
+It returns false for unsupported input without changing the document. The default
+kind is <code>inline</code>. Block formulas allow multiple top-level math rows; both kinds
+support structures such as matrices.</p>
+<p><code>editing: 'inline'</code> uses compact editing at the formula's position. Outside clicks
+apply the draft; the floating controls can expand it. <code>editing: 'panel'</code> opens the
+expanded field with explicit Apply/Cancel. Formula placement and editing layout
+are separate options.</p>
+<p>The node attributes contain <code>latex</code>, authoritative <code>mathDocument</code>, and <code>fontSize</code>
+(50–200 percent, default 100). Save with Tiptap's JSON or HTML APIs, not the live
+NodeView DOM. Canonical HTML carries math data and plain LaTeX fallback text while
+excluding preview HTML and editing controls. Unsupported stored models remain
+preserved and cannot be edited by an older math editor.</p>
+<p>Apply commits the draft to host history; Cancel discards it. Enabling host readonly
+or replacing the same formula closes an open draft. Formula drafts have their own
+undo history. Neighboring-text keyboard entry and optional shared toolbar behavior
+are described in the <a href="/docs/integrations/index.html#tiptapprosemirror-editing-contract">integration editing contract</a>.
+Destroy the Tiptap editor through <code>editor.destroy()</code> to tear down its NodeViews.</p>
+<p>See <a href="https://tiptap.dev/docs/editor/extensions/custom-extensions/node-views">Tiptap's NodeView documentation</a>
+for the host extension point.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/index.html"><small>Previous</small>Integration overview </a><a href="/docs/integrations/prosemirror.html"><small>Next</small>ProseMirror →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#editing-and-storage">Editing and storage</a></nav></aside></div></body></html>

@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Editor.js · Barocss Math Editor</title><meta name="description" content="Editor.js for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" aria-current="page">Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="editorjs-formula-blocks">Editor.js formula blocks</h1>
+<p>The examples below use its public entry points. See the <a href="/docs/integrations/releasing.html">release guide</a>.</p>
+<p><a href="/integrations/?editor=editorjs">Open the Editor.js example</a> · <a href="/docs/integrations/host-support.html">Host support</a> · <a href="/docs/integrations/validation.html">Validation</a></p>
+<p>The package root exports <code>BarocssMathTool</code>, a dedicated Block Tool tested
+against Editor.js 2.31.6. It does not modify paragraph tools or implement inline
+formulas inside arbitrary text blocks.</p>
+<pre><code class="language-ts">import EditorJS from &quot;@editorjs/editorjs&quot;;
+import { BarocssMathTool } from &quot;@barocss/math-editor-editorjs&quot;;
+import &quot;@barocss/math-editor/style.css&quot;;
+import &quot;@barocss/math-editor-editorjs/style.css&quot;;
+
+const editor = new EditorJS({
+  holder: &quot;editor&quot;,
+  tools: { barocssMath: { class: BarocssMathTool, config: { locale: &quot;en&quot; } } },
+});
+</code></pre>
+<p>Pass a <code>render(latex, element, displayMode)</code> callback in tool config for typeset
+previews, such as KaTeX with <code>trust: false</code>. The default safely shows LaTeX as text.</p>
+<p>Each block saves <code>{ latex, mathDocument, fontSize }</code>. The structured document is
+authoritative when present. Unsupported data remains stored and visible, and is
+not replaced by a blank formula. Model fields bypass HTML stripping so strings
+such as <code>a&lt;b&gt;c</code> survive; renderers must treat these fields as untrusted data.</p>
+<p>Click to edit. Apply commits and calls <code>block.dispatchChange()</code> once; Cancel keeps
+the stored value. Outside clicks apply the compact draft. Block and editor teardown
+remove editing listeners. Runtime read-only toggling uses Editor.js's tool lifecycle.</p>
+<p>Insert from the toolbox, or use the block API:</p>
+<pre><code class="language-ts">const block = editor.blocks.insert(&quot;barocssMath&quot;, {
+  latex: &quot;&quot;,
+  mathDocument: null,
+});
+block.call(&quot;edit&quot;);
+const document = await editor.save();
+await editor.render(document);
+</code></pre>
+<p>Editor.js does not provide the same built-in document history API as the other
+sample hosts. Its integration does not claim host Undo/Redo; install and validate
+an Editor.js history extension separately. Undo inside an open math draft remains
+available through the common math editor.</p>
+<p>Official references: <a href="https://editorjs.io/tools-api/">Tools API</a>,
+<a href="https://editorjs.io/sanitize-saved-data/">Sanitize saved data</a>,
+<a href="https://editorjs.io/saving-data/">Saving data</a>.</p>
+<h2 id="continuous-editing-checks">Continuous editing checks</h2>
+<p>The workspace EDIT-019 run on 2026-09-10 passes 29 checkpoints for Editor.js block
+editing in Chromium on macOS. It covers fraction/root/matrix editing, suggestion
+selection, two formula Undo/Redo chains, Apply, Save/reload/Restore, re-edit and
+Cancel. Draft edits leave saved host data unchanged. Saved documents are compared
+with only the generated save timestamp excluded.</p>
+<p>Document Undo/Redo remains unverified because the demo has no host history
+extension. Inline editing is outside this Block Tool's contract. See the
+<a href="/docs/integrations/validation.html#edit-019-editorjs--workspace-2026-09-10">validation evidence</a>
+for the tested scope and remaining browser/input checks.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/lexical.html"><small>Previous</small>Lexical </a><a href="/docs/integrations/tinymce.html"><small>Next</small>TinyMCE →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#continuous-editing-checks">Continuous editing checks</a></nav></aside></div></body></html>

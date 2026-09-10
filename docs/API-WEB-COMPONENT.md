@@ -5,7 +5,7 @@ Use the custom element with plain HTML or a framework that can pass DOM properti
 ## Install and register
 
 ```sh
-npm install @barocss/math-editor@0.2.1
+npm install @barocss/math-editor@0.4.0
 ```
 
 ```js
@@ -126,3 +126,5 @@ Persist the `MathDocument` passed to `onChange`; LaTeX is derived output and is 
 Keep the mount host empty. The editor owns its descendants; framework rendering into the same host can destroy caret and composition state. Use one editing surface per session. Destroy the renderer on teardown; a session supplied by the host remains the host's responsibility.
 
 See [session and DOM API](API-SESSION.md) for exact options, commands, events and cleanup, and [renderer differences](ADAPTERS.md#current-renderer-parity) before choosing a native wrapper over the rich React editor.
+
+Set `context-tools="false"` to hide the contextual structure footer. Changing this attribute updates the mounted editor. Conversion suggestions remain available.

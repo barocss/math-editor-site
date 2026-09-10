@@ -1,0 +1,156 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CKEditor 5 · Barocss Math Editor</title><meta name="description" content="CKEditor 5 for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" aria-current="page">CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="ckeditor-5-adapter">CKEditor 5 adapter</h1>
+<p>The examples below use its public entry points. See the <a href="/docs/integrations/releasing.html">release guide</a>.</p>
+<p><a href="/integrations/?editor=ckeditor">Open the CKEditor example</a> · <a href="/docs/integrations/host-support.html">Host support</a> · <a href="/docs/integrations/validation.html">Validation</a></p>
+<p>Development preview for CKEditor 5, implemented against version 48.5.0. The
+adapter uses CKEditor model objects, conversion, commands, and widgets; it does
+not include or vendor CKEditor. Install a compatible <code>ckeditor5</code> package in the
+host application. The adapter is distributed through its own public package. The shared workspace helpers remain private.</p>
+<h2 id="setup">Setup</h2>
+<pre><code class="language-ts">import { ClassicEditor, Essentials, Paragraph, Bold, Italic } from &quot;ckeditor5&quot;;
+import { BarocssMathCKEditor } from &quot;@barocss/math-editor-ckeditor&quot;;
+import &quot;ckeditor5/ckeditor5.css&quot;;
+import &quot;@barocss/math-editor/style.css&quot;;
+import &quot;@barocss/math-editor-ckeditor/style.css&quot;;
+
+async function createEditor(
+  host: HTMLElement,
+  licenseKey: string,
+  toolbarHost?: HTMLElement
+) {
+  return ClassicEditor.create({
+    attachTo: host,
+    licenseKey,
+    plugins: [Essentials, Paragraph, Bold, Italic, BarocssMathCKEditor],
+    toolbar: [
+      &quot;undo&quot;,
+      &quot;redo&quot;,
+      &quot;|&quot;,
+      &quot;bold&quot;,
+      &quot;italic&quot;,
+      &quot;|&quot;,
+      &quot;insertBarocssMath&quot;,
+      &quot;insertBarocssMathBlock&quot;,
+    ],
+    barocssMath: {
+      locale: &quot;en&quot;,
+      editing: &quot;inline&quot;,
+      toolbarHost,
+      toolbarMaxItems: 6,
+    },
+  });
+}
+</code></pre>
+<p>The example uses standard CKEditor features and does not load premium plugins.
+Set <code>barocssMath.render(latex, host, displayMode)</code> for typeset previews. Without a
+renderer, the preview shows LaTeX as text. Use the same trusted-renderer settings
+and math-editor styles as the other integrations.</p>
+<p><code>barocssMath</code> accepts the shared <code>MathIntegrationOptions</code>: locale, message
+overrides, inline or panel editing, toolbar configuration, and preview renderer.
+An optional <code>toolbarHost</code> outside the editable document follows the active
+formula. Use one toolbar container per editor. <code>toolbar: false</code> disables math
+toolbars while preserving suggestions and draft actions.</p>
+<h2 id="insertion-and-editing">Insertion and editing</h2>
+<pre><code class="language-ts">editor.execute(&quot;insertBarocssMath&quot;, { source: &quot;x_i^2&quot;, kind: &quot;inline&quot; });
+editor.execute(&quot;insertBarocssMath&quot;, {
+  source: String.raw`\frac{a}{b}`,
+  kind: &quot;block&quot;,
+});
+</code></pre>
+<p><code>source</code> accepts supported LaTeX or a validated <code>MathDocument</code>; it defaults to an
+empty formula. Unsupported input is rejected before insertion. The <code>Math</code> and
+<code>Block formula</code> toolbar controls insert and open their corresponding node kind.
+Clicking a preview, or pressing Enter with its CKEditor object selected, opens a
+draft. Inline and block formulas use the shared native math editor, without a
+React dependency.</p>
+<p>Apply, Ctrl+Enter, or Cmd+Enter updates the node's content and size in one new
+CKEditor undo batch. Keyboard exit applies before returning selection to the
+host. Compact outside-click commits preserve the destination's focus. Cancel
+discards draft changes; insertion itself is a separate host action, so cancelling
+the first draft leaves its inserted node available for normal deletion or Undo.</p>
+<p>One draft is active per CKEditor instance. Opening another formula applies the
+previous draft, and active IME composition blocks that switch. Switching the
+editor to read-only discards an uncommitted draft and disables editing. External
+changes to the same node close its stale draft; removed widgets and editor
+destruction release their fields and toolbar resources. Apply also checks that
+the node still exists and its stored attributes have not changed.</p>
+<h2 id="storage">Storage</h2>
+<p>The CKEditor model contains <code>barocssMathInline</code> and <code>barocssMathBlock</code> object nodes
+with <code>latex</code>, <code>mathDocument</code>, and <code>fontSize</code> attributes. <code>mathDocument</code> contains
+the authoritative JSON model; LaTeX is the portable fallback. Display size is a
+percentage independent of the mathematical content.</p>
+<p>At the shared API boundary, LaTeX-only data has <code>mathDocument: null</code>. The CKEditor
+model represents that state by omitting the attribute, since CKEditor reserves
+null as the absence sentinel in its attribute operations. The adapter removes an
+attribute when returning to LaTeX-only data instead of storing a null value.</p>
+<p><code>editor.getData()</code> returns standard CKEditor HTML. Formula output uses <code>span</code> for
+inline math and <code>div</code> for block math, with <code>data-barocss-math</code>, <code>data-latex</code>,
+<code>data-math-document</code>, and <code>data-math-size</code>. The data converter writes mathematical
+data and LaTeX text only; editing controls and preview markup are not serialized.
+<code>editor.setData(html)</code> restores these attributes. Preserve them in external HTML
+sanitizers and clipboard pipelines. Applications can store the HTML string inside
+their own JSON document envelope.</p>
+<p>LaTeX-only HTML is parsed when opened. Unsupported or newer JSON remains stored
+and uneditable, and is not replaced by its LaTeX fallback. Use the host's standard
+object selection, deletion, clipboard, and Undo commands for whole formulas.</p>
+<h2 id="local-demo-and-ckeditor-licensing">Local demo and CKEditor licensing</h2>
+<p>The local sample is at <code>http://localhost:5185/?editor=ckeditor&amp;lang=en</code>. It starts with
+inline and block math and exposes insertion, Undo/Redo, save/restore, and read-only
+controls. Its <code>mountCKEditorDemo(host, options)</code> accepts an optional
+<code>options.licenseKey</code> supplied by the host application.</p>
+<p>Without a supplied key, the sample uses <code>licenseKey: 'GPL'</code> only on localhost or a
+loopback hostname and displays a local evaluation notice. This is not permission
+to deploy a proprietary product with that setting. CKEditor offers GPL 2+ and
+commercial licensing; a proprietary host that does not comply with the GPL needs
+an appropriate CKEditor commercial license. Supply that host license separately;
+the Barocss adapter grants no CKEditor license and does not activate paid keys.
+See <a href="https://ckeditor.com/docs/ckeditor5/latest/getting-started/licensing/license-and-legal.html">CKEditor's official licensing guide</a>.</p>
+<p>Both <code>@barocss/math-editor</code> and the Barocss CKEditor adapter use the MIT license.
+See the <a href="/docs/integrations/commercial-model.html">licensing guide</a>. The adapter's MIT license does
+not replace CKEditor's terms.</p>
+<h2 id="verification-scope">Verification scope</h2>
+<p>Six focused attribute tests cover JSON persistence, LaTeX-only loading, null
+conversion, unsupported authoritative models, display-size normalization, and
+stale-value detection. Type-check and the integration build pass.</p>
+<p>On 2026-09-09, <code>apps/math-integrations/tests/ckeditor-check.js</code> passed in local
+Chromium on macOS with zero page errors. It covers inline and block Apply,
+LaTeX-only imports, Cancel, one-step host Undo/Redo, HTML saved inside JSON,
+synthetic composition switching guards, compact outside Apply, read-only,
+insertion, unsupported data, model removal, and teardown. The run caught and
+verified the fix for storing null as a CKEditor model attribute. Native OS IME,
+other browsers, and broader host-version compatibility remain unverified.</p>
+<p>The adapter uses the documented <a href="https://ckeditor.com/docs/ckeditor5/latest/framework/tutorials/widgets/implementing-an-inline-widget.html">inline-widget conversion pattern</a>
+and <a href="https://ckeditor.com/docs/ckeditor5/latest/framework/tutorials/widgets/using-react-in-a-widget.html">RawElement integration pattern</a>.
+The native math field occupies the raw DOM boundary and handles its own input;
+CKEditor owns surrounding document editing and stored model changes.</p>
+<p>The public static sample shows setup guidance until the host license is explicitly configured. Local development settings do not authorize a production TinyMCE or CKEditor deployment.</p>
+<h2 id="continuous-editing-checks">Continuous editing checks</h2>
+<p>The workspace EDIT-019 run on 2026-09-10 passes both math block and math inline
+modes in the local ClassicEditor demo, using CKEditor 48.5.0 and Chromium on macOS.
+It covers nested fraction/root/matrix editing, two formula Undo/Redo chains,
+draft isolation, Apply as one host history event, Save/reload/Restore, re-edit
+and Cancel. Inline also checks Enter commit, Right-arrow exit, host focus,
+prose input after the formula and Undo of that prose edit.</p>
+<p>The test compares complete saved HTML for persistence and history. It also
+checks prose and element boundaries, so a correct preview alone cannot pass.
+See <a href="/docs/integrations/validation.html#edit-019-ckeditor--workspace-2026-09-10">validation evidence</a>.
+Other CKEditor builds, collaboration, native OS IME/clipboard and other browser
+engines need separate validation.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/tinymce.html"><small>Previous</small>TinyMCE </a><a href="/docs/integrations/quill.html"><small>Next</small>Quill →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#setup">Setup</a><a class="h2" href="#insertion-and-editing">Insertion and editing</a><a class="h2" href="#storage">Storage</a><a class="h2" href="#local-demo-and-ckeditor-licensing">Local demo and CKEditor licensing</a><a class="h2" href="#verification-scope">Verification scope</a><a class="h2" href="#continuous-editing-checks">Continuous editing checks</a></nav></aside></div></body></html>

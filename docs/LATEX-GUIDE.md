@@ -43,6 +43,7 @@ Typing LaTeX into an ordinary editor slot is not the same as importing it. Use t
 
 ## Type with suggestions
 
+- In the 0.4.0 release, enter a matrix size as `rows x columns` without spaces. `2x1` creates two rows and one column, `1x2` creates one row and two columns, and `3x7` creates three rows and seven columns. Each dimension must be an integer from 1 to 20, without leading zeros. Uppercase `X` and `×` also work. Suggestions offer an empty matrix and a zero matrix; square sizes additionally offer an identity matrix. Enter accepts the highlighted candidate and focuses its first cell; Tab moves through cells in row order. Space or Escape keeps the original text. These are editor shortcuts, not LaTeX commands; accepted matrices export as the usual `bmatrix` environment.
 - Type `nthroot`, `nroot` or `n제곱근` and choose Indexed root. Enter the index, press Tab, then enter the radicand. A selected expression can be wrapped; it becomes the radicand and the index receives focus.
 - Type `text` or `텍스트`, choose Text and write the description. Tab returns to math input. Mathematical suggestions are disabled inside literal text.
 - Type a function name such as `sin`, `cos`, `log` or `ln`, then select its suggestion. Accept the suggestion before typing the argument; plain `log` remains variable text until converted.
@@ -249,6 +250,34 @@ Numbered `equation`, `\tag` and `\label` are not supported: the model cannot pre
 
 ## Keyboard ranges and brace discovery (0.2.1)
 
-Shift+Left/Right extends or shrinks the same model range used by dragging. Structures are crossed as balanced units; copied and deleted ranges use existing model normalization. Shift+Up/Down extends to an adjacent top-level document line, using a logical text offset rather than pixel-based column matching; grid-cell rectangular selection is not added. Copy, cut, wrapping, deletion and Undo use the existing range behavior. IME composition and modifier shortcuts retain their existing handling.
+Shift+Left/Right extends or shrinks the same model range used by dragging. Structures are crossed as balanced units; copied and deleted ranges use existing model normalization. Shift+Up/Down extends to an adjacent top-level document line, using a logical text offset rather than pixel-based column matching; an active matrix-cell selection instead uses Shift+arrows to move its rectangular focus corner. Copy, cut, wrapping, deletion and Undo use the existing range behavior. IME composition and modifier shortcuts retain their existing handling.
 
 Typing `{` offers both paired braces and cases. Paired braces remain the first candidate; choose Cases explicitly to insert its editable grid.
+
+## Insert or adjust existing math — workspace
+
+Use **Paste as LaTeX** in More tools, or **Alt+Shift+V**, to paste a source fragment at the current caret or selected range. Ctrl/Cmd+Enter inserts it; unsupported input stays in the source field with a diagnostic. Ordinary paste retains its existing literal-text behavior.
+
+When the caret is inside a structure, the toolbar can change its bracket pair, fraction/binomial display size, or operator limit placement. These actions preserve contents and support one-step Undo. Recent & favorites keeps frequently used symbols/templates available without searching again. See [editing utilities](API-SESSION.md#editing-utilities--workspace).
+
+### Change a radical while editing
+
+Inside `\sqrt{x}`, choose **Change to Indexed root** in the suggestions. The
+result is `\sqrt[2]{x}` with `2` selected for replacement. The content under the
+radical is preserved. An indexed root with an empty index or `2` offers **Change
+to Square root**. Other indices must be edited before that conversion is offered.
+This editing operation does not change the LaTeX grammar or JSON model schema.
+
+
+## Literal caret/tilde and complex root indices
+
+A literal `^` or `~` in a model text run exports as `\char"005E{}` or
+`\char"007E{}`. These spellings render in KaTeX math mode and load back into the
+same text run. The importer also accepts `\textasciicircum{}` and
+`\textasciitilde{}` as input aliases. Inside `\text{...}`, text-mode escaping
+remains unchanged. General TeX `\char` codes are not supported.
+
+An index containing braces or brackets is grouped when exported. For example,
+`\sqrt[{x^2}]{y}` and `\sqrt[{\left[a\right]}]{y}` keep the optional index
+argument intact. Grouping does not add a JSON node or remove editable structure.
+Simple indices continue to export as `\sqrt[3]{x}`.

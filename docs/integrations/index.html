@@ -1,0 +1,519 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Integration overview · Barocss Math Editor</title><meta name="description" content="Integration overview for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" aria-current="page">Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="barocss-math-editor-integrations">Barocss Math Editor Integrations</h1>
+<p>Private common data, draft-field UI, messages and styles for math editor plugins.
+Each host owns its implementation and tests in its own <code>math-editor-&lt;host&gt;</code>
+package. This common package has no host SDK imports or host entry points.
+Install the public plugins alongside the core and their host editor SDKs. Compatibility ranges are declared in each package manifest.</p>
+<h2 id="why-this-package-stays-private">Why this package stays private</h2>
+<p>Source exports are for workspace development. They do not make this package a
+runtime dependency of the published plugins. Each plugin build includes the common
+JavaScript and CSS it uses, and copies common declarations into <code>dist/_shared/</code>.
+The packed plugin has no import or dependency on <code>@barocss/math-editor-integrations</code>.
+Consumers install the core, their selected plugin and its host SDK peers.
+Tiptap also installs the public ProseMirror plugin through its declared dependency.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Environment</th>
+<th>Common implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Workspace app</td>
+<td>Imports this private package's source through the selected plugin</td>
+</tr>
+<tr>
+<td>npm consumer or deployed site</td>
+<td>Uses the common code already included in the public plugin</td>
+</tr>
+</tbody>
+</table></div><p>Making the common code external in a future build would require a public runtime
+package and dependency versions. The current build deliberately includes it instead.</p>
+<h2 id="license">License</h2>
+<p>The core, this shared source package, and all nine host
+packages use the MIT license. Each package includes a LICENSE file with copyright
+attributed to barocss.com. See the included <code>LICENSE</code> file.</p>
+<p>See the <a href="/docs/integrations/releasing.html">release guide</a> for package boundaries, Changesets,
+artifact checks and the remaining publication prerequisites.
+The <a href="/docs/index.html#packages">complete package catalog</a> separates the
+published core, its framework subpaths and all nine prepared host packages.</p>
+<h2 id="choose-a-host-adapter">Choose a host adapter</h2>
+<p>Import the public package for your host. Formula placement and the editing surface are
+separate: an inline formula can be stored inside a sentence even when its draft
+opens in a panel outside the document.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Host / development target</th>
+<th>Prepared npm package</th>
+<th>Formula placement</th>
+<th>Editing surface and guide</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tiptap 3</td>
+<td><code>@barocss/math-editor-tiptap</code></td>
+<td>Inline and block</td>
+<td>Shared ProseMirror NodeView; compact or panel editing; <a href="#tiptap">setup below</a></td>
+</tr>
+<tr>
+<td>ProseMirror 1</td>
+<td><code>@barocss/math-editor-prosemirror</code></td>
+<td>Inline and block</td>
+<td>DOM NodeView; compact or panel editing; <a href="#prosemirror">setup below</a></td>
+</tr>
+<tr>
+<td>Lexical 0.50.0</td>
+<td><code>@barocss/math-editor-lexical</code></td>
+<td>Inline and block</td>
+<td>DecoratorNode with the native math field; <a href="/docs/integrations/lexical.html">Lexical guide</a></td>
+</tr>
+<tr>
+<td>Editor.js 2.31.6</td>
+<td><code>@barocss/math-editor-editorjs</code></td>
+<td>Block only</td>
+<td>Block Tool with the native math field; <a href="/docs/integrations/editorjs.html">Editor.js guide</a></td>
+</tr>
+<tr>
+<td>TinyMCE 8.9.0</td>
+<td><code>@barocss/math-editor-tinymce</code></td>
+<td>Inline and block</td>
+<td>In-place editing in inline/iframe hosts; optional Apply/Cancel panel; <a href="/docs/integrations/tinymce.html">TinyMCE guide</a></td>
+</tr>
+<tr>
+<td>CKEditor 5 / 48.5.0</td>
+<td><code>@barocss/math-editor-ckeditor</code></td>
+<td>Inline and block</td>
+<td>Model objects and widgets with the native math field; <a href="/docs/integrations/ckeditor.html">CKEditor guide</a></td>
+</tr>
+<tr>
+<td>Quill 2.0.3</td>
+<td><code>@barocss/math-editor-quill</code></td>
+<td>Inline and block</td>
+<td>Embed/BlockEmbed with the native math field; <a href="/docs/integrations/quill.html">Quill guide</a></td>
+</tr>
+<tr>
+<td>Slate 0.126.2 / slate-react 0.126.4</td>
+<td><code>@barocss/math-editor-slate</code></td>
+<td>Inline and block</td>
+<td>Void elements with a React wrapper and native math field; <a href="/docs/integrations/slate.html">Slate guide</a></td>
+</tr>
+<tr>
+<td>Gutenberg npm block-editor 17.0.0</td>
+<td><code>@barocss/math-editor-gutenberg</code></td>
+<td>Block only</td>
+<td>Registered WordPress math block with the native math field; <a href="/docs/integrations/gutenberg.html">Gutenberg guide</a></td>
+</tr>
+</tbody>
+</table></div><p>These are development targets, not a certified compatibility matrix. Local Chromium
+checks cover all nine adapters, including Gutenberg in WordPress 7.1. Broader
+browser and host-version testing remains. See
+<a href="/docs/integrations/host-support.html">host support</a> and <a href="/docs/integrations/validation.html">VALIDATION.md</a> for recorded
+checks and remaining limits.</p>
+<p>Each public plugin declares its own host SDK peers and the public math core.
+Its development dependencies provide those SDKs for local builds and tests.
+Tiptap also declares the public ProseMirror plugin as a runtime dependency:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Adapter</th>
+<th>Host dependencies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tiptap</td>
+<td><code>@tiptap/core</code> and the host's compatible ProseMirror packages</td>
+</tr>
+<tr>
+<td>ProseMirror</td>
+<td><code>prosemirror-model</code>, <code>prosemirror-state</code>, <code>prosemirror-view</code>, <code>prosemirror-history</code></td>
+</tr>
+<tr>
+<td>Lexical</td>
+<td><code>lexical</code>; register the host features and <code>@lexical/history</code> separately when needed</td>
+</tr>
+<tr>
+<td>Editor.js</td>
+<td><code>@editorjs/editorjs</code>; document history requires a separate host solution</td>
+</tr>
+<tr>
+<td>TinyMCE</td>
+<td><code>tinymce</code>, its locally served/bundled assets, and host license configuration</td>
+</tr>
+<tr>
+<td>CKEditor</td>
+<td><code>ckeditor5</code>, host features/styles, and host license configuration</td>
+</tr>
+<tr>
+<td>Quill</td>
+<td><code>quill</code> and the host theme/styles</td>
+</tr>
+<tr>
+<td>Slate</td>
+<td><code>slate</code>, <code>slate-react</code>, <code>slate-dom</code>, <code>slate-history</code>, <code>react</code>, and <code>react-dom</code></td>
+</tr>
+<tr>
+<td>Gutenberg</td>
+<td>Compatible WordPress blocks, block-editor, components, data, element and i18n packages; an installed WordPress plugin uses the host's script dependencies</td>
+</tr>
+</tbody>
+</table></div><p>Each plugin builds its own TypeScript source and bundles the private common helpers.
+Host SDKs and the public math core remain external. The demo application installs
+and bundles the SDKs it uses. Consumers
+load only their selected public package. Each one exports <code>/shared</code> for common
+attributes, options, and native math-field helpers, plus <code>/style.css</code>.</p>
+<h2 id="what-works">What works</h2>
+<ul>
+<li>The common math editor supplies suggestions, structure tools, draft history,
+Apply/Cancel, display size, and English/Korean messages.</li>
+<li>Adapters preserve the math document model and LaTeX fallback in host-native data.
+HTML-capable adapters serialize mathematical data without live preview controls.</li>
+<li>Supported LaTeX can be inserted explicitly; unsupported authoritative models are
+preserved instead of being replaced by a lossy LaTeX conversion.</li>
+<li>Each adapter connects draft changes, read-only behavior, and teardown to its host
+lifecycle. History requires the host's configured history support. Editor.js core
+has no built-in document Undo/Redo, and its math Tool does not add one.</li>
+</ul>
+<p>Keyboard entry at neighboring text boundaries and the detailed behavior below are
+the Tiptap/ProseMirror contract. Other adapters have their own guides; shared math
+input does not imply identical host navigation, clipboard, or insertion behavior.</p>
+<h2 id="run-the-development-sample">Run the development sample</h2>
+<p>From the repository root:</p>
+<pre><code class="language-sh">pnpm --dir apps/math-integrations dev
+</code></pre>
+<p>Open the <a href="/integrations/?lang=ko">unified sample</a> or
+<a href="/integrations/?lang=en">the English sample</a>. All nine editors use the same
+page and selector; <code>editor=tiptap</code>, <code>prosemirror</code>, <code>lexical</code>, <code>editorjs</code>, <code>tinymce</code>,
+<code>ckeditor</code>, <code>quill</code>, <code>slate</code>, or <code>gutenberg</code> chooses the host. Old <code>plugins.html</code>
+links redirect here while preserving their selected editor and language.
+Workspace exports resolve the plugins, core and private common module directly from
+<code>src/</code>. Source edits reach Vite without a package rebuild. Package <code>build</code> commands
+remain available to validate publishable output. Tiptap's build includes its public
+ProseMirror dependency. The website stages this sample under <code>/integrations/</code> and
+renders its guides under <code>/docs/integrations/</code>.
+Staging the site does not publish the individual npm packages.</p>
+<h2 id="source-ownership-and-package-versions">Source ownership and package versions</h2>
+<p>Each public package has <code>src/</code>, <code>test/</code>, TypeScript configuration and its own
+<code>build</code>, <code>type-check</code>, <code>test</code> and <code>format</code> scripts. ProseMirror owns its schema,
+NodeView, keyboard boundaries and host toolbar coordination. Tiptap imports its
+public API through a declared package dependency. Other adapters depend on the
+core, common helpers and their own host SDKs.</p>
+<p>The common build helper in <code>scripts/build-math-plugins.mjs</code> reads each plugin's
+own source. It bundles common helpers, keeps public plugin/SDK imports external,
+and copies the common declaration graph into each artifact. Consumers never need
+to install this private package. The public entry points remain unchanged.</p>
+<p>Version each affected plugin with Changesets. A CKEditor-only change names the
+CKEditor package. A ProseMirror change follows the declared Tiptap dependency.
+Changes to bundled common helpers must name every affected public plugin because
+the private common package is not a runtime npm dependency. See the
+<a href="/docs/integrations/releasing.html">release guide</a> for the batch command and package checks.</p>
+<p>For an installable Gutenberg development plugin, follow the
+<a href="/docs/integrations/wordpress.html">WordPress preview ZIP build guide</a>.
+That artifact is separate from the standalone browser sample and supports dedicated
+math blocks; inline formulas inside Gutenberg RichText paragraphs remain future work.</p>
+<p>TinyMCE and CKEditor samples use local development/evaluation license settings;
+configure the host's own license and assets before deployment. TinyMCE documents
+its GPL/commercial choice and <code>license_key</code> setting in its
+<a href="https://www.tiny.cloud/docs/tinymce/latest/license-key/">license configuration guide</a>.
+CKEditor documents its separate GPL/commercial terms in its
+<a href="https://ckeditor.com/docs/ckeditor5/latest/getting-started/licensing/license-and-legal.html">licensing guide</a>.
+The Barocss adapter does not grant either host SDK's license or activate paid features.</p>
+<h2 id="tiptap">Tiptap</h2>
+<p>The integration consumes the host's Tiptap and ProseMirror dependencies. Do not install
+multiple independent copies of ProseMirror state/model in the same editor bundle.</p>
+<pre><code class="language-ts">import { Editor } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+import { BarocssMath } from '@barocss/math-editor-tiptap';
+import katex from 'katex';
+import '@barocss/math-editor/style.css';
+import '@barocss/math-editor-tiptap/style.css';
+import 'katex/dist/katex.min.css';
+
+const editor = new Editor({
+  element: document.querySelector('#editor')!,
+  extensions: [
+    StarterKit,
+    BarocssMath.configure({
+      locale: 'en',
+      editing: 'inline', // Default: compact editing in the text flow. Use 'panel' for explicit Apply/Cancel.
+      toolbar: true,
+      toolbarMaxItems: 6,
+      render(latex, host, displayMode) {
+        katex.render(latex, host, { displayMode, throwOnError: false, trust: false });
+      },
+    }),
+  ],
+});
+
+editor.commands.insertMath(String.raw`x_i^2`, 'inline');
+editor.commands.insertMath(String.raw`\frac{a}{b}`, 'block');
+const documentJSON = editor.getJSON();
+editor.commands.setContent(documentJSON);
+</code></pre>
+<p><code>insertMath(source?, kind?)</code> accepts LaTeX or a validated MathDocument. Unsupported
+input returns false without changing the document. Both node types are installed by
+<code>BarocssMath</code>; avoid registering them again yourself.</p>
+<h2 id="prosemirror">ProseMirror</h2>
+<pre><code class="language-ts">import { Schema } from 'prosemirror-model';
+import { EditorState } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
+import { schema as basicSchema } from 'prosemirror-schema-basic';
+import { history } from 'prosemirror-history';
+import { mathNodes, createMathPlugin, insertMath } from '@barocss/math-editor-prosemirror';
+
+const schema = new Schema({
+  nodes: basicSchema.spec.nodes.append(mathNodes),
+  marks: basicSchema.spec.marks,
+});
+const view = new EditorView(document.querySelector('#editor'), {
+  state: EditorState.create({
+    schema,
+    plugins: [createMathPlugin({ locale: 'en', toolbar: false }), history()],
+  }),
+});
+
+insertMath('x_i^2', 'inline')(view.state, view.dispatch);
+</code></pre>
+<p>Register your usual host keymaps, history shortcuts, and document commands as well.
+The sample shows a complete setup. Supply the same <code>render</code> callback as the Tiptap
+example to display typeset formulas; the default displays escaped LaTeX text.
+KaTeX is a sample dependency, not an integration runtime dependency.</p>
+<h2 id="tiptapprosemirror-direct-editing-and-panel-editing">Tiptap/ProseMirror: direct editing and panel editing</h2>
+<p><code>editing: 'inline'</code> is the default. The input replaces the displayed formula at its
+original position, without a full toolbar taking up document space. Suggestions still
+work. A small floating bar offers More tools, Apply, and Cancel. More tools expands
+the current draft into the panel without losing input. Clicking outside or moving
+focus to another control applies the compact draft without stealing the destination
+focus. Internal input replacement and suggestion clicks do not end editing.</p>
+<p><code>editing: 'panel'</code> starts with the toolbar and explicit Apply/Cancel actions. An outside
+click leaves that draft open. The <code>inline</code>/<code>block</code> <strong>node kind</strong> separately determines
+whether top-level multiple rows are allowed; editing layout does not change storage.</p>
+<p>Each host <code>EditorView</code> coordinates one active math draft across both editing layouts.
+Opening another supported formula applies the previous draft before opening the next.
+A switch is blocked while the active draft is composing IME input. Separate host
+editors have separate coordinators; the usual outside-click behavior still applies when focus moves between host editors.</p>
+<h2 id="tiptapprosemirror-shared-toolbar">Tiptap/ProseMirror: shared toolbar</h2>
+<p>Provide <code>toolbarHost: HTMLElement</code> to place one toolbar in a dedicated container
+outside the editable document. It follows the active formula and uses that draft's
+session for structure insertion and Undo/Redo. With no active draft, editing actions
+are disabled. The integration manages the toolbar's session and lifecycle; the host
+application owns the container.</p>
+<pre><code class="language-ts">const toolbarHost = document.querySelector&lt;HTMLElement&gt;('#math-toolbar')!;
+
+// Tiptap extension configuration:
+BarocssMath.configure({ locale: 'en', toolbarHost, toolbarMaxItems: 6 });
+
+// Equivalent ProseMirror plugin configuration:
+createMathPlugin({ locale: 'en', toolbarHost, toolbarMaxItems: 6 });
+</code></pre>
+<p>Shared toolbar editing commands are disabled during IME composition. In compact mode, moving keyboard focus out of both the draft and shared toolbar applies the draft.</p>
+<p>Use a separate toolbar container for each host editor. <code>toolbar: false</code> disables the
+math toolbar, including the shared toolbar when a host is supplied. Without
+<code>toolbarHost</code>, the existing compact inline and expanded panel toolbar behavior is
+preserved. Suggestions and draft Apply/Cancel controls remain available.</p>
+<p>For a custom embedding outside these integrations, the native math editor also
+exports an independently mounted toolbar from <code>@barocss/math-editor/dom</code>:</p>
+<pre><code class="language-ts">import { mountMathToolbar } from '@barocss/math-editor/dom';
+import type { MathSession } from '@barocss/math-editor/core';
+
+const toolbar = mountMathToolbar(toolbarHost, null, {
+  locale: 'en',
+  maxItems: 6,
+  onExecute: () =&gt; {
+    // Restore focus to your active math editor if your host UI requires it.
+  },
+});
+
+function activateFormula(session: MathSession | null) {
+  toolbar.setSession(session);
+}
+
+// On host teardown:
+toolbar.destroy();
+</code></pre>
+<p><code>mountMathToolbar(host, session | null, { locale, maxItems, onExecute })</code> returns
+<code>setSession(next | null)</code> and <code>destroy()</code>. Switching sessions removes the previous
+subscription. An attached session supplies its locale; <code>locale</code> initializes labels
+before a session is attached. Passing <code>null</code> detaches the session and disables
+editing actions. This API controls a toolbar only; the custom host owns draft and
+focus coordination. Do not mount it into a container already managed by
+<code>toolbarHost</code>.</p>
+<h2 id="tiptapprosemirror-editing-contract">Tiptap/ProseMirror: editing contract</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Action</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Click a formula or press Enter on its node selection</td>
+<td>Open a draft for that formula</td>
+</tr>
+<tr>
+<td>ArrowRight immediately before inline math / ArrowLeft immediately after it</td>
+<td>Open at the formula's start / end</td>
+</tr>
+<tr>
+<td>Delete immediately before nonempty inline math / Backspace immediately after it</td>
+<td>Open at the start / end before deleting mathematical content</td>
+</tr>
+<tr>
+<td>Delete or Backspace beside empty inline math</td>
+<td>Keep the host's normal deletion behavior</td>
+</tr>
+<tr>
+<td>Delete or Backspace with a whole formula selected</td>
+<td>Keep the host's normal selection deletion behavior</td>
+</tr>
+<tr>
+<td>Open another formula in the same host editor</td>
+<td>Apply the previous draft, then open the next; block switching during composition</td>
+</tr>
+<tr>
+<td>Apply / Ctrl+Enter / Cmd+Enter</td>
+<td>Commit and return the cursor to the host</td>
+</tr>
+<tr>
+<td>Enter in inline math</td>
+<td>Accept a suggestion first; otherwise apply</td>
+</tr>
+<tr>
+<td>Enter in block math</td>
+<td>Accept a suggestion first; otherwise add a row according to math editor policy</td>
+</tr>
+<tr>
+<td>Escape</td>
+<td>Dismiss math suggestions/selection first; then cancel</td>
+</tr>
+<tr>
+<td>Tab or an arrow that exits the math editor</td>
+<td>Apply and return to the host boundary</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>Discard the draft</td>
+</tr>
+<tr>
+<td>Host read-only enabled</td>
+<td>Discard the draft and disable editing</td>
+</tr>
+<tr>
+<td>Host changes the same formula while a draft is open</td>
+<td>Close the draft and show a conflict notice</td>
+</tr>
+<tr>
+<td>Save host document programmatically while a draft is open</td>
+<td>Save the committed document; draft is not included</td>
+</tr>
+<tr>
+<td>Click outside compact editing</td>
+<td>Apply before the destination receives the click</td>
+</tr>
+<tr>
+<td>More tools</td>
+<td>Expand the same draft into panel editing</td>
+</tr>
+</tbody>
+</table></div><p>Boundary entry requires a collapsed host text selection immediately beside supported
+inline math. Range selections, Shift selection, modifier shortcuts, IME input, and
+read-only mode retain their host behavior. Unsupported formulas do not consume host
+navigation or deletion keys. Block math still opens by clicking it or pressing Enter
+on its node selection.</p>
+<p>Math editing has its own undo history while a draft is open. After Apply, the host's
+history owns the committed change. Multiple users editing the same formula are not
+merged at the level of individual math tokens. Do not advertise collaborative formula
+editing from this integration alone.</p>
+<h2 id="storage-and-clipboard">Storage and clipboard</h2>
+<p>All adapters preserve these shared formula values, with host-specific envelopes:</p>
+<pre><code class="language-ts">interface MathAttributes {
+  latex: string;
+  mathDocument: MathDocument | null;
+  fontSize?: number; // Display scale in percent; defaults to 100.
+}
+</code></pre>
+<p>Tiptap/ProseMirror, Lexical, and Slate use their document JSON formats; Editor.js uses the
+math Tool's block <code>data</code>; Quill uses Delta embed values. Slate omits an absent
+<code>mathDocument</code> property because its operations reserve <code>null</code>. TinyMCE's <code>getContent()</code>
+and CKEditor's <code>getData()</code> return HTML. Use the corresponding host save/load APIs,
+not a live editing container's <code>innerHTML</code>. Adapter guides describe their exact
+node names and data conversion hooks.</p>
+<p>The JSON model is authoritative when present. <code>latex</code> is its portable representation.
+A null model enables LaTeX import when editing. An invalid/newer model is preserved
+and cannot be edited; it is never silently replaced by a partial LaTeX conversion.
+Inline mode rejects multiple top-level rows, while structured matrices remain allowed.</p>
+<p>Most HTML converters use <code>data-barocss-math=&quot;inline|block&quot;</code>,
+<code>data-latex</code>, <code>data-math-document</code>, and <code>data-math-size</code>. The serialized visible
+content is plain LaTeX; editing views render it after loading. Preserve these
+attributes in HTML sanitizers. Quill also uses its registered math classes when
+importing HTML. Editor.js's block Tool saves JSON and does not provide a general
+host HTML/inline clipboard converter.</p>
+<p>Gutenberg instead stores a single <code>mathData</code> string containing a versioned
+UTF-8/base64 envelope of the shared values. This preserves model text through
+WordPress's block-attribute sanitization. Its saved block comment contains
+<code>mathData</code>, and saved HTML uses <code>data-math-data</code> with an escaped LaTeX fallback.
+Encoding is for data preservation, not encryption or permission to execute content.
+Use the <a href="/docs/integrations/gutenberg.html#stored-data">Gutenberg codec and save format</a>;
+do not substitute raw <code>mathDocument</code>/<code>latex</code> comment attributes.</p>
+<p>An external editor that strips custom attributes may retain only the LaTeX text.
+Cross-host clipboard conversion is not a blanket support guarantee; use each
+adapter's documented pipeline. Plain text is not automatically interpreted as
+LaTeX: use an explicit insertion command.</p>
+<h2 id="localization">Localization</h2>
+<p>Integration labels are in <code>src/locales/en.json</code> and <code>ko.json</code> with English keys.
+Set <code>locale</code> for the underlying math editor, and override integration labels through
+<code>messages: { apply: '...', cancel: '...', ... }</code>. For another language, register its
+math-editor locale separately; <code>messages</code> covers only host integration controls.
+English is the integration fallback. Runtime locale changes require recreating the
+integration/plugin; live locale switching is not yet an API contract.</p>
+<h2 id="verification-and-release-boundaries">Verification and release boundaries</h2>
+<p>See <a href="/docs/integrations/host-support.html">host support</a>, <a href="/docs/integrations/validation.html">VALIDATION.md</a>,
+<a href="/docs/integrations/roadmap.html">ROADMAP.md</a>, and the
+<a href="/docs/integrations/commercial-model.html">licensing guide</a>.
+Barocss adds no licensing server, billing, or integration license-key enforcement to
+this preview. Host SDK license configuration is separate. No commercial support
+commitment is made. <code>release:math</code> validates and batch-publishes the core and all
+nine public plugins. The private implementation workspace is excluded. See the
+<a href="/docs/integrations/releasing.html">release guide</a> for versioning and individual artifact checks.
+<code>release:math:site</code> stages the shared sample and documentation while identifying
+the integration preview separately from the supplied core artifact.</p>
+<p>The adapters use the documented host extension points: <a href="https://tiptap.dev/docs/editor/extensions/custom-extensions/node-views">Tiptap node views</a>,
+<a href="https://lexical.dev/docs/concepts/nodes">Lexical nodes</a>,
+<a href="https://editorjs.io/tools-api/">Editor.js Tools</a>,
+<a href="https://www.tiny.cloud/docs/tinymce/latest/creating-a-plugin/">TinyMCE plugins</a>,
+<a href="https://ckeditor.com/docs/ckeditor5/latest/framework/tutorials/widgets/implementing-an-inline-widget.html">CKEditor widgets</a>,
+<a href="https://quilljs.com/docs/api/">Quill's API</a>,
+<a href="https://docs.slatejs.org/api/nodes/element">Slate void elements</a>,
+and <a href="https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/">Gutenberg block registration</a>. Host-specific setup and verification
+remain necessary even when adapters share the same math editor.</p>
+<h3 id="formula-size-and-dragging">Formula size and dragging</h3>
+<p>The editing controls adjust the formula's display size from 50% to 200% in
+10-point steps. The formula data stores <code>fontSize</code> as a percentage (default <code>100</code>),
+separately from <code>latex</code> and <code>mathDocument</code>. HTML clipboard/export preserves it as
+<code>data-math-size</code>. Applying commits content and size together; Cancel discards
+both. With host history configured, Undo restores the previous values; Editor.js
+requires a separate document-history solution. LaTeX export does not include
+this host presentation setting.</p>
+<p>In Tiptap/ProseMirror, native node dragging is disabled while editing so mouse
+selection belongs to the math editor. Preview nodes remain draggable. Other hosts
+retain their own object/embed/block selection and dragging behavior.</p>
+<h2 id="styling">Styling</h2>
+<p>Core CSS variables also style plugin panels, buttons and in-place fields. See <a href="/docs/styling.html">Styling &amp; themes</a> for scoped themes, separate toolbar hosts, iframe CSS and persisted formula sizing.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/api-solid.html"><small>Previous</small>Solid </a><a href="/docs/integrations/tiptap.html"><small>Next</small>Tiptap →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#why-this-package-stays-private">Why this package stays private</a><a class="h2" href="#license">License</a><a class="h2" href="#choose-a-host-adapter">Choose a host adapter</a><a class="h2" href="#what-works">What works</a><a class="h2" href="#run-the-development-sample">Run the development sample</a><a class="h2" href="#source-ownership-and-package-versions">Source ownership and package versions</a><a class="h2" href="#tiptap">Tiptap</a><a class="h2" href="#prosemirror">ProseMirror</a><a class="h2" href="#tiptapprosemirror-direct-editing-and-panel-editing">Tiptap/ProseMirror: direct editing and panel editing</a><a class="h2" href="#tiptapprosemirror-shared-toolbar">Tiptap/ProseMirror: shared toolbar</a><a class="h2" href="#tiptapprosemirror-editing-contract">Tiptap/ProseMirror: editing contract</a><a class="h2" href="#storage-and-clipboard">Storage and clipboard</a><a class="h2" href="#localization">Localization</a><a class="h2" href="#verification-and-release-boundaries">Verification and release boundaries</a><a class="h3" href="#formula-size-and-dragging">Formula size and dragging</a><a class="h2" href="#styling">Styling</a></nav></aside></div></body></html>

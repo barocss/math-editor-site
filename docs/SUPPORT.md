@@ -46,7 +46,7 @@ See the [LaTeX editing guide](LATEX-GUIDE.md) for input examples and prioritized
 | Product | Lower limit, upper limit, body | `\prod_{i=1}^{n}x` | No evaluation |
 | Triple / contour integrals | Three editable slots; side bounds or explicit limits | `\iiint`, `\oint` | No computation; `\nolimits` supported in workspace |
 | Integral | Lower limit, upper limit, integrand | `\int_{a}^{b}x` | Differential entered as text; no integration engine |
-| Matrices / vectors | Editable nested cells; row/column changes | `matrix`, `pmatrix`, `bmatrix`, `Bmatrix`, `vmatrix`, `Vmatrix` | 1–20 rows and columns; no rectangular cell clipboard |
+| Matrices / vectors | Editable nested cells; row/column changes | `matrix`, `pmatrix`, `bmatrix`, `Bmatrix`, `vmatrix`, `Vmatrix` | 1–20 rows and columns; workspace rectangular clipboard and full-matrix transpose |
 | Aligned equations | Two columns, left side right-aligned and right side left-aligned | `aligned` | 1–20 rows, one alignment point; type the relation explicitly |
 | Cases | Expression and condition columns, left brace | `cases` | 1–20 rows; conditions accept math and literal text nodes |
 | Multiple document lines | Split/join top-level rows | `gathered` | No wrapping several document lines into one structure |
@@ -56,17 +56,19 @@ See the [LaTeX editing guide](LATEX-GUIDE.md) for input examples and prioritized
 | Area | Supported | Remaining boundary |
 |---|---|---|
 | Languages | Korean and English UI, demo, accessible names, hints and suggestions | Custom host labels require host translation |
+| Recent / favorites | Shared UI preference store for known symbols/templates, up to 12 recent and 100 favorites | Optional host persistence; no effect on formula JSON or Undo |
+| Presentation changes | Fence type, fraction/binomial size and operator limits from the contextual toolbar | Existing notation only; no arbitrary fonts or dimensions |
 | Discovery | All-symbol grid with English/Korean/glyph/LaTeX search, click to insert | Scroll through the complete 117-symbol catalog |
 | Line numbers | UI gutter for multiple top-level rows, optional prop | Excluded from math output and clipboard |
 | Aliases | English and Korean in both locales; longest symbolic trigger first | Substring matching with exact matches first; no natural-language parsing |
 | Native input | Active token only; composition draft held stable | Real OS IME validation deferred |
 | Roles | Variables, numeric literals, symbols, spaces | Lexical colors are not semantic declarations |
-| Selection | Partial text, drag across tokens/structures, whole document in preview | No keyboard Shift-arrow model expansion or rectangular cell selection |
+| Selection | Partial text, drag across tokens/structures, whole document in preview | Shift+arrow model ranges and workspace rectangular cell selection; touch/OS clipboard validation remains |
 | Wrapping | Fraction, root, power, subscript, parentheses, brackets, absolute value | One balanced row; cross-slot range expands to common structure |
-| Clipboard | Structured internal fragment plus LaTeX text; cut/paste replacement | External LaTeX is literal text; nested multiline paste rejected |
-| History | Undo/redo of model changes and caret, up to 100 prior states | No shared host undo adapter yet |
+| Clipboard | Structured internal fragment plus LaTeX text; cut/paste replacement | Ordinary paste is literal; explicit LaTeX insertion parses at the caret/range; nested multiline paste rejected |
+| History | Undo/redo of model changes and caret, up to 100 prior states | Shared host adapters commit one formula edit; per-host history support varies |
 | Deletion | Text boundaries, line join, structure unwrap, two-step filled-grid deletion | General structural deletion rules are still limited |
-| Serialization | Version-1 JSON document and change callback | No persistence service, saved-document validator or migrations |
+| Serialization | Version-1 JSON document and change callback | `parseMathDocument` validates shape and IDs; persistence and future version migrations remain host work |
 | Preview | Demo-only KaTeX view | Library renders its own editable presentation |
 | Accessibility | Localized labels, combobox suggestions, keyboard slot navigation | Not a complete mathematical screen-reader implementation |
 | Computation | None | No solving, simplification, units engine or collaboration |
@@ -75,9 +77,9 @@ See the [LaTeX editing guide](LATEX-GUIDE.md) for input examples and prioritized
 
 | Template / preset | Sizes | Discovery | Behavior |
 |---|---|---|---|
-| Empty matrix | 2×2, 3×3, 4×4 | `matrix`, `행`, `행렬`; matrix menu | Editable empty cells |
-| Identity matrix | 2×2, 3×3, 4×4 | `identity`, `단위`, `단위행렬`; matrix menu | Diagonal 1, other entries 0 |
-| Zero matrix | 2×2, 3×3, 4×4 | `zero`, `영행렬`; template menu | All entries 0, editable |
+| Empty matrix | 1–20 rows × 1–20 columns via size shortcuts; 2×2/3×3/4×4 menu presets | `matrix`, `행`, `행렬`; matrix menu | Editable empty cells |
+| Identity matrix | Square sizes 1–20 via size shortcuts; 2×2/3×3/4×4 menu presets | `identity`, `단위`, `단위행렬`; matrix menu | Diagonal 1, other entries 0 |
+| Zero matrix | 1–20 rows × 1–20 columns via size shortcuts; 2×2/3×3/4×4 templates | `zero`, `영행렬`; template menu | All entries 0, editable |
 | Column vector | 2×1, 3×1 | `vector`, `column`, `벡터`, `열벡터`; template menu | Empty editable column; existing generic matrix candidates may also match |
 | Quadratic formula | One expression | `quadratic`, `근의공식`; template menu | `x=(-b±√(b²−4ac))/(2a)` using fraction/root/power nodes; assumes a≠0 mathematically, does not enforce it |
 | Pythagorean theorem | One expression | `pythagorean`, `피타고라스`; template menu | `a²+b²=c²` using editable power nodes |
@@ -212,7 +214,7 @@ Catalog size: **117 symbols**.
 
 ## Renderer availability
 
-This formula catalog describes the shared model and the existing rich React editor. New native DOM/framework surfaces share the notation model but have a smaller interaction UI. See the [renderer parity table](ADAPTERS.md#current-renderer-parity) before choosing an adapter.
+This formula catalog describes the shared model and the existing rich React editor. Native DOM/framework surfaces share the notation model, token editing, discovery and presentation utilities; host integration policies remain separate. See the [renderer parity table](ADAPTERS.md#current-renderer-parity) before choosing an adapter.
 
 ### Combined scripts (workspace)
 
@@ -253,12 +255,12 @@ Type `quad` / `qquad` (or `간격` / `큰간격`) for an explicit gap. The caret
 
 Select an expression and choose a fence or annotation in the regular suggestion menu. Fences wrap the expression and resume after it. Annotations keep the selected expression in the body and focus the empty annotation slot. Nested fractions, scripts and other editable structures are allowed in both annotation slots. Backspace after a structure removes its wrapper while preserving its content; Undo restores it.
 
-All structured fences scale with their contents. Short angle notation normalizes to scalable `\left\langle…\right\rangle` on export. Supported physical ends are `(`, `)`, `[`, `]`, `{`, `}`, `⟨`, `⟩`, `|` and `.`. Plain punctuation stays literal unless imported with a structural command. Double norm bars, `\big`/`\Big`, `\overbrace` and `\underbrace` remain unsupported.
+All structured fences scale with their contents. Short angle notation normalizes to scalable `\left\langle…\right\rangle` on export. Supported physical ends are `(`, `)`, `[`, `]`, `{`, `}`, `⟨`, `⟩`, `|` and `.`. Plain punctuation stays literal unless imported with a structural command. Double norm bars and brace annotations are supported. Explicit `\big`/`\Big` sizing remains unsupported.
 
 
 ### Double integrals (workspace)
 
-`\iint_R f(x,y)` imports as `doubleIntegral` with exactly three slots: `[lower/domain, upper, body]`, matching integral navigation. Missing bounds remain editable empty slots. `\iint\limits` preserves the explicit placement directive. Export uses `\iint_{lower}^{upper}{body}`. Search `iint`, `이중적분` or `∬` to insert; Tab visits the domain, upper bound and body in order. The reported expression with `\rm dx \rm dy`, `\xi`, `\eta` and `\text{Area}` is covered by import/round-trip and browser editing fixtures. This is notation support, not numerical integration. Triple and contour integrals remain outside this addition.
+`\iint_R f(x,y)` imports as `doubleIntegral` with exactly three slots: `[lower/domain, upper, body]`, matching integral navigation. Missing bounds remain editable empty slots. `\iint\limits` preserves the explicit placement directive. Export uses `\iint_{lower}^{upper}{body}`. Search `iint`, `이중적분` or `∬` to insert; Tab visits the domain, upper bound and body in order. The reported expression with `\rm dx \rm dy`, `\xi`, `\eta` and `\text{Area}` is covered by import/round-trip and browser editing fixtures. This is notation support, not numerical integration. Triple and contour integrals are also supported.
 
 Fine spacing: `\,`, `\:`, `\;`, `\!` are preserved as zero-slot structures. Positive spacing expands and negative thin spacing contracts the next boundary; these are not editable text spaces.
 
@@ -276,6 +278,16 @@ Fine spacing: `\,`, `\:`, `\;`, `\!` are preserved as zero-slot structures. Posi
 
 ## Keyboard ranges and brace discovery (0.2.1)
 
-Shift+Left/Right extends or shrinks the same model range used by dragging. Structures are crossed as balanced units; copied and deleted ranges use existing model normalization. Shift+Up/Down extends to an adjacent top-level document line, using a logical text offset rather than pixel-based column matching; grid-cell rectangular selection is not added. Copy, cut, wrapping, deletion and Undo use the existing range behavior. IME composition and modifier shortcuts retain their existing handling.
+Shift+Left/Right extends or shrinks the same model range used by dragging. Structures are crossed as balanced units; copied and deleted ranges use existing model normalization. Shift+Up/Down extends to an adjacent top-level document line, using a logical text offset rather than pixel-based column matching; an active matrix-cell selection instead uses Shift+arrows to move its rectangular focus corner. Copy, cut, wrapping, deletion and Undo use the existing range behavior. IME composition and modifier shortcuts retain their existing handling.
+
+After a model selection, plain Left/Up restores the caret at its document-ordered
+start; Right/Down restores it at the end. The same rule applies to reverse drags
+and Shift+arrow selections, without consuming another character or changing the
+formula. Alt+Up/Down browses the wrapping suggestions while retaining the range;
+Enter applies a candidate. Ordinary input suggestions still use Up/Down.
 
 Typing `{` offers both paired braces and cases. Paired braces remain the first candidate; choose Cases explicitly to insert its editable grid.
+
+## Presentation customization
+
+CSS variables support scoped palettes, token colors, slot focus/selection, toolbar density and menu chrome in both renderers and all framework adapters. Portaled suggestions follow their owning editor. See [Styling & themes](STYLING.md); host integrations retain their own persisted formula-size attributes.

@@ -19,7 +19,7 @@ The first product target is Note: open an existing supported LaTeX formula in a 
 | Import for editing | `parseLatex` and the editor model | Parser succeeds and every resulting node remains editable |
 | Export LaTeX | `toLatex` | Supported model produces valid presentation output |
 
-KaTeX display support does **not** imply editable import support. For example, KaTeX can display annotations such as underbraces that the editor cannot yet import. Unsupported notation must fail without a partial conversion.
+KaTeX display support does **not** imply editable import support. For example, a host can configure KaTeX macros that the editor does not import. Unsupported notation must fail without a partial conversion.
 
 ## V1 grammar
 
@@ -69,7 +69,7 @@ Empty editable slots are valid import data, even if a host requires a nonempty f
 | `\newcommand`, `\def`, packages, labels, references, document preambles | No macro expansion or document-level TeX processing |
 | `\input`, URLs, HTML or trust-enabled renderer commands | Never execute or resolve resources |
 
-New syntax enters this table only with a model mapping, export policy, positive/negative fixtures and editor tests. Additional delimiters and overset/underset annotations are implemented in the workspace. Wider accents, under/over braces and explicit delimiter sizes remain future candidates. See the [editing guide and expansion priorities](LATEX-GUIDE.md); these are not implemented support.
+New syntax enters this table only with a model mapping, export policy, positive/negative fixtures and editor tests. Additional delimiters and overset/underset annotations are implemented in the workspace. The additional accents and under/over braces documented below are implemented; explicit delimiter sizes remain a future candidate. See the [editing guide and expansion priorities](LATEX-GUIDE.md); these are not implemented support.
 
 ## API and failure behavior
 
@@ -214,7 +214,7 @@ Each is a structure with a unique `id` and exactly one MathRow in `slots: [body]
 
 All limit-family, sum/product and integral nodes accept a single `\limits` or `\nolimits` immediately after the command, before scripts. The optional `limits` field is now boolean: omitted means default, `true` is stacked placement, `false` is side placement. Both explicit values survive JSON validation, copying and LaTeX export. Repeated/conflicting directives are rejected. Existing `limits: true` remains valid; older package builds do not accept `false` or the new limit kinds.
 
-Placement is currently selected through imported LaTeX/model metadata, not a dedicated toolbar switch. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.
+Placement is selected through imported LaTeX/model metadata; the workspace now also provides contextual toolbar controls. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.
 
 ## Fine mathematical spacing (workspace)
 
@@ -261,3 +261,12 @@ Type `xrightarrow`, `xleftarrow`, or search for “labeled arrow” / “설명�
 `\begin{equation*} ... \end{equation*}` imports its body into the existing root math row. It creates no new node kind and adds no suggestion item. Export emits the body without the environment wrapper. Nested supported structures remain editable. Missing/mismatched endings and unsupported commands fail atomically.
 
 Numbered `equation`, `\tag` and `\label` are not supported: the model cannot preserve numbering or references. Use `equation*` only when formula-only import is intended. `align`, `split` and `array` remain open.
+
+
+## Compatibility corrections — 2026-09-10
+
+Math-mode caret and tilde text runs export with bounded `\char"005E{}` and
+`\char"007E{}` commands. Text-mode aliases remain accepted and literal text-group
+escaping is unchanged. Arbitrary character codes remain unsupported.
+Complex root indices export inside a protective group, preserving their existing
+JSON slots. See [the LaTeX guide](LATEX-GUIDE.md#literal-carettilde-and-complex-root-indices).

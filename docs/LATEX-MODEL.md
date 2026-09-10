@@ -288,3 +288,15 @@ Type `xrightarrow`, `xleftarrow`, or search for “labeled arrow” / “설명�
 `\begin{equation*} ... \end{equation*}` imports its body into the existing root math row. It creates no new node kind and adds no suggestion item. Export emits the body without the environment wrapper. Nested supported structures remain editable. Missing/mismatched endings and unsupported commands fail atomically.
 
 Numbered `equation`, `\tag` and `\label` are not supported: the model cannot preserve numbering or references. Use `equation*` only when formula-only import is intended. `align`, `split` and `array` remain open.
+
+
+### Protected root indices and literal characters
+
+| Model content | Canonical LaTeX | Import result |
+| --- | --- | --- |
+| Text run containing `^` | `\char"005E{}` | Same text run, not a superscript |
+| Text run containing `~` | `\char"007E{}` | Same text run, not an accent |
+| `indexedRoot` with a structured index | `\sqrt[{…}]{…}` | Same index and radicand slots; protective braces add no model node |
+
+Literal text groups keep their existing text-mode escapes. Only the two character
+codes above are supported; this does not implement arbitrary TeX character codes.

@@ -1,9 +1,9 @@
 # Math editor website
 
-Static output for @barocss/math-editor 0.2.1.
+This site uses workspace source for the core and all nine host plugins. Core metadata version: 0.5.0. Versions describe the selected code; they do not assert npm publication.
 
-Source: https://github.com/barocss/barocss-editor (apps/math-demo).
-Package: https://www.npmjs.com/package/@barocss/math-editor
+Each plugin owns its source. The private common module is included in the site bundle and does not need a separate npm release. The default build does not build package dist folders, contact npm or require authentication. TinyMCE and CKEditor retain their existing deployed-site license guidance.
+
 Site: https://math-editor.barocss.com
 
-Do not edit generated assets here. Build from the downloaded npm tarball using the source repository's release:math:site command, then deploy the generated site directory. release.json records the exact package integrity.
+Build with pnpm build:math:site. For an explicit artifact check, pass a local core .tgz to pnpm release:math:site. release.json records the source mode and local package versions; artifact builds also record core integrity. This command prepares static output and does not publish packages or deploy the site.

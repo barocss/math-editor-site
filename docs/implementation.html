@@ -1,7 +1,20 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Implementation · Barocss Math Editor</title><meta name="description" content="Implementation for Barocss Math Editor 0.2.1."><link rel="stylesheet" href="/docs.css?v=cobalt-1"></head><body>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Implementation · Barocss Math Editor</title><meta name="description" content="Implementation for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="docs-header"><a class="brand" href="/">barocss<span> / math</span></a><span class="docs-label">Documentation <small>v0.2.1</small></span><a href="/#playground">Try the editor ↗</a></header>
-<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing & editing LaTeX</a><a href="/docs/adapters.html" >API & framework adapters</a><a href="/docs/embedding.html" >Embedding & layouts</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session & DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" aria-current="page">Implementation</a><a href="/docs/validation.html" >Testing & validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script src="/docs.js"></script>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" aria-current="page">Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="implementation-guide">Implementation guide</h1>
 <p>See the <a href="/docs/json-model.html">JSON model specification</a> for required fields, exact slot order, invariants and persistence limits.</p>
 <p>See <a href="/docs/latex-model.html">LaTeX → JSON model mapping</a> for node types, slot order and complete conversion examples.</p>
@@ -41,12 +54,20 @@
 <td>Endpoint ordering, balanced selection resolution, slicing, insertion, wrapping and clipboard validation</td>
 </tr>
 <tr>
+<td><code>matrix-range.ts</code></td>
+<td>Transient cell rectangles, clipboard shape validation, fresh subtree IDs, atomic paste/clear and full-matrix transpose</td>
+</tr>
+<tr>
 <td><code>matrix.ts</code></td>
 <td>Innermost grid lookup, row/column changes, delimiters and grid navigation</td>
 </tr>
 <tr>
 <td><code>lines.ts</code></td>
 <td>Top-level line split/join and vertical navigation</td>
+</tr>
+<tr>
+<td><code>vertical-navigation.ts</code>, <code>dom/caret-geometry.ts</code></td>
+<td>Shared structural Up/Down movement and optional measurements of rendered insertion points</td>
 </tr>
 <tr>
 <td><code>suggestions.ts</code></td>
@@ -110,6 +131,7 @@
 <h2 id="active-input-rendering-and-composition">Active-input rendering and composition</h2>
 <p>Passive tokens render as spans. Only the active token renders an input. A hidden text mirror supplies browser-shaped width and pointer offset measurements. Variable, numeric constant and symbol colors do not change the stored text. Logical text runs remain intact when the UI displays several tokens.</p>
 <p>During composition, the token partition and input element are held stable. Suggestions are visible but disabled. Enter and arrows remain with the IME; parent handlers do not receive editing keystrokes. On composition end, the complete text is committed as one history change and tokenization resumes. Synthetic composition tests are not a substitute for actual OS input-method validation.</p>
+<p><code>moveVertical</code> walks slot ancestors from the inside out: fractions, scripts, indexed roots, annotations and operator bounds precede enclosing grids and document lines. Grid targets stay in the same column. Both keyboard handlers pass caret measurements from the existing hidden mirrors; React token offsets are translated back to their logical text run. The target is the nearest horizontal insertion point in the requested direction, with vertical distance breaking ties. Paired scripts and operator bounds also consider their base/body, so movement can follow their shared script column. Missing layout uses the first target text run with a clamped UTF-16 offset, avoiding surrogate splits. Navigation preserves the document and undo history. It does not add persistent preferred-column state or change Shift+arrow selection.</p>
 <h2 id="ranges-and-transformations">Ranges and transformations</h2>
 <p><code>MathRange</code> has anchor/focus points identified by logical text ID and UTF-16 offset. <code>resolveRange</code> orders them in document traversal order and finds the deepest shared row. Endpoints in different slots expand to a balanced common structure; endpoints on different document lines produce multiple row slices.</p>
 <p>Pointer hit testing uses token rectangles and mirror text ranges. A drag inside the current input stays native until it leaves that field. A model selection suppresses the active input. Partial token marks reflect the actual selected substring.</p>
@@ -204,7 +226,7 @@
 </table></div><p>Type <code>overbrace</code> / <code>위중괄호</code> or <code>underbrace</code> / <code>아래중괄호</code>. The annotation is edited first; Tab moves into the body. Wrapping a selection preserves it in the body and focuses the empty annotation. Both slots allow nested math. The brace stretches across the body/annotation container. Backspace immediately after the structure unwraps its contents; Undo restores the structure.</p>
 <p>The parser accepts a bare brace body and creates an empty annotation. Export always includes the corresponding <code>^{…}</code> or <code>_{…}</code>, including an empty annotation. Repeated annotation markers fail. An opposite-side script is handled as an outer ordinary script, not a second brace annotation. Slot order is annotation then body even for underbraces; this matches overset/underset. This workspace addition retains document version 1; older consumers must reject unknown structure kinds during validation.</p>
 <h2 id="compact-and-filtered-toolbars-workspace">Compact and filtered toolbars (workspace)</h2>
-<p>Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and <code>toolbarEnd</code> stay visible. Native toolbars contain structure buttons and history only and show a toggle when needed. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.</p>
+<p>Toolbars initially show up to eight structure buttons. More tools / Fewer tools toggles the remainder without changing the formula or history. Rich React also places matrix presets, templates and symbol shortcuts in the expanded section; Undo, Redo and <code>toolbarEnd</code> stay visible. Native toolbars also expose symbol search, templates and presets behind More tools; both renderers provide contextual matrix controls and cell selection/transpose. The layout wraps naturally on narrow screens; this is not a guaranteed single-row toolbar.</p>
 <pre><code class="language-tsx">&lt;MathEditor toolbar={['fraction', 'root', 'superscript', 'matrix']}
   toolbarMaxItems={3} /&gt;
 </code></pre>
@@ -262,7 +284,7 @@ mountMathToolbar(toolbarHost, session, {
 <h2 id="limit-variants-and-placement-workspace">Limit variants and placement (workspace)</h2>
 <p><code>\limsup_{n}{x}</code> and <code>\liminf_{n}{x}</code> use <code>limsup</code> / <code>liminf</code> structures with exactly <code>[condition, body]</code> rows. Search <code>limsup</code> / <code>상극한</code> or <code>liminf</code> / <code>하극한</code>; Tab moves from condition to body. They do not evaluate sequence limits.</p>
 <p>All limit-family, sum/product and integral nodes accept a single <code>\limits</code> or <code>\nolimits</code> immediately after the command, before scripts. The optional <code>limits</code> field is now boolean: omitted means default, <code>true</code> is stacked placement, <code>false</code> is side placement. Both explicit values survive JSON validation, copying and LaTeX export. Repeated/conflicting directives are rejected. Existing <code>limits: true</code> remains valid; older package builds do not accept <code>false</code> or the new limit kinds.</p>
-<p>Placement is currently selected through imported LaTeX/model metadata, not a dedicated toolbar switch. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.</p>
+<p>Placement is selected through imported LaTeX/model metadata or the workspace contextual toolbar. Imported side conditions remain editable; normal limit suggestions use default placement. This is 0.2.0 functionality.</p>
 <h2 id="fine-mathematical-spacing-workspace">Fine mathematical spacing (workspace)</h2>
 <div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
 <tr>
@@ -306,5 +328,93 @@ mountMathToolbar(toolbarHost, session, {
 <p><code>bold</code>, <code>calligraphic</code> and <code>blackboard</code> are one-slot structures validated by the document/clipboard codec. Both renderers use their generic structure path. Scoped CSS font variables keep inner alphabet choices independent of outer ones and leave structural glyphs unchanged. KaTeX font files live under <code>src/fonts</code> alongside their license. The parser retains the earlier five single number-set aliases to avoid changing stored symbol semantics.</p>
 <h2 id="labeled-arrows">Labeled arrows</h2>
 <p>The <code>xrightarrow</code> and <code>xleftarrow</code> structures have two slots in upper/lower order. Parse the optional lower bracket before the required upper argument, then store in model order. Render the generic slots in three CSS grid rows, with a pseudo-element shaft and a fixed-size head in the middle row. Labels drive grid width; the decoration cannot intercept pointer events. These commands are inserted through the shared catalog and do not require a separate dialog.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/latex-model.html"><small>Previous</small>LaTeX → JSON model </a><a href="/docs/validation.html"><small>Next</small>Testing & validation →</a></nav><footer>Barocss Math Editor · 0.2.1 · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#ownership-and-data-flow">Ownership and data flow</a><a class="h2" href="#source-map">Source map</a><a class="h2" href="#presentation-tree-invariants">Presentation tree invariants</a><a class="h2" href="#active-input-rendering-and-composition">Active-input rendering and composition</a><a class="h2" href="#ranges-and-transformations">Ranges and transformations</a><a class="h2" href="#clipboard-boundary">Clipboard boundary</a><a class="h2" href="#localization">Localization</a><a class="h2" href="#adding-a-symbol-template-or-structure">Adding a symbol, template or structure</a><a class="h2" href="#integration-and-testing">Integration and testing</a><a class="h2" href="#line-gutter-and-symbol-discovery">Line gutter and symbol discovery</a><a class="h2" href="#framework-neutral-integration-layer-2026-09-07">Framework-neutral integration layer (2026-09-07)</a><a class="h2" href="#composition-refactor--2026-09-08">Composition refactor — 2026-09-08</a><a class="h3" href="#workspace-binomial-and-operand-suggestions">Workspace: binomial and operand suggestions</a><a class="h3" href="#workspace-limits-and-function-colors">Workspace: limits and function colors</a><a class="h3" href="#workspace-imported-notation-compatibility">Workspace: imported notation compatibility</a><a class="h3" href="#workspace-fences-annotations-and-indexed-root-rendering">Workspace: fences, annotations and indexed-root rendering</a><a class="h2" href="#editing-typography-and-focus-2026-09-08-workspace">Editing typography and focus: 2026-09-08 (workspace)</a><a class="h3" href="#workspace-spacing-refinement">Workspace spacing refinement</a><a class="h2" href="#required-visual-check-for-notation-changes">Required visual check for notation changes</a><a class="h2" href="#triple-and-contour-integrals-workspace">Triple and contour integrals (workspace)</a><a class="h2" href="#brace-annotations-workspace">Brace annotations (workspace)</a><a class="h2" href="#compact-and-filtered-toolbars-workspace">Compact and filtered toolbars (workspace)</a><a class="h2" href="#additional-accents-workspace">Additional accents (workspace)</a><a class="h2" href="#limit-variants-and-placement-workspace">Limit variants and placement (workspace)</a><a class="h2" href="#fine-mathematical-spacing-workspace">Fine mathematical spacing (workspace)</a><a class="h2" href="#explicit-fractionbinomial-sizes">Explicit fraction/binomial sizes</a><a class="h2" href="#scoped-math-alphabets">Scoped math alphabets</a><a class="h2" href="#labeled-arrows">Labeled arrows</a></nav></aside></div></body></html>
+<h2 id="cell-selection-and-grid-transformations">Cell selection and grid transformations</h2>
+<p><code>MathMatrixRange</code> is separate from <code>MathRange</code>: <code>{ matrixId, anchor, focus }</code> uses
+row-major cell indices and resolves to a rectangle. Neither selection is persisted.
+Cross-cell pointers use the nearest shared matrix ancestor; within-cell pointers
+retain text/structure selection. The DOM renderer keeps selection in MathSession;
+rich React owns its view state and calls the same pure matrix operations.</p>
+<p>Clipboard data has its own bounded matrix MIME payload, plus a regular math
+fragment and LaTeX fallback. Incoming cells receive fresh IDs recursively. Paste
+validates all dimensions before cloning or writing the destination; unselected
+cells and the destination delimiter survive. Transpose reorders existing slots
+and changes <code>columns</code>; preserving IDs keeps a nested caret valid. None of these
+operations needs a new model version or parser command.</p>
+<h2 id="shared-editing-utilities--workspace">Shared editing utilities — workspace</h2>
+<p>Native text rows are tokenized with the same <code>tokenizeMathText</code>/<code>tokenIndexAt</code> rules as rich React. Every rendered run retains its model ID and UTF-16 token start/end. Input events replace only that token's slice. Pointer/keyboard offsets are translated to model coordinates; boundary deletion joins neighboring text without discarding it. IME preedit updates the stable input/mirror and is committed before re-tokenizing. Literal text/operator names remain one input.</p>
+<p><code>latex-insertion.ts</code> parses before applying a range insertion. <code>preferences.ts</code> owns validated UI lists independently of formula sessions/history. <code>presentation.ts</code> changes only supported metadata while preserving subtree IDs and caret. The nonmodal native panels are reused by React wrappers, so diagnostics and favorites use one implementation. Host clipboard boundaries stay intact and no system clipboard reads are implicit.</p>
+<h3 id="contextual-radical-conversions">Contextual radical conversions</h3>
+<p><code>findStateSuggestions(state, locale, caret?)</code> augments text search with the nearest
+enclosing radical's conversion actions. <code>transformRootId</code> binds an action to that
+structure; <code>acceptSuggestion</code> validates the current target before conversion and
+does not remove the query. <code>root-transform.ts</code> clones the document, preserves the
+radicand tree and structure ID, and updates the slots. Converting to an indexed
+root adds a selected index <code>2</code>; converting to a square root rejects any nonempty
+index other than <code>2</code>. Both renderers use this shared path and their normal history
+commit mechanism. Context-only actions require pointer acceptance or arrow-key
+selection before Enter can apply them.</p>
+<h3 id="empty-slot-deletion-and-script-fractions">Empty-slot deletion and script fractions</h3>
+<p><code>unwrapEmptySlot</code> removes a non-grid wrapper from inside a truly empty slot.
+Both Delete and Backspace call it before boundary-specific deletion. The other
+slots are retained; an empty root index collapses to a square root, and an empty
+paired script preserves the other script. A populated row or ordinary structural
+boundary is not an empty slot. Grid cells keep their shape and their existing
+explicit deletion controls. The edit uses the normal history commit.</p>
+<p>Fractional script presentation uses compact row heights and term metrics in both
+renderers. See <a href="/docs/rendering-tests.html">Rendering checks</a> for the bounded geometry
+comparison and remaining layout work.</p>
+<h3 id="query-independent-context-footer">Query-independent context footer</h3>
+<p><code>rootEditingContext(state)</code> derives the nearest radical, conversion availability
+and index caret from the model. React and DOM render the same actions below the
+surface. The footer does not use suggestion text, dismissal or candidate indices.
+Transformations use <code>transformRoot</code> and normal history; Edit index only moves
+and selects the caret. Model/matrix selections and blur hide context actions.
+F6 and Escape are handled within the editor to retain host/iframe focus. Native
+composition disables footer actions without replacing the composing input.</p>
+<h3 id="shared-fence-transformations">Shared fence transformations</h3>
+<p><code>structureEditingContext</code> selects the nearest supported radical or fence and
+excludes literal text. <code>findStateSuggestions</code> adds fence transformations before
+operand-wrapping actions, while retaining explicit symbol/command matches first.
+<code>transformFenceId</code> distinguishes metadata changes from new structure insertion.
+Acceptance validates the current target before preserving content, IDs and caret.</p>
+<p>React and native DOM handle Alt+Down before modifier-key fallthrough. The shortcut
+reopens a dismissed list and arms the first context action. Normal contextual
+menus still require navigation before Enter overrides host commit behavior.
+The footer is optional; suggestions do not depend on its visibility.</p>
+<h2 id="contextual-operator-layout">Contextual operator layout</h2>
+<p><code>src/math-layout.ts</code> derives display, text, script and scriptscript contexts from
+model slots on each render. It does not mutate or persist presentation metadata.
+Fractions reduce the style of their terms; scripts reduce their labels; indexed
+root indices use scriptscript style. Explicit fraction styles reset that context. Aligned cells enter display style; matrix and cases cells enter text style.</p>
+<p>Both React and native DOM consume the same row/operator map. Operator attributes
+select the large or small font and side or stacked limits. Explicit limits remain
+authoritative. Scoped row attributes keep a nested operator body at its own size
+while reducing its bounds. This replaces the inline-only CSS decision, which
+could not identify operators inside fractions or nested scripts.</p>
+<p>The current CSS application is scoped to operators. Other structures still use
+their existing layout rules; this is not a complete TeX layout engine.</p>
+<h3 id="horizontal-text-spacing">Horizontal text spacing</h3>
+<p><code>math-spacing.ts</code> computes spacing between lexical runs without changing the
+saved document, token boundaries or caret offsets. Both renderers use the same
+values. Common binary operators use 4 mu, relations use 5 mu and punctuation
+uses 3 mu before the next atom (18 mu = 1 em). Neighboring atoms distinguish
+unary signs from binary operators. Binary, relation and punctuation gaps are
+suppressed in script and scriptscript rows.</p>
+<p>Measuring spans use glyph width instead of adding padding to every math token.
+Literal text fields retain their text layout. Named-function fields use unpadded glyph measurement. Inactive model
+boundaries use 1 px; empty expression slots and the active boundary keep their
+existing input hit areas. Other structure interiors and full TeX atom classification are separate work. These rules do not provide a complete
+TeX horizontal layout engine.</p>
+<h3 id="named-functions-and-fraction-boundaries">Named functions and fraction boundaries</h3>
+<p>Named functions and fractions participate in the same horizontal-spacing pass as
+text runs. A named function uses a thin gap next to an ordinary atom or another
+named function, and no gap before a plain opening parenthesis. These thin gaps
+remain in script styles at the corresponding reduced font size. Binary and
+relation gaps still disappear in scripts. Fractions contribute an ordinary atom
+and receive their external gap once, rather than adding fixed margins on both
+sides. The function name's measuring span adds no glyph padding.</p>
+<p>The spacing map contains structure IDs for these two families and token-offset
+keys for text. Other structure families keep their existing outer layout. This
+change does not alter LaTeX output, JSON, selection offsets or editing commands.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/latex-model.html"><small>Previous</small>LaTeX → JSON model </a><a href="/docs/editing-scenarios.html"><small>Next</small>Editing scenarios →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#ownership-and-data-flow">Ownership and data flow</a><a class="h2" href="#source-map">Source map</a><a class="h2" href="#presentation-tree-invariants">Presentation tree invariants</a><a class="h2" href="#active-input-rendering-and-composition">Active-input rendering and composition</a><a class="h2" href="#ranges-and-transformations">Ranges and transformations</a><a class="h2" href="#clipboard-boundary">Clipboard boundary</a><a class="h2" href="#localization">Localization</a><a class="h2" href="#adding-a-symbol-template-or-structure">Adding a symbol, template or structure</a><a class="h2" href="#integration-and-testing">Integration and testing</a><a class="h2" href="#line-gutter-and-symbol-discovery">Line gutter and symbol discovery</a><a class="h2" href="#framework-neutral-integration-layer-2026-09-07">Framework-neutral integration layer (2026-09-07)</a><a class="h2" href="#composition-refactor--2026-09-08">Composition refactor — 2026-09-08</a><a class="h3" href="#workspace-binomial-and-operand-suggestions">Workspace: binomial and operand suggestions</a><a class="h3" href="#workspace-limits-and-function-colors">Workspace: limits and function colors</a><a class="h3" href="#workspace-imported-notation-compatibility">Workspace: imported notation compatibility</a><a class="h3" href="#workspace-fences-annotations-and-indexed-root-rendering">Workspace: fences, annotations and indexed-root rendering</a><a class="h2" href="#editing-typography-and-focus-2026-09-08-workspace">Editing typography and focus: 2026-09-08 (workspace)</a><a class="h3" href="#workspace-spacing-refinement">Workspace spacing refinement</a><a class="h2" href="#required-visual-check-for-notation-changes">Required visual check for notation changes</a><a class="h2" href="#triple-and-contour-integrals-workspace">Triple and contour integrals (workspace)</a><a class="h2" href="#brace-annotations-workspace">Brace annotations (workspace)</a><a class="h2" href="#compact-and-filtered-toolbars-workspace">Compact and filtered toolbars (workspace)</a><a class="h2" href="#additional-accents-workspace">Additional accents (workspace)</a><a class="h2" href="#limit-variants-and-placement-workspace">Limit variants and placement (workspace)</a><a class="h2" href="#fine-mathematical-spacing-workspace">Fine mathematical spacing (workspace)</a><a class="h2" href="#explicit-fractionbinomial-sizes">Explicit fraction/binomial sizes</a><a class="h2" href="#scoped-math-alphabets">Scoped math alphabets</a><a class="h2" href="#labeled-arrows">Labeled arrows</a><a class="h2" href="#cell-selection-and-grid-transformations">Cell selection and grid transformations</a><a class="h2" href="#shared-editing-utilities--workspace">Shared editing utilities — workspace</a><a class="h3" href="#contextual-radical-conversions">Contextual radical conversions</a><a class="h3" href="#empty-slot-deletion-and-script-fractions">Empty-slot deletion and script fractions</a><a class="h3" href="#query-independent-context-footer">Query-independent context footer</a><a class="h3" href="#shared-fence-transformations">Shared fence transformations</a><a class="h2" href="#contextual-operator-layout">Contextual operator layout</a><a class="h3" href="#horizontal-text-spacing">Horizontal text spacing</a><a class="h3" href="#named-functions-and-fraction-boundaries">Named functions and fraction boundaries</a></nav></aside></div></body></html>

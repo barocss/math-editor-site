@@ -1,0 +1,183 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TinyMCE · Barocss Math Editor</title><meta name="description" content="TinyMCE for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" aria-current="page">TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="tinymce-integration-development-preview">TinyMCE integration (development preview)</h1>
+<p>The examples below use its public entry points. See the <a href="/docs/integrations/releasing.html">release guide</a>.</p>
+<p><a href="/integrations/?editor=tinymce">Open the TinyMCE example</a> · <a href="/docs/integrations/host-support.html">Host support</a> · <a href="/docs/integrations/validation.html">Validation</a></p>
+<p>This independently implemented adapter uses TinyMCE 8's public plugin, selection,
+serialization, mode and undo APIs. It does not depend on another math editor's code.</p>
+<pre><code class="language-ts">import tinymce from &quot;tinymce&quot;;
+import katex from &quot;katex&quot;;
+import { registerBarocssMath } from &quot;@barocss/math-editor-tinymce&quot;;
+import &quot;@barocss/math-editor/style.css&quot;;
+import &quot;@barocss/math-editor-tinymce/style.css&quot;;
+import &quot;katex/dist/katex.min.css&quot;;
+
+registerBarocssMath(tinymce, {
+  locale: &quot;en&quot;,
+  render(latex, host, displayMode) {
+    // Optional renderer: treat LaTeX as untrusted input.
+    katex.render(latex, host, {
+      displayMode,
+      throwOnError: false,
+      trust: false,
+    });
+  },
+});
+
+await tinymce.init({
+  target: document.querySelector&lt;HTMLElement&gt;(&quot;#editor&quot;)!,
+  // Configure the TinyMCE license and locally served assets in your host.
+  plugins: &quot;barocssmath&quot;,
+  toolbar: &quot;undo redo | barocssmath&quot;,
+  menu: { insert: { title: &quot;Insert&quot;, items: &quot;barocssmath barocssmathblock&quot; } },
+  noneditable_class: &quot;mceNonEditable&quot;,
+});
+</code></pre>
+<p>Register the plugin before <code>tinymce.init</code>. Options are captured per editor when
+it initializes. <code>editing: &quot;inline&quot;</code> is the default: an existing formula opens at
+its position in the text, and insertion opens at the current selection. Both
+inline TinyMCE hosts and classic iframe hosts support this behavior. The math
+field lives in the same document as the formula.</p>
+<p>Choose <code>editing: &quot;panel&quot;</code> for the previous explicit Apply/Cancel workflow.
+<code>panelHost</code> applies only to that option and must be outside TinyMCE's editable
+body. Without it, the panel follows the editable element in inline TinyMCE mode
+or the editor container in classic iframe mode. <code>toolbarHost</code> can provide a
+separate math toolbar in either editing mode, including outside an iframe.</p>
+<h3 id="styles-in-a-classic-iframe">Styles in a classic iframe</h3>
+<p>CSS imported into the application page does not style TinyMCE's iframe. Serve the
+core CSS, this adapter's CSS, and any preview renderer's CSS (with their font
+assets) inside the iframe using TinyMCE's <code>content_css</code> option. For example,
+after copying/bundling those assets to your application's public asset directory:</p>
+<pre><code class="language-ts">await tinymce.init({
+  target: document.querySelector&lt;HTMLTextAreaElement&gt;(&quot;#editor&quot;)!,
+  plugins: &quot;barocssmath&quot;,
+  content_css: [
+    &quot;/assets/math-editor.css&quot;, // @barocss/math-editor/style.css
+    &quot;/assets/math-editor-tinymce.css&quot;, // @barocss/math-editor-tinymce/style.css
+    &quot;/assets/katex.min.css&quot;, // When using the optional KaTeX preview renderer
+  ],
+  // Supply your normal TinyMCE assets, toolbar and license configuration.
+});
+</code></pre>
+<p>Keep the application-page CSS imports when using an outside toolbar or panel.
+The asset URLs above are examples; the package does not inject styles into
+another document automatically.</p>
+<p>The <code>barocssmath</code> toolbar button edits a selected formula or starts an inline
+formula. Click an existing formula, or select it and press Enter, to edit it.
+The Insert menu offers inline and block formulas. Existing unsupported model data
+remains visible and cannot be replaced by an empty draft.</p>
+<pre><code class="language-ts">import type { TinyMCEMathPlugin } from &quot;@barocss/math-editor-tinymce&quot;;
+
+const math = editor.plugins.barocssmath as TinyMCEMathPlugin;
+math.insert(String.raw`\frac{x^2}{y}`, &quot;inline&quot;);
+math.insert(String.raw`\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}`, &quot;block&quot;);
+math.edit(); // Selected formula; returns false when editing is unavailable.
+math.cancel();
+
+editor.execCommand(&quot;BarocssMath&quot;, false, { kind: &quot;block&quot;, latex: &quot;x=y&quot; });
+const html = editor.getContent();
+editor.setContent(html);
+editor.mode.set(&quot;readonly&quot;);
+editor.remove();
+</code></pre>
+<p>Opening or cancelling a draft does not modify saved host content. The inline
+insertion marker preserves any selected prose until Apply; Cancel restores that
+selection. Apply replaces or inserts one atomic node inside one
+<code>undoManager.transact</code> call. Clicking outside a compact inline field commits
+without taking focus back. Ctrl/Cmd+Enter applies explicitly; Escape first
+closes suggestions and then cancels. Expanding More tools keeps the draft open
+until an explicit Apply/Cancel, matching the shared field's panel behavior.</p>
+<p>Temporary controls stop input, clipboard and pointer events from reaching the
+host's noneditable-object handlers. TinyMCE still owns surrounding prose,
+selection, Backspace/Delete and document Undo/Redo. A second open command does
+not discard the active draft. Loading content, undo/redo, read-only mode and
+editor removal close it. Applying checks that its target still exists with the
+same source data; insertion checks that the document has not changed since the
+selection bookmark was captured.</p>
+<p>The inline field opens after TinyMCE finishes its click/command focus handling.
+<code>insert()</code> / <code>edit()</code> returning <code>true</code> means opening was accepted; the input is
+mounted/focused on the next animation frame. The API closes pending openings on
+Cancel, content replacement, read-only transitions and editor removal too.</p>
+<p>Inline formulas persist as <code>span</code>, block formulas as <code>div</code>, with these attributes:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Attribute</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-barocss-math</code></td>
+<td><code>inline</code> or <code>block</code></td>
+</tr>
+<tr>
+<td><code>data-latex</code></td>
+<td>Portable LaTeX fallback</td>
+</tr>
+<tr>
+<td><code>data-math-document</code></td>
+<td>Authoritative versioned math document JSON</td>
+</tr>
+<tr>
+<td><code>data-math-size</code></td>
+<td>Display scale, 50–200 percent</td>
+</tr>
+<tr>
+<td><code>contenteditable=&quot;false&quot;</code></td>
+<td>Atomic host content</td>
+</tr>
+</tbody>
+</table></div><p>Normal <code>getContent()</code> serialization removes transient math UI from TinyMCE's
+detached <code>PreProcess</code> clone before parsing the HTML, then replaces preview
+descendants with escaped LaTeX in its AST filter. This prevents the inline field's
+block controls from being reparented out of the formula by HTML normalization.
+Bogus subtrees and a registered temporary attribute also keep drafts out of raw
+Undo snapshots. Use the normal serialization lifecycle; <code>no_events: true</code>
+bypasses the adapter's preprocessing and is not supported for saving active drafts.
+TinyMCE's default schema preserves <code>data-*</code> attributes; host sanitizers or custom
+schemas must also preserve the attributes above. Sanitizing or importing the
+surrounding HTML remains the host application's responsibility.</p>
+<p>The local demo loads TinyMCE core, icons, theme, DOM model and skin from the pinned
+NPM package. It declares <code>license_key: &quot;gpl&quot;</code> only inside its unpublished Vite
+development entry and refuses production initialization. The reusable adapter
+sets no license or cloud configuration. Hosts must deliberately choose GPL or
+their own eligible commercial configuration before deploying TinyMCE. No premium
+features, embedded keys, CDN scripts or tracking are added by this adapter.</p>
+<p>Official API references: <a href="https://www.tiny.cloud/docs/tinymce/latest/creating-a-plugin/">custom plugins</a>,
+<a href="https://www.tiny.cloud/docs/tinymce/latest/apis/tinymce.undomanager/">UndoManager</a>,
+<a href="https://www.tiny.cloud/docs/tinymce/latest/apis/tinymce.dom.serializer/">serializer</a>,
+<a href="https://www.tiny.cloud/docs/tinymce/latest/vite-es6-npm/">Vite bundling</a>, and
+<a href="https://www.tiny.cloud/docs/tinymce/latest/license-key/">license configuration</a>.</p>
+<p>Run the real-browser regression in <code>apps/math-integrations/tests/tinymce-check.js</code>
+against the local demo server. It covers Apply/Cancel, one-step undo/redo,
+HTML round trips, read-only mode, draft invalidation and destroy cleanup.</p>
+<p>The public static sample shows setup guidance until the host license is explicitly configured. Local development settings do not authorize a production TinyMCE or CKEditor deployment.</p>
+<h2 id="continuous-editing-checks">Continuous editing checks</h2>
+<p>The workspace EDIT-019 run on 2026-09-10 passes both math block and math inline
+modes in a TinyMCE <code>inline: true</code> host, using Chromium on macOS. It covers nested
+editing, repeated formula Undo/Redo, Apply as one host history event,
+Save/reload/Restore, re-edit and Cancel. Inline also checks Enter commit,
+Right-arrow exit, prose input after the formula and Undo of that prose edit.
+See <a href="/docs/integrations/validation.html#edit-019-tinymce--workspace-2026-09-10">validation evidence</a>.</p>
+<p>An empty saved formula shows the localized empty-formula placeholder so it remains
+clickable. The preview renderer is called only when LaTeX is nonempty. The label
+is presentation only; saved HTML still contains empty formula content.</p>
+<p>Classic iframe hosts, native OS IME/clipboard and other browser engines need
+separate validation. The continuous editing run does not certify those targets.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/editorjs.html"><small>Previous</small>Editor.js </a><a href="/docs/integrations/ckeditor.html"><small>Next</small>CKEditor 5 →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h3" href="#styles-in-a-classic-iframe">Styles in a classic iframe</a><a class="h2" href="#continuous-editing-checks">Continuous editing checks</a></nav></aside></div></body></html>

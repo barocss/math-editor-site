@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WordPress plugin ZIP · Barocss Math Editor</title><meta name="description" content="WordPress plugin ZIP for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a><a href="/?lang=en#install" data-site-label="install">Installation</a>
+      <a href="/integrations/?lang=en" data-site-label="integrations">Editor integrations</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Samples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Framework adapters</a><a href="/layouts.html?lang=en" data-site-label="layouts">Layout examples</a>
+      </div></details>
+      <a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" aria-current="page">WordPress plugin ZIP</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a> / <a href="/docs/integrations/index.html">Integrations</a></div><p class="docs-provenance">Integrations: Host adapters v0.1.1 · Core ^0.4.1 · MIT. Host SDK licenses and compatibility requirements are separate from the MIT math-editor core.</p><article><h1 id="barocss-math-for-wordpress--development-preview">Barocss Math for WordPress — development preview</h1>
+<p>This is a local, installable Gutenberg block prototype. Distribution and commercial
+license terms are not finalized. It is separate from the published MIT math-editor
+core and does not publish anything to WordPress.org or npm.</p>
+<p>After installing workspace dependencies with <code>pnpm install</code>, run from the repository
+root (Node.js and the <code>zip</code> command are required):</p>
+<pre><code class="language-sh">pnpm --dir packages/math-editor build
+pnpm --dir packages/math-editor-integrations build
+pnpm --dir apps/math-integrations build:wordpress
+</code></pre>
+<p>The output is <code>output/wordpress/barocss-math-0.1.0.zip</code>, using the version in
+<code>wordpress/block.json</code>. The expanded plugin is in <code>output/wordpress/barocss-math/</code>,
+and <code>output/wordpress/build-report.json</code> records the bundle inputs. Rebuild after
+changing the core, adapter, or WordPress assets; this command creates local files
+and does not deploy or publish the plugin.</p>
+<p>In a WordPress test site,
+open <strong>Plugins → Add New Plugin → Upload Plugin</strong>, upload the ZIP, and activate it.
+In the block editor, insert <strong>Math</strong> (or <strong>수식</strong> in a Korean admin). Click the formula
+to edit, then Apply or Cancel. The plugin supplies dedicated blocks; paragraph
+inline math is not part of this preview.</p>
+<p>The ZIP contains built editor/frontend JavaScript, CSS, local KaTeX fonts, a PHP
+registration file, block metadata, and notices. It requires no npm install on the
+WordPress server. WordPress supplies React and its own block-editor packages.
+The plugin header declares WordPress 6.6 (including its JSX runtime) and PHP 7.4
+as loader requirements. These are not a verified compatibility range. WordPress
+7.1 with PHP 8.3 passed a local WordPress Playground check of its iframe canvas,
+author-role saves, reload/re-edit, host Undo/Redo, and frontend KaTeX rendering.
+The generated plugin directory was mounted and activated for that check; the
+dashboard ZIP-upload wizard was not exercised. See the integration
+<a href="/docs/integrations/validation.html">VALIDATION record</a>.</p>
+<p>The build gives editor/frontend JavaScript and CSS a shared content-derived cache
+version. CSS also refers to local fonts by hashed filenames, so changing styling,
+fonts, or frontend rendering invalidates the corresponding cached asset URLs.</p>
+<p>The <code>mathData</code> attribute contains a UTF-8/base64 versioned payload wrapping
+<code>{ latex, mathDocument, fontSize }</code>. WordPress block comments persist that string;
+saved HTML preserves it as <code>data-math-data</code>. Encoding keeps
+WordPress's HTML sanitization from changing formula text inside model attributes;
+it is not encryption or a substitute for validating data. Post content saves a
+deterministic escaped LaTeX fallback. Frontend JavaScript enhances it with KaTeX
+using <code>trust: false</code>; live editor controls and renderer markup are never saved.
+The <a href="/docs/integrations/gutenberg.html">Gutenberg adapter guide</a>
+documents the codec and save contract. Do not replace this envelope with raw model
+strings in block comment attributes or save the live editing element's <code>innerHTML</code>.</p>
+<p>Uninstalling the plugin leaves the post's original block data and LaTeX fallback
+in place. Reactivating the plugin restores editing. It does not delete post data.</p>
+<p>The current build is for local evaluation. WordPress's licensing requirements and
+any future Barocss commercial terms must be settled before customer distribution;
+this preview does not change existing licenses or provide a WordPress.org listing.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/commercial-model.html"><small>Previous</small>Licensing </a><a href="/docs/api-session.html"><small>Next</small>Session &amp; DOM API →</a></nav><footer>Barocss Math Editor core · 0.5.0 (workspace) · MIT License · Barocss adapters: MIT · Host SDK licenses are separate</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a href="#content">Overview</a></nav></aside></div></body></html>

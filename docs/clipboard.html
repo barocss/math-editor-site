@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Copy &amp; paste · Barocss Math Editor</title><meta name="description" content="Copy &amp; paste for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Examples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Frameworks</a><a href="/integrations/?lang=en" data-site-label="integrations">Document editors</a>
+      <a href="/text-editors.html?lang=en" data-site-label="textEditors">Code editors</a><a href="/layouts.html?lang=en" data-site-label="layouts">Editor layouts</a></div></details>
+      <a href="/?lang=en#install" data-site-label="install">Installation</a><a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/getting-started.html" >Learn to edit</a><a href="/docs/clipboard.html" aria-current="page">Copy &amp; paste</a><a href="/docs/keyboard.html" >Keyboard reference</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Text editors</h2><a href="/docs/text-editors.html" >LaTeX in text editors</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="copy-and-paste-formulas">Copy and paste formulas</h1>
+<p>Choose the method that matches your source. <strong>Ordinary paste does not automatically parse LaTeX.</strong></p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Source and goal</th>
+<th>Method</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selected math → another math-editor field</td>
+<td>Select a model range, copy, then paste at the destination</td>
+<td>Editable structure is preserved when the browser retains the custom clipboard format</td>
+</tr>
+<tr>
+<td>Ordinary text → a formula slot</td>
+<td>Paste normally</td>
+<td>Literal text insertion; suggestions can help with subsequent editing</td>
+</tr>
+<tr>
+<td>LaTeX source → an editable formula</td>
+<td>Open <strong>Paste as LaTeX</strong> with <code>Alt+Shift+V</code>, paste the source, then <code>Ctrl/Cmd+Enter</code></td>
+<td>Supported syntax becomes editable nodes at the caret or replaces the selected range</td>
+</tr>
+<tr>
+<td>Formula → a LaTeX-aware application</td>
+<td>Copy a formula range, or use the site's LaTeX Copy button</td>
+<td>Plain clipboard text is LaTeX; the receiving application decides how to use it</td>
+</tr>
+<tr>
+<td>Formula → a slide, document or image tool</td>
+<td>Use <strong>Copy image</strong> or <strong>Download image</strong> in the site's rendering preview</td>
+<td>PNG pixels; this is not an editable math model</td>
+</tr>
+</tbody>
+</table></div><p>On macOS, use Cmd for copy/cut/paste and Option for Alt. The editor does not read the system clipboard just because you open the paste panel.</p>
+<h2 id="move-part-of-a-formula">Move part of a formula</h2>
+<ol>
+<li>Drag across the math, or extend a range with Shift+Left/Right.</li>
+<li>Press Ctrl/Cmd+C to copy. Use Ctrl/Cmd+X to cut.</li>
+<li>Click the destination. Place the caret where the formula should go, or select content to replace.</li>
+<li>Press Ctrl/Cmd+V. Check the result. Undo restores the previous content.</li>
+</ol>
+<p>Selection inside one input can be a native text selection. A model range can include multiple tokens and nested structures. To copy the whole formula, focus the formula surface and use Select All; Select All inside an active input can select that input's text first. Check the highlight before copying.</p>
+<p>Copying leaves the original unchanged. Cut and accepted structured paste are undoable. Pasted nodes receive fresh identities so editing one copy does not change the other.</p>
+<h2 id="insert-latex-without-replacing-the-whole-formula">Insert LaTeX without replacing the whole formula</h2>
+<p>Place the caret after your existing expression. Open Paste as LaTeX and enter:</p>
+<pre><code class="language-latex">+\frac{a}{b}
+</code></pre>
+<p>Press Ctrl/Cmd+Enter to insert. Escape closes the panel. If the source is unsupported or malformed, the panel shows a diagnostic and keeps the existing formula unchanged. Correct the source or close the panel.</p>
+<p>The site's <strong>Load LaTeX</strong> control replaces the whole formula. <strong>Paste as LaTeX</strong> inserts at the current location. See <a href="/docs/latex-scope.html">LaTeX support</a> for parsing limits.</p>
+<h2 id="matrices-and-multiline-formulas">Matrices and multiline formulas</h2>
+<p>A selected rectangle of matrix cells carries row and column boundaries. Paste into a compatible matrix destination to replace that rectangle or grow from the target cell where supported. Tab-separated rectangular text can also supply matrix cells when the caret is in a matrix. Ragged, oversized or incompatible cell data is rejected.</p>
+<p>Inline fields reject top-level multiline fragments. A multiline fragment also cannot be inserted inside an ordinary nested slot such as a fraction numerator. Matrix rows are internal structure; they are different from top-level formula lines.</p>
+<h2 id="when-pasting-does-not-produce-editable-math">When pasting does not produce editable math</h2>
+<ul>
+<li>Another application or browser can discard custom clipboard formats. If only plain LaTeX remains, use Paste as LaTeX explicitly.</li>
+<li>Malformed custom formula data is rejected. It does not silently fall back to replacing your selection with plain text.</li>
+<li>An image contains no editable model. This library does not perform formula OCR.</li>
+<li>Clipboard permissions can prevent image copying. Use Download image as the site alternative.</li>
+<li>A host editor can handle clipboard operations outside the active math field. Put the caret inside the math field before pasting there.</li>
+</ul>
+<p>Controlled browser clipboard tests pass for the recorded scope. Actual exchange through the OS clipboard, other applications and all browsers is not yet certified. See <a href="/docs/validation.html">validation</a>.</p>
+<p>Try <a href="/#tutorial">the practice exercises</a> or open <a href="/docs/keyboard.html">the keyboard reference</a>.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/getting-started.html"><small>Previous</small>Learn to edit </a><a href="/docs/keyboard.html"><small>Next</small>Keyboard reference →</a></nav><footer>Barocss Math Editor core · 0.6.1 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#move-part-of-a-formula">Move part of a formula</a><a class="h2" href="#insert-latex-without-replacing-the-whole-formula">Insert LaTeX without replacing the whole formula</a><a class="h2" href="#matrices-and-multiline-formulas">Matrices and multiline formulas</a><a class="h2" href="#when-pasting-does-not-produce-editable-math">When pasting does not produce editable math</a></nav></aside></div></body></html>

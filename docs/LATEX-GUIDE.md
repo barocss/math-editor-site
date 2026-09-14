@@ -2,6 +2,8 @@
 
 This guide describes **version 0.2.0**, including bounded LaTeX import and editable notation. See [installation and API guides](README.md) for package usage and [the support contract](LATEX-SCOPE.md) for the exact grammar.
 
+Start with [practice exercises](GETTING-STARTED.md), [copy and paste](CLIPBOARD.md), or the [keyboard reference](KEYBOARD.md).
+
 ## Load and edit a formula
 
 In the demo, open **Import LaTeX**, enter a supported expression and apply it. Click a displayed slot to edit it. A successful import is undoable; a failed import preserves the existing formula and returns diagnostics.
@@ -58,7 +60,23 @@ Standard function names: `sin`, `cos`, `tan`, `cot`, `sec`, `csc`, `arcsin`, `ar
 
 Drag across a formula to select a model range. The regular suggestion list offers fraction, root, superscript, subscript, parentheses, brackets and absolute value. Click a candidate, or use arrow keys and Enter. Compound bases receive parentheses when wrapped in an exponent.
 
-Typing a printable character replaces the selected range and resumes editing. Backspace/Delete removes the selection. Undo restores content. Wrapping multiple top-level lines is disabled. In combined scripts, Backspace in an empty script removes that side while retaining the other script.
+With a nonempty math selection, these keys apply immediately without choosing a suggestion:
+
+| Key | Result | Caret after wrapping |
+| --- | --- | --- |
+| `(` | Parentheses | After the closing parenthesis |
+| `[` | Square brackets | After the closing bracket |
+| `{` | Braces | After the closing brace |
+| `\|` | Absolute value | After the closing bar |
+| `/` | Fraction with selection as numerator | Empty denominator |
+| `^` | Selection as the base of a power | Empty exponent |
+| `_` | Selection as the subscript base | Empty subscript |
+
+Compound power bases receive parentheses. Each wrap is one Undo step; subsequent typing is a separate edit. This works with mouse dragging, Shift+arrows and native input selections in React and DOM fields, including toolbar-free inline fields. The key handling is shared by the framework and host adapters through their renderer.
+
+Other printable characters replace the selection. Without a selection, the existing suggestion behavior stays unchanged; `{` can still offer braces and cases. Literal text slots retain text input. Ctrl/Cmd/Alt combinations and IME composition are not structural shortcuts. Multi-line selections remain selected and unchanged when a wrapping key is pressed. Rectangular matrix-cell selection retains its own typing behavior.
+
+Backspace/Delete removes the selection. Undo restores content. In combined scripts, Backspace in an empty script removes that side while retaining the other script.
 
 ## Text boundaries
 
@@ -68,7 +86,7 @@ The editor retains structure and canonical notation, not the exact original sour
 
 ## What should be added next?
 
-See the [prioritized LaTeX backlog](ROADMAP.md#remaining-latex-priorities-workspace-review-2026-09-08). Norm fences and additional integrals come first, followed by annotated braces and more accents. Fine spacing, styles and equation environments need explicit preservation policies. These are candidates, not current parser support.
+Norms, triple/contour integrals, brace annotations and additional accents are already supported. See the [current roadmap](ROADMAP.md#subsequent-milestones) for remaining work. New notation must keep the model, parser, keyboard editing and rendering aligned.
 
 Each addition needs a documented JSON shape, import/export round trips, unsupported-input diagnostics, actual per-character typing, cursor movement, selection, deletion and Undo tests in both renderers. See [roadmap](ROADMAP.md) for progress and [validation](VALIDATION.md) for tested coverage.
 
@@ -281,3 +299,13 @@ An index containing braces or brackets is grouped when exported. For example,
 `\sqrt[{x^2}]{y}` and `\sqrt[{\left[a\right]}]{y}` keep the optional index
 argument intact. Grouping does not add a JSON node or remove editable structure.
 Simple indices continue to export as `\sqrt[3]{x}`.
+
+## Boundary deletion and continued editing
+
+- At the outside right edge of a non-grid structure, Backspace removes the wrapper and retains its contents. At the outside left edge, Delete does the same and leaves the caret before the retained contents.
+- An empty non-grid slot can remove its wrapper with Backspace or Delete. Removing an empty root index or one empty paired-script slot retains the other structure parts.
+- Populated matrices, aligned equations and cases use a separate boundary selection before a second deletion removes the whole grid. Removing a wrapper never silently flattens a populated grid into text. A cell's ordinary text deletion remains local.
+- Backspace at the start of a top-level line joins the previous line. Delete at the end joins the next line. Undo restores the original structure and lines.
+- Repeated Up/Down movement retains its preferred horizontal position through shorter rows. Horizontal movement, typing and pointer placement reset that preference. Visible suggestions retain ownership of Up/Down; Escape dismisses them.
+- Shift+Enter bypasses suggestions. In a grid it inserts a row; in a block top-level expression it follows the newline policy. Inline mode remains one top-level line.
+- Invalid structured clipboard data leaves the formula unchanged and reports an error. Multiline paste is rejected in inline mode and inside nested math slots. Plain clipboard text remains literal; use the explicit LaTeX paste action for parsing.

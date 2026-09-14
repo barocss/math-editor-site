@@ -49,11 +49,27 @@ Try the website's **Theme**, **Math size** and **Compact spacing** controls in t
 
 ## Public CSS variables
 
+For complex fractions, start with a **26px editing base** instead of enlarging
+only the numerator or denominator. Use a **16px minimum** if nested text remains
+hard to read. Keep the KaTeX preview/export size separate from editing size:
+
+```css
+.product-math {
+  --me-font-size: 26px;
+  --me-min-font-size: 16px;
+}
+```
+
+복잡한 분수는 편집 기본 크기를 **26px**, 중첩 글자의 최소 크기를 **16px**로
+설정해 보세요. KaTeX 미리보기와 이미지 출력 크기는 앱에서 별도로 설정합니다.
+수식이 커지면 줄 높이도 늘어날 수 있도록 호스트 영역의 고정 높이를 피하세요.
+
 Unset variables preserve the existing default appearance. Some controls intentionally have slightly different default shades/radii; a supplied token unifies them. Set lengths such as the base font size in `px` or `rem` when the editor and its portal have different parents.
 
 | Variable | Controls | Default behavior |
 | --- | --- | --- |
 | `--me-font-size` | Base formula text and relative script sizes | `22px` in standalone editors |
+| `--me-min-font-size` | Minimum editing glyph/input size, including nested fractions and scripts | `14px`; `0px` disables the floor |
 | `--me-ui-font-family` | Toolbars, menus and helper text | `system-ui, sans-serif` |
 | `--me-text` | UI text and neutral math glyphs | Dark green/gray |
 | `--me-muted` | Help text, line numbers, menu details | Muted gray/green |
@@ -85,7 +101,18 @@ Unset variables preserve the existing default appearance. Some controls intentio
 | `--me-menu-shadow` | Floating menu shadow | Soft dark shadow |
 | `--me-menu-z-index` | Suggestion menu stacking level | `1000` |
 
-Inline mode retains its content-driven minimum height. Explicit LaTeX sizing commands and specialty mathematical fonts retain their own metrics; the base-size token is not an image scaling API. Formula export/KaTeX rendering is owned by the consumer and does not inherit semantic editing colors automatically.
+Inline mode retains its content-driven minimum height. The editor reserves extra line space when scripts extend beyond the row. The host must allow this height to grow instead of clipping the editor into a fixed-height line.
+
+Nested math uses TeX size ratios with a readable `14px` floor. The same floor applies to glyphs, measuring spans and focused inputs, so fractions and fences grow with their contents. Explicit small LaTeX styles are also subject to this editing floor. To use a larger minimum:
+
+```css
+.product-math {
+  --me-font-size: 22px;
+  --me-min-font-size: 16px;
+}
+```
+
+Set `--me-min-font-size: 0px` for unmodified TeX size ratios, for example in a typography comparison. Use a nonnegative length in `px` or `rem`. The floor changes editing layout only; it does not add sizing commands to LaTeX, change history, or enlarge suggestion menu labels. Formula export/KaTeX rendering is owned by the consumer and does not inherit this floor or semantic editing colors automatically. The base-size token is not an image scaling API.
 
 ## Dark and monochrome themes
 

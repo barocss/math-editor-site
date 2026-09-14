@@ -1,0 +1,30 @@
+/* Shared site palette, including examples and body-mounted editor popups.
+   Formula token colors and explicit editor theme presets remain independent. */
+:root {
+  --page-bg: #fafaf8;
+  --page-ink: #20242b;
+  --page-muted: #606975;
+  --page-line: #dce0e5;
+  --page-panel: #ffffff;
+  --page-soft: #edf1ff;
+  --page-accent: #315efb;
+
+  --me-text: var(--page-ink);
+  --me-muted: var(--page-muted);
+  --me-line: var(--page-line);
+  --me-panel-background: var(--page-panel);
+  --me-subtle-background: var(--page-soft);
+  --me-hover-background: #f0f3ff;
+  --me-active-background: #e4ebff;
+  --me-accent: var(--page-accent);
+  --me-focus-color: var(--page-accent);
+  --me-menu-shadow: 0 12px 32px #202c5026;
+  --bme-inline-background: var(--page-soft);
+
+  --me-text-foreground: var(--page-ink);
+  --me-text-background: var(--page-panel);
+  --me-text-border: var(--page-line);
+  --me-text-muted: var(--page-soft);
+  --me-text-accent: var(--page-accent);
+  --me-text-on-accent: #fff;
+}

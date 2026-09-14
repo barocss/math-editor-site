@@ -1,8 +1,91 @@
 # Math editor roadmap
 
-This roadmap describes priorities, not release promises. The current package is an independent editing prototype. Production integration requires the reliability work below even if additional notation is implemented first.
+## Learning and discoverability — implemented, 2026-09-13
 
+- Five interactive site exercises use their own field and validate normalized formula models: correction, fraction wrapping, power, root conversion and LaTeX insertion.
+- Beginner, clipboard and keyboard guides are in the documentation navigation. Outdated claims that norms/integrals/brace annotations were still planned were removed from the LaTeX guide.
+- Localized F1/toolbar help works in React and native fields, including toolbar-free inline. Closing restores native input selection. Custom controls can use `showHelp()`; separate native toolbars connect with `onHelp`.
+- EDIT-035 and the extended 17-target host chain pass; see [validation](VALIDATION.md).
 
+Possible later convenience work: configurable key bindings with host-conflict rules, and selection-only image export. These are not implemented by the help API. Prioritize demonstrated input problems and platform validation before adding more notation.
+
+## Completed milestone: reliable editing of supported notation — 2026-09-13
+
+Complete an uninterrupted formula workflow: **input → select → wrap or transform → navigate → delete → copy/paste → undo/redo → save → reopen and edit**. The JSON tree, exported LaTeX, visible notation and active caret must agree at each relevant checkpoint.
+
+This section defines the current work and its completion criteria. The dated records below are historical evidence; their old “next” and “awaiting release” statements do not define current priority or publication status. Dates describe verification runs, not release promises.
+
+### Starting baseline
+
+- EDIT-019: 17 standalone/integration targets, 499 continuous-editing checkpoints.
+- EDIT-033: 63 selection-shortcut cases, 510 checkpoints, including 21 comparisons of actual edited output with KaTeX.
+- EDIT-034: React block and native DOM block/inline, 131 held-arrow checkpoints.
+- Rendering: 91 formulas, 330 renderer/mode/size combinations. These are selected geometry checks, not complete pixel or behavior coverage.
+- Core: 1,677 tests in 42 files at the latest recorded run.
+
+See [validation](VALIDATION.md) and [editing scenarios](EDITING-SCENARIOS.md). The starting counts above are historical; the closure results below supersede them.
+
+### Execution order and bounded deliverables
+
+All six batches are **complete for the environment and checks stated here**. The local gate passed 1,736 core tests, 113 editing cases / 4,311 checkpoints and 330 KaTeX comparisons. Strict type checks, core build and site/docs build passed. [Validation](VALIDATION.md) contains the per-suite evidence. The CI workflow is configured and its entry point passed locally; remote execution and publishing remain separate actions.
+
+| Order | Batch | Scope | Completion check |
+| --- | --- | --- | --- |
+| 1 | Structure and grid deletion | EDIT-006/015: Backspace and Delete inside/outside empty and populated structures; selected ranges; matrix, cases and alignment rows/cells | Define the expected action before implementation. Preserve all content not explicitly deleted. One Undo restores the exact tree and a valid caret. Follow deletion with typing and Redo. |
+| 2 | Range interchange | EDIT-007/015: text plus nested structures; copy, cut and paste within/across instances; matrix rectangles; supported LaTeX fallback; malformed and mismatched payloads | Preserve selected structure and unselected content. Cut is undoable. Rejected paste changes nothing. Distinguish controlled clipboard-event checks from actual system clipboard verification. |
+| 3 | Lines and keyboard navigation | EDIT-012/013/016/034: line split/merge; cases/alignment row edits; matrix traversal; repeat keys; vertical movement; suggestion navigation | Preserve the preferred horizontal caret position across repeated vertical movement where geometry permits. Menus own their documented keys. Inline Enter follows the host contract and creates no formula line. |
+| 4 | Selection and transformations | EDIT-002–005/021–033: direct wrapping, suggestion-based conversion, nearest nested target, Escape and continued input without a toolbar | Current supported transformations remain discoverable by keyboard. They preserve operands, use the intended slot and support one-step Undo. Do not add new notation as a prerequisite. |
+| 5 | Host lifecycle | EDIT-008–011/018/019: extend current host chains with the completed operations; Apply/Cancel; storage reload; read-only; multiple instances; teardown | Draft operations do not modify stored host content. Apply creates one host history event where supported. Reopened formulas remain editable. Menus and listeners do not survive instance destruction. |
+| 6 | Consolidated verification and release checks | Run the required suites on the same candidate source; update scenario status, support limits, docs and release notes; connect the required checks to CI | Checks fail on regressions or missing required results, retain reports/screenshots and work without a developer-specific absolute CLI path. No required in-scope scenario remains unrun or failed. Publishing is a separate action. |
+
+For each batch: reproduce → specify the expected tree/caret → add a failing case → fix the shared behavior → compare editor/KaTeX → rerun affected scenarios → record evidence. Rerun the complete geometry set when shared layout rules change. Keep every discovered regression as a stable scenario.
+
+### Structure and visual comparison contract
+
+1. Cover every currently supported structure kind in the catalog with a populated edit and an empty-slot/boundary case where applicable. Shared structural families may share fixtures, but each catalog kind must map to coverage or an explicit non-applicable reason.
+2. Keep the existing catalog-driven parser/exporter combination checks. Add browser combinations by behavior: structure in a fraction slot, a script, a radical/fence, an operator bound, or a grid cell. Include repeated siblings, compound operands, mixed text/math and at least three nested structural levels. This is a finite representative matrix, not every possible expression.
+3. For changed flows, compare **the LaTeX produced by actual editing**, not only a separately imported formula. Verify the expected JSON structure independently; a visually correct preview cannot excuse lost or misplaced model content.
+4. Compare idle and focused states at 22px and 36px, with matching KaTeX display mode. Check baseline/relative positions, script and index size, fences/radicals, operator bounds, horizontal spacing, clipping and input-induced movement.
+5. Retain the existing metric thresholds: font difference ≤ 0.1px, relative vertical-center difference ≤ 0.25em, active-position change ≤ 0.2em, and horizontal difference ≤ 0.25em where comparable anchors are defined. These proxies are not complete glyph-ink measurements. Add a check when a visible defect is outside the measured anchors; do not relax thresholds to hide it.
+6. Review screenshots of changed notation. Reject obscured symbols, overlapping slots, clipped content or a position that suggests the wrong mathematical attachment, even if a measured probe passes. Record intentional differences for empty slots, focus backgrounds and caret hit areas. Exact pixel equality with KaTeX is not a milestone requirement.
+
+Detailed comparison tables and screenshots stay in the source-only rendering ledger. Public guides describe supported behavior and limitations.
+
+### Environments included in this milestone
+
+- Automated editing and visual acceptance: desktop Chromium on macOS, with the recorded browser and font versions.
+- Core surfaces: React block and native DOM block/inline. Smoke-check Pure JS, Web Component, Vue, Svelte and Solid wrappers for focus, option updates, independent instances and teardown; shared DOM passes alone do not certify wrapper lifecycle.
+- Existing host configurations: Tiptap, ProseMirror, Lexical, Quill, Slate, TinyMCE inline host and CKEditor ClassicEditor in their current block/inline math demos; Editor.js and Gutenberg standalone in block mode. Run the relevant chain in each host that supports the operation.
+- Editor.js host history is not configured in the current demo. Formula history is required; do not count host Undo as passed. Gutenberg RichText inline math and additional host configurations are outside this scope.
+- English/Korean labels and custom-locale fallback must remain valid. Include a narrow desktop container to check clipping and suggestion placement, without claiming touch support.
+
+### Closure rule
+
+Close this milestone only when all six batches have executable coverage, the required checks pass on the candidate source, and no known in-scope content-loss, blocked-input, incorrect-structure or visual-attachment defect remains. Each result must identify its scenario, renderer/mode, source fingerprint and observed limitation. A test count alone is not completion evidence.
+
+If a new defect is within this contract, fix and rerun before closure. If it requires a new notation family, platform or product, record it in the later queue instead of silently expanding the milestone. “Complete” refers to this bounded milestone, not all TeX or every device.
+
+### Subsequent milestones
+
+| Next stage | Work deferred from the current milestone |
+| --- | --- |
+| Platform validation | Safari, Firefox, Windows Chromium, real Korean IME, actual OS/application clipboard exchange, touch/mobile input and screen-reader verification. The earlier deferral of real OS input testing remains explicit; synthetic checks do not replace it. |
+| Library operating contract | Versioned JSON migration/recovery, measured document-size/depth and performance budgets, supported host-version policy and broader installed-host configurations such as TinyMCE iframe and WordPress admin. |
+| Demand-led expansion | Additional LaTeX environments/style declarations, reviewed language packs, new editor integrations and optional radial suggestions. Require a concrete input/editing use case first. |
+
+Full TeX documents, arbitrary macros/packages, symbolic computation, collaboration and a paper-writing service are separate products or projects. They are not required to finish this editor milestone.
+
+## Historical implementation records
+
+The following entries preserve past decisions and dated evidence. Use the completed milestone and subsequent milestones above for current scope.
+
+## Direct selection shortcuts — workspace, 2026-09-13
+
+Implemented immediate range wrapping for `(`, `[`, `{`, `|`, `/`, `^` and `_` in both renderers. Selection content, script/fraction caret placement and one-step Undo use the existing model operation. Other characters still replace selections. Unselected input and literal text retain their current behavior.
+
+Validation: EDIT-033 passes 63 cases / 510 checkpoints; geometry passes 91 formulas / 330 combinations after correcting fraction sizing and spacing. EDIT-019 still passes 17 targets / 499 checkpoints.
+
+EDIT-033 adds a repeatable browser suite for keyboard, native and dragged selections. VIS-080–093 add block/inline KaTeX position comparisons for the resulting formulas. Continue running editing and rendering checks together when shortcuts or notation change. Ambiguous keys such as `<` (relation, angle bracket, arrow prefix) and word commands such as `sqrt` remain suggestions.
 
 ## Current focus: continuous editing — workspace, 2026-09-10
 
@@ -404,3 +487,25 @@ punctuation and script comparisons at 22 px and 36 px in React and native DOM.
 Next: longer expressions, complete atom classification across structure wrappers,
 named-function boundaries, explicit spacing commands and browser font differences.
 The source-only rendering ledger records measured limits and remaining work.
+
+## Text editor integrations — 2026-09-13
+
+- Implemented: optional direct LaTeX completion and caret preview for the three browser adapters; keyboard template navigation and source-preserving command insertion.
+- Implemented: grouped Examples navigation and per-example installation, usage and guide links.
+- Remaining: VS Code native source completion, wider platform/assistive-technology validation, and custom TeX dialect completion.
+
+- Implemented: shared LaTeX source-range discovery and draft popup; separate CodeMirror 6, CodeMirror 5, and Monaco packages.
+- Implemented: VS Code Edit Formula and Insert Formula commands, Webview UI, and VSIX build. VS Code 1.103.1 desktop command and Webview round-trip checks passed.
+- Added: workspace-source examples, English/Korean popup messages, source conflict protection, unchanged-source preservation, and one-step host undo.
+- Next: host syntax-tree resolvers for additional Markdown/TeX dialects, rebasing non-overlapping source edits, multi-caret policy, and broader VS Code platform QA.
+- Separate project: typed WGSL/GLSL expression editing. No shader parser is used by these adapters.
+- Publication: the four browser text packages are in the math release allowlist. The VS Code extension remains a separate release.
+
+## Editing readability and navigation — 2026-09-14
+
+- Added a configurable 14px editing minimum and extra line space for raised scripts.
+- Corrected fraction descendant sizes, nested fence alignment and radical geometry in scripts.
+- Added lexical/structural movement and selection: Ctrl+arrows, or Option+arrows on macOS, with Shift to select.
+- Added 100/125/150% visual text-popup zoom; default 125%, with a saved browser preference.
+- Documented a 26px editing base and optional 16px minimum for complex formulas. Output size stays separate.
+- Remaining: exact glyph contours/spacing, the full updated rendering audit, cross-editor suggestion dismissal, and wider browser/platform checks. Focused browser checks are recorded in the source rendering ledger; historical all-suite PASS results are not evidence for the new size policy.

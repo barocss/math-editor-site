@@ -3,22 +3,24 @@
     "main": "Main navigation",
     "playground": "Playground",
     "install": "Installation",
-    "integrations": "Editor integrations",
-    "samples": "Samples",
-    "adapters": "Framework adapters",
-    "layouts": "Layout examples",
+    "integrations": "Document editors",
+    "samples": "Examples",
+    "adapters": "Frameworks",
+    "layouts": "Editor layouts",
     "docs": "Guides",
-    "language": "Language"
+    "language": "Language",
+    "textEditors": "Code editors"
   },
   "ko": {
     "main": "주요 메뉴",
     "playground": "직접 써보기",
     "install": "설치",
-    "integrations": "에디터 연동",
-    "samples": "샘플",
-    "adapters": "프레임워크 샘플",
-    "layouts": "레이아웃 샘플",
+    "integrations": "문서 에디터",
+    "samples": "예제",
+    "adapters": "프레임워크",
+    "layouts": "편집 레이아웃",
     "docs": "가이드",
-    "language": "언어"
+    "language": "언어",
+    "textEditors": "코드 에디터"
   }
 }

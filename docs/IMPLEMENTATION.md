@@ -360,3 +360,13 @@ sides. The function name's measuring span adds no glyph padding.
 The spacing map contains structure IDs for these two families and token-offset
 keys for text. Other structure families keep their existing outer layout. This
 change does not alter LaTeX output, JSON, selection offsets or editing commands.
+
+## Editing boundary corrections — 2026-09-13
+
+`unwrapNext` reuses the non-grid unwrapping operation, then restores the left-side caret. `joinNextLine` delegates to the existing line merge and keeps the join position. Grid deletion remains a distinct selection/removal operation; it does not pass through wrapper flattening.
+
+Both renderers use a view-local preferred column for vertical navigation. The column is not stored in JSON or history. The current row supplies Y while the first vertical movement supplies X; typing, horizontal navigation and pointer placement reset it. Native caret selection is synchronized before keydown so held arrows do not wait for keyup.
+
+React and DOM use `mathEnterAction` for Enter decisions. Structured clipboard input is validated before literal fallback. A present but malformed math payload is rejected; missing custom data can still use ordinary text. Single-line mode rejects multiple rows before applying the React paste result.
+
+Editing regression runners use the repository-owned `scripts/math-playwright-cli.sh`. Controlled ClipboardEvents test handler behavior, not the OS clipboard. In host tests, permission changes occur without pointer blur: clicking outside an in-place field is a separate, intentional Apply operation. Editor.js cannot save while read-only, so its document equality check runs after editing is re-enabled.

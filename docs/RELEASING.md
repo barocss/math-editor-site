@@ -4,12 +4,14 @@ See [Editing scenarios](EDITING-SCENARIOS.md) for stable scenario IDs, acceptanc
 
 
 The source stays in this monorepo. The local batch release includes
-`@barocss/math-editor` and the nine public host plugins. All use MIT, public npm
+`@barocss/math-editor`, nine public rich-text plugins and four text packages
+(`math-editor-text`, `math-editor-codemirror6`, `math-editor-codemirror5`,
+`math-editor-monaco`, all under `@barocss`). All use MIT, public npm
 access and the `latest` tag. Framework adapters are core subpaths and share the
 core version. The private integration workspace and other products are excluded.
 
-The published baseline is core **0.4.0** and host plugins **0.1.0**. Later versions
-remain independent; a batch release does not force every package to change.
+Versions remain independent; a batch release does not force every package to change.
+VS Code is a separate VSIX/Marketplace release and is not published by this npm command.
 
 ## Local release
 
@@ -20,10 +22,10 @@ npm login --registry=https://registry.npmjs.org/
 pnpm release:math
 ```
 
-This one command runs release-tool tests, core formatting/type/unit checks,
-integration type/unit checks, builds and package validation. It verifies the core
+This one command runs core formatting/type/unit checks,
+integration type/unit checks, builds, package validation and release-tool tests. It verifies the core
 entry points and each plugin's packed declarations, runtime imports and required
-files. It then runs **one `pnpm -r publish` command** for the ten allowed names.
+files. It then runs **one `pnpm -r publish` command** for the fourteen allowed names.
 `pnpm release` is an alias for this workflow.
 
 Only the inspected package contents enter a generated workspace under
@@ -42,7 +44,7 @@ guarantee one authentication prompt.
 For checks without publishing:
 
 ```sh
-# Build and inspect all ten packages. No registry publication.
+# Build and inspect all fourteen packages. No registry publication.
 pnpm release:math:prepare
 # Also exercise recursive publishing with npm's dry-run flag.
 # This can read registry metadata; it does not upload packages.
@@ -62,9 +64,21 @@ Before releasing UI changes, also run `pnpm --filter @barocss/math-demo test:e2e
 
 1. Run `pnpm changeset`, select the affected math core and/or public plugins, and write a user-facing change summary.
 2. Use patch for compatible fixes and minor for features. During 0.x development, clearly identify breaking API changes in a minor release. Reserve 1.0.0 for the agreed stable API.
-3. Run `pnpm version:math:plan` to preview the core and nine plugin versions. Run `pnpm version:math` to apply that plan. Changesets runs in a temporary math-only workspace and copies back only affected math manifests/changelogs. Unrelated product changesets remain untouched. Review plugin peer-range changes before publishing.
+3. Run `pnpm version:math:plan` to preview the core, nine rich-text plugin and four text-package versions. Run `pnpm version:math` to apply that plan. Changesets runs in a temporary math-only workspace and copies back only affected math manifests/changelogs. Unrelated product changesets remain untouched. Review plugin peer-range changes before publishing.
 4. Review and commit the version/changelog and any dependency/lockfile changes with the implementation. Run release validation, then publish locally.
 5. Record package-specific Git tags on the release commit, and update the site with the matching package version. The batch command does not create commits or tags.
+
+The scoped Changesets configuration only promotes peer dependents when the new
+version leaves their supported range. Widen a compatible peer range explicitly
+and add a patch changeset; incompatible range changes still require release review.
+
+Text tarballs are installed with the packed core into a temporary consumer using
+`npm install --offline --ignore-scripts --legacy-peer-deps`. Host SDKs come from the
+local installation. Strict public declaration checks and runtime import checks run
+there. This validates package contents and local installation, not npm availability
+or a fresh registry peer installation. Monaco interaction is covered by browser QA.
+See [text editor validation](../../apps/math-text-demo/test/README.md) for native
+IME and physical mobile checks that remain open.
 
 Versioning is separate from publishing. Repeating a publish command must not create
 another version. Avoid `pnpm version-packages` and unfiltered `pnpm -r publish`

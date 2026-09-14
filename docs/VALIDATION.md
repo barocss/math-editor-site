@@ -1,5 +1,88 @@
 # Validation report
 
+## Readability, geometry and navigation — release preparation, 2026-09-14
+
+This candidate includes a configurable editing minimum, line clearance for
+scripts, fraction descendant sizing, nested fence/radical fixes, token/structure
+movement and selection, and visual text-popup zoom. The learning and styling
+guides now recommend a 26px editing base for complex fractions, with a separate
+preview/export size and an optional 16px nested minimum.
+
+- Core regression checks: 1,743 unit tests passed; core and demo type checks passed.
+- Focused browser checks: minimum-size editing, nested fences, script radicals,
+  keyboard movement/selection, and visual popup zoom. Detailed scope and limits
+  are recorded in the source-only records below.
+- English/Korean site guidance explains the larger editing size. Public keyboard
+  help now documents Ctrl/Option movement and selection and the matrix column
+  deletion shortcut change.
+- Historical full rendering and continuous-editing results below were obtained
+  before this candidate. They are not a fresh all-suite pass for the new size
+  policy. Exact curves/spacing and broader browser/platform QA remain open.
+- This section records preparation, not npm publication or site deployment.
+
+Source evidence: `test/rendering/STATUS.md`, `test/rendering/READABILITY.md`,
+`test/editing/TOKEN-NAVIGATION.md`, and
+`packages/math-editor-text/test/VISUAL-ZOOM.md` in the repository.
+
+## Learning and keyboard help — workspace, 2026-09-13
+
+- EDIT-035: **4 results / 40 checkpoints passed**: five model-checked tutorial exercises, wrong-answer/reset/close behavior, unchanged playground, toolbar help, Korean labels, and F1 lifecycle on React block/native block/native inline. [Evidence](../../output/playwright/editing-scenarios/2026-09-13T12-33-34-456Z/REPORT.md).
+- EDIT-019: **17 targets / 549 checkpoints passed**, including F1/Escape before the full continuous editing and host persistence chain. [Evidence](../../output/playwright/editing-scenarios/2026-09-13T12-31-33-614Z/REPORT.md).
+- Core: **1,736 tests / 43 files**, core/demo type checks, package build and site build passed.
+- Rendering: **330 PASS / 0 DIFF / 0 ERROR**, source stable. [Gallery](../../output/playwright/rendering-audit/2026-09-13T12-31-34-393Z/GALLERY.html). The new styles target help and the tutorial; mathematical geometry thresholds are unchanged.
+
+The first toolbar-help check exposed native selection collapse after closing help; selection restoration now passes immediate wrapping and continued input. A separate toolbar now uses explicit `onHelp` ownership instead of guessing a target field. The tutorial's LaTeX readout is not an extra live status region. English semantic locale-key checks pass.
+
+The consolidated CI entry point now includes the learning suite. These are local Chromium/macOS results. Actual OS F1/Fn routing, screen readers and system clipboard exchange remain unverified. No npm/site publication was performed.
+
+## Supported-notation editing milestone — workspace, 2026-09-13
+
+The bounded milestone in [the roadmap](ROADMAP.md) passed its local gate. This is a workspace result; no package version or publication status changed.
+
+- Core: **1,736 tests in 43 files**, strict core and browser-fixture type checks, and package build passed.
+- Editing: **113 cases / 4,311 checkpoints** across 11 suites. All suites used identical source fingerprints, which still matched the candidate after execution.
+- Rendering: **91 formulas / 330 PASS, 0 DIFF, 0 ERROR**. Existing thresholds were retained. Rendering sources matched the editing candidate. Twenty-one direct-shortcut cases also compare actual edited output with KaTeX.
+- Main site/docs production build passed. The repository-owned runner and CI workflow use `node scripts/check-math-editor.mjs`. Workflow YAML and runner syntax passed; remote GitHub Actions execution is not claimed.
+
+| Suite | Cases | Checkpoints | Result |
+| --- | ---: | ---: | --- |
+| EDIT-006 | 3 | 2766 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-56-52-074Z/REPORT.md) |
+| EDIT-007 | 4 | 76 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-57-55-776Z/REPORT.md) |
+| EDIT-013 | 2 | 10 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-58-09-267Z/REPORT.md) |
+| EDIT-016 | 2 | 28 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-58-21-145Z/REPORT.md) |
+| EDIT-018 | 8 | 60 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-58-33-699Z/REPORT.md) |
+| EDIT-018-options | 5 | 30 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-58-46-765Z/REPORT.md) |
+| EDIT-017-narrow | 3 | 12 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-58-58-829Z/REPORT.md) |
+| EDIT-029 | 3 | 156 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-59-12-733Z/REPORT.md) |
+| EDIT-034 | 3 | 131 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-59-30-658Z/REPORT.md) |
+| EDIT-033 | 63 | 510 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T11-59-45-550Z/REPORT.md) |
+| EDIT-019 | 17 | 532 | [PASS](../../output/playwright/editing-scenarios/2026-09-13T12-00-17-841Z/REPORT.md) |
+
+[Consolidated evidence](../../output/playwright/math-editor-milestone/2026-09-13/REPORT.md) · [Rendering gallery](../../output/playwright/rendering-audit/2026-09-13T12-01-09-133Z/GALLERY.html)
+
+Corrections include forward structure deletion, joining the following line, preferred vertical column retention, malformed clipboard rejection, multiline-paste rejection in React single-line fields, consistent Shift+Enter behavior and horizontal scrolling inside narrow inline hosts. English and Korean include the new invalid-clipboard message.
+
+Clipboard checks use controlled ClipboardEvents/DataTransfer. Read-only is toggled without pointer blur to isolate the host state transition; clicking outside may intentionally apply a draft first. Editor.js data is checked after re-enabling because it cannot save while read-only. Its demo has no host Undo integration. Svelte option updates use its action API; the framework sample also covers actual Svelte mount/unmount.
+
+Scope is desktop Chromium 152 on macOS with KaTeX 0.16.28. Safari, Firefox, Windows, real OS IME/clipboard, touch, screen readers, TinyMCE iframe and an installed WordPress admin are separate validation work. Geometry uses selected anchors and screenshot review, not complete pixel equality.
+
+## Held arrow navigation — workspace validation, 2026-09-13
+
+- React and native DOM now read the live input selection before keydown handling. Delayed selection events no longer leave token/slot boundary checks one key repeat behind.
+- EDIT-034: 3 renderer/mode targets passed 131 checkpoints with repeated keydown and one final keyup. Both horizontal directions, fraction slots, held Shift selection, collapse, continued input and Undo are covered.
+- EDIT-033: 63 cases / 510 checkpoints passed, including 21 actual edited-output comparisons with KaTeX.
+- EDIT-019: all 17 standalone/integration targets passed 499 continuous editing checkpoints.
+- Core: 1,677 tests / 42 files, type checking and package build passed. Evidence is linked from the source-only editing test README. This change is not published yet.
+
+## Selection shortcuts — workspace validation, 2026-09-13
+
+- Core: 1,677 tests / 42 files passed; type checking passed.
+- EDIT-033: 63 cases / 510 checkpoints passed in Chromium. React block and native DOM block/inline each cover keyboard, native input and dragged selections, seven wrapping keys, continued typing and Undo/Redo.
+- Geometry: 91 formulas / 330 combinations passed after fixing fraction term sizing and spacing. The same thresholds apply.
+- Twenty-one keyboard cases also compare the actual edited output with KaTeX using the existing font-size and vertical-position thresholds.
+- EDIT-019: all 17 standalone/integration targets passed 499 continuous editing checkpoints after the layout correction.
+- Browser artifacts and measured rendering limits remain in the source-only editing/rendering ledgers. OS IME, other browser engines and the previously excluded host configurations remain separate work.
+
 ## Inline fence transformation suggestions — workspace, 2026-09-09
 
 Core: **584 tests in 36 files passed**. Core type checking and the main site/docs
@@ -698,3 +781,22 @@ This is local Chromium evidence. OS IME, Safari/Firefox, installed WordPress and
   collaboration, native OS IME/clipboard, Firefox/WebKit, touch, accessibility
   and performance remain separate targets. Editor.js/Gutenberg are block tools;
   no inline mode is claimed for them.
+
+## Text editor integrations — 2026-09-13
+
+- Source-range tests: 31 passing cases (`packages/math-editor-text/test/ranges.test.ts`).
+- macOS Chromium browser adapters: 52 passing checkpoints across CodeMirror 6, CodeMirror 5, and Monaco. Includes nested root editing, display Enter, read-only changes, conflicting source, unsupported syntax, code exclusion, and Korean popup labels.
+- VS Code 1.103.1 Extension Host: four command-opening checks and eight Webview Apply/Cancel/Undo/Redo checks across Markdown and LaTeX. A disposable copy uses a test-only DOM input driver; no test driver ships in the VSIX.
+- Evidence: `output/playwright/math-text/`. Browser script: `apps/math-text-demo/test/editing.browser.js`. VS Code runner: `pnpm --filter barocss-math-editor test:extension`.
+- Remaining coverage: Firefox/Safari, Windows/Linux shortcuts, screen readers, VS Code web/remote hosts, and custom Markdown/TeX dialect resolvers.
+
+## Direct source completion and example guides — 2026-09-13
+
+- Shared source unit coverage: 37 passing checks, including range detection, fraction/root argument positions, rectangular matrices, symbol aliases, canonical export spellings and localized completion labels.
+- Browser source completion: 42 checks across CodeMirror 5, CodeMirror 6 and Monaco. Covers command-only replacement, focus retention, one-step Undo/Redo, forward argument navigation, scrolling, explicit catalog opening, incomplete source, read-only state and visual-popup fallback.
+- Additional source layout checks: 9 across the three hosts, covering indexed roots, reverse argument navigation, KaTeX preview placement and composition-event suspension. Synthetic composition events test gating; this is not a complete OS IME certification.
+- Existing visual-popup browser suite: 52 checkpoints still pass.
+- Example guides: 12 pages, including all nine document editors, with installation instructions and links checked against rendered HTML documentation.
+- Text packages, main site and integration site build successfully. Main and integration bundles retain existing large-chunk warnings.
+- Scripts: `apps/math-text-demo/test/source.browser.js`, `source-layout.browser.js`, `example-guides.browser.js`. Evidence is under `output/playwright/math-text/`.
+- This does not establish Firefox/Safari, Windows/Linux, screen-reader or VS Code source-completion support. No npm or site publication was performed for this change.

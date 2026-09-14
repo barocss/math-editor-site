@@ -1,21 +1,24 @@
 # @barocss/math-editor
 
-See [Editing scenarios](EDITING-SCENARIOS.md) for stable scenario IDs, acceptance criteria, coverage gaps and per-run reporting.
-
-
 An embeddable math editor for writing LaTeX-compatible formulas. Edit expressions in place, select existing math, and wrap it in fractions, roots, powers or delimiters. The package includes a framework-independent model, a rich React editor, and a native DOM editor with framework adapters.
 
 This editor does not calculate, solve equations or parse arbitrary LaTeX.
 
-## Packaging changes in 0.4.1
+Selection shortcuts: highlight math and press `(`, `[`, `{`, `|`, `/`, `^` or `_` to wrap it immediately. Fractions focus the denominator; powers and subscripts focus their empty script. See [selection editing](LATEX-GUIDE.md#select-replace-and-wrap) for behavior and exceptions.
+
+## Learn the editor
+
+Try the [interactive exercises](https://math-editor.barocss.com/#tutorial), read [copy and paste](https://math-editor.barocss.com/docs/clipboard.html), or open the [keyboard reference](https://math-editor.barocss.com/docs/keyboard.html). F1 opens help while a math field has focus, including toolbar-free inline fields.
+
+## Package ownership
 
 Each host plugin owns its source and version. Workspace apps import source without
 a prerequisite build; npm consumers receive generated runtime and declarations.
 The private common module is included in each plugin and is not installed separately.
 
-## Editing additions in 0.4.0
+## Editing utilities
 
-The native renderer now edits one lexical token at a time, matching the main React field's role colors. New utilities provide **Paste as LaTeX** (Alt+Shift+V), **Recent & favorites** for symbols/templates, and contextual **bracket, fraction-size and limit-placement settings**. These utilities are included in 0.4.0. See [editing utilities and API](API-SESSION.md#editing-utilities--workspace).
+The native renderer now edits one lexical token at a time, matching the main React field's role colors. New utilities provide **Paste as LaTeX** (Alt+Shift+V), **Recent & favorites** for symbols/templates, and contextual **bracket, fraction-size and limit-placement settings**. See [editing utilities and API](API-SESSION.md#editing-utilities--workspace).
 
 ## Packages
 
@@ -61,16 +64,16 @@ Each guide covers installation, document replacement, saving and lifecycle clean
 
 See [framework adapters and inline/custom toolbar integration](https://math-editor.barocss.com/docs/adapters.html), [custom locales](https://math-editor.barocss.com/docs/localization.html), and [progress / roadmap](https://math-editor.barocss.com/docs/roadmap.html). The new native renderer has explicit parity gaps; existing React consumers keep their current UI.
 
-**Included in 0.4.0:** the native toolbar now includes searchable All symbols, templates, matrix presets and active-grid controls. Native ranges show exact partial-text highlights, and a drag can start in the active input and continue across structures. See [renderer parity](https://math-editor.barocss.com/docs/adapters.html#current-renderer-parity) for the remaining limits.
+The native toolbar includes searchable All symbols, templates, matrix presets and active-grid controls. Native ranges show exact partial-text highlights, and a drag can start in the active input and continue across structures. See [renderer parity](https://math-editor.barocss.com/docs/adapters.html#current-renderer-parity) for the remaining limits.
 
 For editor-only, external toolbar, LaTeX, preview, inline and popup compositions, see [Embedding](https://math-editor.barocss.com/docs/embedding.html) and the [layout examples](https://math-editor.barocss.com/layouts.html).
 
 ## Quick start
 
-Install version 0.4.1 from npm:
+Install the latest published version from npm:
 
 ```sh
-npm install @barocss/math-editor@0.4.1
+npm install @barocss/math-editor
 # For the rich React UI:
 npm install react react-dom
 ```
@@ -160,18 +163,22 @@ Native passive text preserves these lexical colors; its whole active run still u
 | Grid | Shift+Enter | Insert a row |
 | Matrix | Shift+Space | Insert a column |
 | Grid | Alt+Shift+Up | Delete the current row |
-| Matrix | Alt+Shift+Left | Delete the current column |
+| Matrix | Alt+Shift+Backspace | Delete the current column |
 | Aligned / cases | Enter | Insert a row, unless applying a suggestion |
 | Just after a fraction/root/delimiter | Backspace | Unwrap, preserving contents |
 | Outer grid edge | Backspace / Delete | Delete empty grid; select filled grid first, press again to delete |
 | Preview surface | Cmd/Ctrl+A | Select the whole math document |
 | Active input | Cmd/Ctrl+A | Select the current input text: a React token or native logical run |
+| Editor | Ctrl+Left / Right (Mac: Option+Left / Right) | Move to a lexical unit boundary; cross a fraction/root/fence as one structure |
+| Editor | Same modifier + Shift+Left / Right | Extend or shrink selection by lexical units and structures |
 | Editor | Shift+Left / Right | Extend or shrink the model range across text and balanced structures |
 | Editor | Shift+Up / Down | Extend the model range across top-level lines using logical offsets |
 | Preview surface | Enter / F2 | Enter editing |
 | Model selection | Cmd/Ctrl+C / X / V | Copy / cut / replace with clipboard contents |
 | Model selection | Backspace / Delete | Delete selection |
 | Editor | Cmd/Ctrl+Z / Cmd/Ctrl+Shift+Z | Undo / redo |
+
+Unit movement stays within the current variable or number until its edge, then crosses an adjacent structure intact. From a nested slot edge it exits the enclosing structure. An unshifted unit arrow collapses an existing selection to its ordered edge. It does not change LaTeX or add undo entries. Matrix rectangle selection keeps its existing arrow behavior.
 
 Vertical arrows use the nearest inner structure before an enclosing grid, then fall back to another equation line. Paired scripts can move along their shared column; a base moves up to its superscript and down to its subscript. Visible suggestions retain Up/Down priority, including after Shift+arrow or drag selection. Enter applies the highlighted wrapper to the selected content; Left/Right restores the caret, and Shift+arrows adjusts the range. Composition, literal text and noncollapsed text selections do not trigger structural movement. React and native surfaces share this behavior.
 
@@ -352,6 +359,16 @@ These operations are available in both renderers and the framework-free
 
 Use inherited CSS variables for colors, slot backgrounds, typography, toolbar density and menu appearance. Scoped themes also follow portaled suggestions in both renderers. See [Styling & themes](https://math-editor.barocss.com/docs/styling.html) for the public variables, dark/monochrome examples, shared toolbars and iframe/plugin sizing.
 
+Nested fractions and scripts have a `14px` editing minimum. Set
+`--me-min-font-size: 16px` on your editor wrapper for a larger minimum, or `0px`
+for unmodified TeX size ratios. Inline rows grow to contain elevated scripts;
+allow the host line height to grow too. This display setting does not change
+the saved LaTeX. See [STYLING.md](./STYLING.md) for the size policy.
+
+For complex fractions, try `--me-font-size: 26px` with
+`--me-min-font-size: 16px`. Keep the preview/export size separate. In the website
+playground, use **Math size → 26px**; visual text-editor popups also offer zoom.
+
 ## License
 
 MIT License. Copyright (c) 2026 barocss.com.
@@ -404,3 +421,28 @@ Automatic contextual suggestions do not consume Enter until you navigate them.
 The optional footer also offers bracket buttons via F6, Left/Right and Enter.
 Nested roots and fences share a nearest-wrapper target. See EDIT-029 through
 EDIT-032 in [Editing scenarios](EDITING-SCENARIOS.md).
+
+### Prime notation (workspace)
+
+The symbol catalog supports `\prime`. LaTeX imports such as `f^{\prime}(x)`,
+`f^\prime(x)` and `f^{\prime\prime}(x)` use editable superscript slots and
+preserve the prime count on export. Bare `\prime` is a symbol; use a superscript
+for derivative notation. Apostrophe shorthand such as `f'(x)` remains accepted.
+The editor does not compare answers. Hosts own question-specific suggestions and grading.
+
+## Development validation
+
+The [editing scenarios](https://math-editor.barocss.com/docs/editing-scenarios.html)
+define expected input, selection, deletion, history and host behavior. The
+[validation report](https://math-editor.barocss.com/docs/validation.html) records
+what was actually checked, including browser and host limits.
+
+From a source checkout, start both math demo servers and run
+`node scripts/check-math-editor.mjs`. This checks the model, actual editing,
+framework/host lifecycle, selected KaTeX geometry and documentation build.
+Workspace changes and a passing check do not imply that npm or the site has
+already been published. See the changesets and release guide before publishing.
+
+## Text editor plugins
+
+CodeMirror 6, CodeMirror 5, and Monaco have separate source-editing adapters. A VS Code extension uses a Webview beside the document. See the [text editor guide](./TEXT-EDITORS.md) for package names, setup, source-preservation rules, and validation scope. WGSL/GLSL editing is separate.

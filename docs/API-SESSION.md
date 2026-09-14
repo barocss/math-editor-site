@@ -135,7 +135,9 @@ Inline mode means one top-level row, not a fixed visual height. It rejects newli
 For a compact draft, pass `menuAvoidElements: () => [actionsElement]` to keep
 suggestions clear of Apply, Cancel and tool-expansion controls. The callback can
 return elements added after mounting. Placement remains constrained by the
-viewport and clipping ancestors; the menu scrolls when the available gap is short.
+viewport and actual CSS clipping ancestors; a dialog role alone does not limit
+the menu to the dialog height. Fixed menus can extend beyond a compact dialog
+while remaining its DOM descendants. The menu scrolls when the available gap is short.
 This option changes presentation only and adds no model data.
 
 ## Saving without caret-only writes
@@ -333,3 +335,25 @@ transformations preserve the existing operand. The shortcut works with
 `toolbar: false` and `contextTools: false`, including inline mode. Normal text
 input continues to use the standard suggestion ordering; a context-only menu
 requires navigation before Enter can apply a change instead of a host commit.
+
+### Low-level boundary and vertical navigation helpers
+
+The core exports `unwrapNext(state)` and `joinNextLine(state)` as immutable state operations, symmetric to `unwrapPrevious` and `joinPreviousLine`. Unsupported positions return the original state. Apply a changed state through a session/history transaction; these helpers do not commit it themselves.
+
+`moveVertical(state, direction, geometry)` remains stateless. A custom editing surface can use `createVerticalNavigation()` for repeated vertical movement: call `move(state, direction, geometry)` and apply the returned caret. Call `reset()` after horizontal navigation, text/model changes or pointer placement. Keep this helper local to one view; never serialize its preferred column with the formula.
+
+### Keyboard help and separate toolbars
+
+F1 opens localized keyboard/clipboard help in a focused React or native field. The native `DOMMathEditor.showHelp()` method and rich React `MathEditorHandle.showHelp()` method open the same help for a custom host button. Closing restores the previous input selection; opening help does not add a document/history entry.
+
+A toolbar mounted separately from its field must identify the owner explicitly:
+
+```ts
+const field = mountMathEditor(fieldHost, { session, toolbar: false });
+const toolbar = mountMathToolbar(toolbarHost, session, {
+  onExecute: () => field.focus(),
+  onHelp: () => field.showHelp(),
+});
+```
+
+Built-in toolbars connect automatically. A separate toolbar without `onHelp` omits its help button instead of guessing which field to target. F1 still works in the field. Destroy the field to remove any open help. The help UI does not read the OS clipboard. Key remapping is not part of this API.

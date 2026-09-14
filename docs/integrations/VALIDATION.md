@@ -1,6 +1,14 @@
 # Validation record
 
-Development preview. Latest recorded run: 2026-09-09. This record covers the
+## Continuous editing milestone — workspace, 2026-09-13
+
+The current local core candidate passed the shared continuous suite in all nine host demos (16 host/mode combinations, plus React standalone). The complete suite has 17 cases / 532 checkpoints. It verifies nested input, selection wrapping, radical conversion, matrix entry, multiple Undo/Redo sequences, copy/delete/paste history, Apply/Cancel, save/reload/restore, reopened editing and active-draft read-only transitions. Inline hosts also verify prose continuation and Enter completion.
+
+[Host-chain evidence](../../output/playwright/editing-scenarios/2026-09-13T12-00-17-841Z/REPORT.md). The core validation record contains the other editing and geometry suites. This run uses workspace source; it does not replace the dated packed-consumer checks below or prove npm publication.
+
+Editor.js has no configured host history and cannot save while read-only; saved data is compared after re-enabling. Read-only changes are triggered without pointer blur to isolate them from intentional Apply-on-blur behavior. TinyMCE uses its inline host configuration, CKEditor uses ClassicEditor, and Gutenberg uses the standalone provider. Other configurations, actual OS clipboard/IME and other browser engines remain outside this run.
+
+Development preview. Latest recorded run: 2026-09-13. This record covers the
 environments and workflows below, not a cross-browser or commercial compatibility
 guarantee.
 

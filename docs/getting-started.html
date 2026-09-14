@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Learn to edit · Barocss Math Editor</title><meta name="description" content="Learn to edit for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Examples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Frameworks</a><a href="/integrations/?lang=en" data-site-label="integrations">Document editors</a>
+      <a href="/text-editors.html?lang=en" data-site-label="textEditors">Code editors</a><a href="/layouts.html?lang=en" data-site-label="layouts">Editor layouts</a></div></details>
+      <a href="/?lang=en#install" data-site-label="install">Installation</a><a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/getting-started.html" aria-current="page">Learn to edit</a><a href="/docs/clipboard.html" >Copy &amp; paste</a><a href="/docs/keyboard.html" >Keyboard reference</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Text editors</h2><a href="/docs/text-editors.html" >LaTeX in text editors</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="learn-to-edit-a-formula">Learn to edit a formula</h1>
+<p>Start with <a href="/#tutorial">the five practice exercises</a>. They use a separate field and leave your playground formula unchanged. Each exercise checks the resulting formula model. You can reset an exercise, go back or close the practice area.</p>
+<h2 id="make-editing-comfortable">Make editing comfortable</h2>
+<p>If a fraction or nested formula feels small, choose <strong>Math size → 26px</strong> above
+the playground. This enlarges the formula while keeping the relative sizes of
+the base, exponent and radicand. A complex denominator makes the fraction taller;
+it does not automatically enlarge the numerator.</p>
+<p>편집할 분수나 중첩 수식이 작게 느껴지면 위의 <strong>수식 크기 → 26px</strong>를 선택하세요.
+수식 내부의 크기 비율은 유지됩니다. 분모가 복잡해져도 분자 글자가 자동으로
+커지지는 않습니다. 편집 크기는 저장되는 LaTeX와 미리보기 이미지 크기를 바꾸지 않습니다.</p>
+<p>Nested editing text has a 14px minimum. In a text-editor visual popup, use
+<strong>125%</strong> or <strong>150%</strong> zoom for a larger editing view. Editing size does not change
+saved LaTeX or the preview/export size. Embedded apps can configure a larger
+minimum and must allow the equation's line height to grow; see <a href="/docs/styling.html">Styling</a>.</p>
+<h2 id="1-write-then-correct">1. Write, then correct</h2>
+<p>Type <code>x+1</code>. Click the number and change it to <code>2</code>. Use Left/Right to move the caret. A held arrow key should keep moving. Undo and Redo let you inspect changes without starting again.</p>
+<h2 id="2-build-structure-from-existing-input">2. Build structure from existing input</h2>
+<p>Type <code>a+b</code>, then select it by dragging or using Shift+arrows. Press <code>/</code>. The selected expression becomes the numerator, and the denominator receives the caret. Type <code>2</code>.</p>
+<p>You do not have to choose a fraction before writing its contents. Selected math can also be wrapped with <code>(</code>, <code>[</code>, <code>{</code>, <code>|</code>, <code>^</code> and <code>_</code>.</p>
+<h2 id="3-add-a-power-or-subscript">3. Add a power or subscript</h2>
+<p>Select <code>x</code>, press <code>^</code>, then type <code>2</code>. Use <code>_</code> instead when you need a subscript. Use Tab to move between editable slots. The editor preserves the distinction between a base and its scripts.</p>
+<h2 id="4-change-an-existing-structure">4. Change an existing structure</h2>
+<p>Click inside a square root. Press Alt+Down to open suggestions. Choose Change to Indexed root and press Enter. The new index is selected; type <code>3</code> to replace it. The radicand stays intact.</p>
+<p>The same suggestion area offers supported bracket transformations when the caret is inside a bracketed expression. You do not need a toolbar. Escape closes the list; Undo reverses a conversion.</p>
+<h2 id="5-bring-in-existing-latex">5. Bring in existing LaTeX</h2>
+<p>Put the caret after a formula. Press Alt+Shift+V, enter <code>+c^2</code>, then Ctrl/Cmd+Enter. This adds parsed LaTeX at the caret. Ordinary paste inserts text or preserved editor clipboard data; it does not automatically interpret LaTeX.</p>
+<p>Read <a href="/docs/clipboard.html">copy and paste</a> before transferring formulas between applications. The site can also copy/download a PNG from its rendering preview. A PNG cannot be reopened as an editable formula.</p>
+<h2 id="keep-these-controls-nearby">Keep these controls nearby</h2>
+<ul>
+<li><strong>F1:</strong> keyboard and clipboard help inside the field.</li>
+<li><strong>Alt+Down:</strong> suggestions and available transformations.</li>
+<li><strong>Tab / Shift+Tab:</strong> move between slots.</li>
+<li><strong>Ctrl/Cmd+Z:</strong> undo the last edit.</li>
+</ul>
+<p>The <a href="/docs/keyboard.html">keyboard reference</a> explains selection, Enter and deletion rules. The <a href="/docs/latex-guide.html">LaTeX guide</a> covers more notation. Developers embedding a field can continue with <a href="/docs/adapters.html">framework guides</a>.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/index.html"><small>Previous</small>Introduction </a><a href="/docs/clipboard.html"><small>Next</small>Copy &amp; paste →</a></nav><footer>Barocss Math Editor core · 0.6.1 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#make-editing-comfortable">Make editing comfortable</a><a class="h2" href="#1-write-then-correct">1. Write, then correct</a><a class="h2" href="#2-build-structure-from-existing-input">2. Build structure from existing input</a><a class="h2" href="#3-add-a-power-or-subscript">3. Add a power or subscript</a><a class="h2" href="#4-change-an-existing-structure">4. Change an existing structure</a><a class="h2" href="#5-bring-in-existing-latex">5. Bring in existing LaTeX</a><a class="h2" href="#keep-these-controls-nearby">Keep these controls nearby</a></nav></aside></div></body></html>

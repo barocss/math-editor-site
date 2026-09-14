@@ -1,5 +1,9 @@
 # Integration product roadmap
 
+## Completed local editing milestone — 2026-09-13
+
+All nine current host demos passed the continuous editing chain with the current core candidate. [Validation](VALIDATION.md) records host persistence, history, read-only and inline-boundary scope. The shared gate also checks standalone/framework behavior and KaTeX geometry. This closes the current local editing milestone, not compatibility certification or publication. The broader stages below retain their own criteria.
+
 The developer SDK now has development-preview adapters for Tiptap, ProseMirror,
 Lexical, Editor.js, TinyMCE, CKEditor 5, Quill, Slate, and WordPress Gutenberg. The common math editor remains
 the source of truth for notation, parsing, and draft editing. Each adapter owns

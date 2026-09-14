@@ -1,5 +1,53 @@
 # @barocss/math-editor
 
+## 0.6.1
+
+### Patch Changes
+
+- Keep fraction terms at their resolved TeX size inside norms, absolute values,
+  parentheses and roots. Use the same font size for passive glyphs, active inputs
+  and measurement spans, including nested fractions and explicit fraction styles.
+- Remove extra inline line-box descent from fence bodies so nested parentheses,
+  brackets and norms keep their contents aligned during display and editing.
+  Preserve fence height for fractions and other tall bodies.
+- Size radical glyphs from the containing mathematical style and editing minimum.
+  Remove anonymous line-box descent and inactive boundary height from radicands,
+  so roots in exponents stay smaller than the base while tall contents still fit.
+- Keep nested editing glyphs and inputs at a readable 14px minimum. Expose
+  `--me-min-font-size` for host configuration, with 0px preserving TeX size ratios.
+  Reserve line space for elevated scripts in React and native DOM editors so
+  larger nested math remains inside the editing surface without changing LaTeX.
+- Add Ctrl+Left/Right (Option on macOS) to move by lexical units and whole math
+  structures. Add Shift to extend or shrink a selection. Apply the same behavior
+  in React and native DOM editors without changing document history. Move matrix
+  column deletion to Alt+Shift+Backspace to avoid a selection shortcut conflict.
+
+## 0.6.0
+
+### Minor Changes
+
+- Complete forward structural deletion and next-line joining, preserving retained content and one-step Undo. Keep the preferred horizontal caret position across vertical movement in React and native DOM. Reject malformed structured clipboard data without falling back to destructive plain-text insertion, and reject multiline paste in React single-line fields. Share Enter policy so Shift+Enter bypasses suggestions and follows row/newline rules.
+
+  Add catalog-wide populated/empty deletion scenarios, structured and matrix clipboard checks, vertical/line editing, keyboard transformations, framework lifecycle and option updates, and extended host persistence/read-only scenarios. Provide a repository-owned browser runner and CI workflow alongside existing KaTeX comparisons.
+
+  Constrain inline surfaces to their host width so long formulas remain horizontally scrollable.
+
+- Wrap selected math immediately with opening parentheses, brackets, braces, absolute-value bars, fraction slash, superscript and subscript keys. Preserve the selected content and move to the denominator or script slot for continued input. Share the behavior across React and native DOM fields, including inline adapters, and retain existing literal-text and unselected-input behavior.
+
+  Add keyboard, native-selection and drag regression scenarios with Undo/Redo checks, plus block and inline KaTeX rendering comparisons for the resulting notation.
+
+  Correct inline fraction term sizes and compact fraction row spacing to match their resolved mathematical style. Keep active inputs and passive glyphs aligned.
+
+- Add localized keyboard and clipboard help in React and native DOM fields, available from the toolbar or F1 in a focused field. Preserve the formula and restore focus when help closes. Include beginner, clipboard and keyboard guides, and link to independent, model-checked practice exercises on the demo site.
+
+  Expose `showHelp()` on DOM and React handles and `onHelp` for an independently mounted toolbar, so help targets an explicit field. Restore native selection as well as focus after help closes.
+
+### Patch Changes
+
+- Center the keyboard-selected suggestion within the available list space in React, DOM and text-source editors. Clamp scrolling at list boundaries, account for sticky source hints, and scroll only the suggestion list so the host document stays in place.
+- Read the native input selection before processing keydown in React and DOM editors. Held arrow keys now cross token and structure boundaries without waiting for keyup or a delayed selection event. Add repeated-keydown browser coverage for both directions, fraction slots, Shift selection, continued typing and Undo.
+- Allow fixed suggestion menus to use viewport space outside compact dialogs. Constrain menus by actual CSS clipping boundaries, not dialog semantics, while retaining host action-control avoidance.
+
 ## 0.5.0
 
 ### Minor Changes

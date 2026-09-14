@@ -1,3 +1,5 @@
+@import "./theme.css";
+
 /* Site navigation is independent of formula themes and host editor SDK styles. */
 .math-site-header {
   display: block;

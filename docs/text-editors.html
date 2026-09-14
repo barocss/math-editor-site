@@ -1,0 +1,228 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>LaTeX in text editors · Barocss Math Editor</title><meta name="description" content="LaTeX in text editors for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Examples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Frameworks</a><a href="/integrations/?lang=en" data-site-label="integrations">Document editors</a>
+      <a href="/text-editors.html?lang=en" data-site-label="textEditors">Code editors</a><a href="/layouts.html?lang=en" data-site-label="layouts">Editor layouts</a></div></details>
+      <a href="/?lang=en#install" data-site-label="install">Installation</a><a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/getting-started.html" >Learn to edit</a><a href="/docs/clipboard.html" >Copy &amp; paste</a><a href="/docs/keyboard.html" >Keyboard reference</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Text editors</h2><a href="/docs/text-editors.html" aria-current="page">LaTeX in text editors</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="latex-editing-in-text-editors">LaTeX editing in text editors</h1>
+<p>The browser text-editor adapters support a visual popup and optional LaTeX source completion with a formula preview. They do not replace the host's text model. WGSL and GLSL expression editing is a separate project.</p>
+<h2 id="available-implementations">Available implementations</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Package or extension</th>
+<th>Editing surface</th>
+<th>Lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@barocss/math-editor-text</code></td>
+<td>Shared range scanner and DOM popup</td>
+<td>Explicit controller cleanup</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor-codemirror6</code></td>
+<td>Caret popup, Alt+Enter</td>
+<td>CodeMirror 6 view plugin</td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor-codemirror5</code></td>
+<td>Caret popup, Alt+Enter</td>
+<td>Attachment with <code>destroy()</code></td>
+</tr>
+<tr>
+<td><code>@barocss/math-editor-monaco</code></td>
+<td>Caret popup, Alt+Enter</td>
+<td>Attachment and editor disposal</td>
+</tr>
+<tr>
+<td>Barocss Math Editor for VS Code</td>
+<td>Webview beside the document</td>
+<td>VS Code extension lifecycle</td>
+</tr>
+</tbody>
+</table></div><p><a href="../text-editors.html">Open the browser examples</a>. The three examples import individual workspace packages directly from source. Published package exports target their own build artifacts. The new packages start at 0.1.0; npm and Marketplace publication are separate steps.</p>
+<h2 id="codemirror-6">CodeMirror 6</h2>
+<pre><code class="language-sh">npm install @barocss/math-editor @barocss/math-editor-text @barocss/math-editor-codemirror6 @codemirror/state @codemirror/view @codemirror/commands
+</code></pre>
+<pre><code class="language-ts">import { mathEditor } from '@barocss/math-editor-codemirror6';
+import '@barocss/math-editor/style.css';
+import '@barocss/math-editor-text/style.css';
+
+// Add to your EditorState extensions alongside the host's history extension.
+const extension = mathEditor({
+  locale: 'en',
+  syntax: 'markdown',
+  onError: message =&gt; { statusElement.textContent = message; },
+});
+</code></pre>
+<p>For CodeMirror 5 and Monaco, import <code>attachMathEditor</code> from the corresponding package and pass the host editor instance. The return value has <code>open()</code> and <code>destroy()</code>. CodeMirror 5 also has <code>refresh()</code>; call it after changing host options such as read-only mode. CodeMirror 6 exports the <code>openMathEditor(view)</code> command for custom controls. CodeMirror 5 uses its own package because its API differs from CodeMirror 6. Monaco applications retain their normal worker configuration.</p>
+<h2 id="direct-latex-input">Direct LaTeX input</h2>
+<p><a href="../text-editors.html?mode=source">Try source completion</a>. Choose <strong>LaTeX completion</strong> on the example page. The visual popup remains the default for existing integrations.</p>
+<p>Pass <code>sourceEditing</code> to the CodeMirror 5, CodeMirror 6, or Monaco adapter. An empty object enables completion without a preview. To show a preview, install KaTeX separately and supply a renderer:</p>
+<pre><code class="language-sh">npm install katex
+</code></pre>
+<pre><code class="language-ts">import katex from 'katex';
+import 'katex/dist/katex.min.css';
+import '@barocss/math-editor/style.css';
+import '@barocss/math-editor-text/style.css';
+
+const options = {
+  locale: 'en',
+  sourceEditing: {
+    renderPreview(latex, element, displayMode) {
+      katex.render(latex, element, {
+        displayMode,
+        throwOnError: true,
+        trust: false,
+        maxExpand: 1000,
+      });
+    },
+  },
+};
+// CodeMirror 6: mathEditor(options), included in EditorState extensions.
+// CodeMirror 5 / Monaco: attachMathEditor(editor, options).
+</code></pre>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Action</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type <code>\frac</code>, <code>\sqrt</code>, or another command inside a detected math range</td>
+<td>Show localized catalog suggestions below the caret</td>
+</tr>
+<tr>
+<td>Place the caret after <code>a</code>, <code>4ab</code>, or <code>x_i^2</code></td>
+<td>Offer fractions, roots, scripts and fences that retain the operand</td>
+</tr>
+<tr>
+<td>Select a complete expression inside one math range</td>
+<td>Preview the selection and offer source-preserving wrappers after drag release</td>
+</tr>
+<tr>
+<td>Ctrl+Space inside a math range</td>
+<td>Open the catalog without typing a command</td>
+</tr>
+<tr>
+<td>Up / Down with suggestions open</td>
+<td>Choose a candidate without moving the source caret</td>
+</tr>
+<tr>
+<td>Enter or Tab after choosing a suggestion</td>
+<td>Apply the selected command or operand wrapper and enter its next argument</td>
+</tr>
+<tr>
+<td>Tab / Shift+Tab after insertion</td>
+<td>Move through template arguments; this takes priority over operand wrapping suggestions</td>
+</tr>
+<tr>
+<td>Tab after the last argument</td>
+<td>Exit the inserted template</td>
+</tr>
+<tr>
+<td>Escape</td>
+<td>Dismiss source tools without changing source or collapsing its selection</td>
+</tr>
+<tr>
+<td>Alt+Enter</td>
+<td>Open the existing visual editor</td>
+</tr>
+</tbody>
+</table></div><p>The preview sits above the caret when space permits. Incomplete syntax displays a short status instead of changing the source or blocking typing. The renderer is optional and is owned by the host. It must render only trusted UI; when using KaTeX, keep <code>trust: false</code> for document content.</p>
+<p>Completion uses the math-editor catalog and serializer to create an <strong>isolated insertion</strong>. It does not parse or normalize the surrounding formula. For example, <code>\rightarrow</code> suggestions may insert the catalog's equivalent <code>\to </code> spelling. A trailing space terminates a control word so it cannot absorb the following variable. Operand wrapping fills a catalog template with the original variable/number run and simple scripts, without reserializing the source. For example, <code>4ab</code> becomes <code>\frac{4ab}{}</code> and the caret enters the denominator. Existing-structure transformations remain visual-editor actions.</p>
+<p>Automatic operand and selection menus do not preselect an action. Until you choose an item with Up/Down, Enter and Tab retain their normal host behavior. Typing a command or explicitly opening Ctrl+Space still preselects a completion.</p>
+<p>Selection mode shows the selected source and keyboard hints in a fixed menu header. Up/Down keeps the native selection; Enter/Tab or a click wraps exactly that range. Shift+Arrow continues to adjust the selection. The shared core parser validates selected expressions without serializing them. Split command names, unbalanced groups, literal text, cross-formula selections and ordinary document text do not get math wrapping suggestions.</p>
+<p>A position-aware lexical scan distinguishes command names, operand spans, comments, and braced text/environment names. Completing <code>\fr|ac{a}{b}</code> replaces the complete command name while preserving the arguments. Text and comments do not offer math wrappers. This is not a full TeX semantic parser: custom macros and arbitrary compound-expression boundaries are not inferred. Source mode accepts whitespace beside paired delimiters, including the trailing space inserted after a symbol command. The default visual-import scanner remains strict.</p>
+<p>The shared dropdown keeps focus in the host and applies changes through the host edit/history API. It handles navigation keys only while its suggestions or template navigation are active. IME composition suspends suggestions. Read-only state, selection outside the math range, and host disposal remove the tools. Multi-caret completion, arbitrary TeX macro completion, and full snippet-language syntax are not supported. Argument navigation ends after leaving the template, undoing its insertion, or replacing across its argument boundaries.</p>
+<p><code>latexCompletions(query, locale)</code> is also exported from <code>@barocss/math-editor-text</code>. Each result includes <code>id</code>, <code>label</code>, <code>glyph</code>, <code>insert</code>, and UTF-16 <code>stops</code> relative to <code>insert</code>. A host can use this data in its own native completion provider instead of enabling the supplied dropdown. The <code>messages</code> option includes <code>suggestions</code>, <code>preview</code>, and <code>incomplete</code>; suggestion labels use the core locale catalog.</p>
+<p>This source-completion mode applies to the three browser adapters. The VS Code extension currently retains its separate visual Webview workflow.</p>
+<h2 id="user-workflow">User workflow</h2>
+<ol>
+<li>Place the caret within <code>$…$</code>, <code>$$…$$</code>, <code>\(…\)</code>, or <code>\[…\]</code>. Alternatively, select a bare LaTeX expression.</li>
+<li>Press Alt+Enter (Option+Enter on macOS) or click <strong>Edit formula</strong>.</li>
+<li>Edit the draft. Math suggestions and clipboard controls operate inside the popup.</li>
+<li>Apply to replace the formula contents. Cancel to preserve the original.</li>
+<li>Continue in the host text editor. Undo once to reverse the applied edit.</li>
+</ol>
+<p>Opening the affordance never steals focus. An unchanged Apply does not normalize the original or add an undo entry. Changed formulas use the core serializer, which can normalize commands and whitespace inside the edited range. Existing dollar/backslash delimiters and surrounding prose remain intact. Leading/trailing whitespace inside the delimiters is preserved, including blank lines and indentation. For example, <code>$$\nx+1\n$$</code> becomes <code>$$\ny+1\n$$</code> after changing <code>x</code> to <code>y</code>. Newly serialized rows retain the source CRLF/LF convention; one-line display formulas remain one line.</p>
+<p>While the popup is open, move the source caret to another formula to switch its contents. This does not take focus from the source editor. Moving outside math hides the popup; entering another formula shows it again. Unapplied drafts survive formula switches while the source version is unchanged. Apply changes only the current formula. If other drafts remain, Apply or Cancel first shows a warning. The explicit discard button finishes the session; returning to another formula keeps its draft. Repeated Enter/Escape does not confirm discarding.</p>
+<h2 id="source-safety-and-limitations">Source safety and limitations</h2>
+<p>The default scanner skips ordinary Markdown code fences, inline code, indented code lines, and HTML comments. LaTeX mode skips percent line comments and common <code>\verb</code>, <code>verbatim</code>, <code>lstlisting</code>, and <code>minted</code> literal constructs. It supports a bounded set of equation, alignment, cases, and matrix environments. Detection is followed by the core LaTeX parser; unsupported syntax cannot overwrite the source. Complete environment ranges can be normalized when edited.</p>
+<p>The scanner is not a full Markdown/TeX parser. Hosts with custom macros, custom literal environments, or nested Markdown containers should provide <code>resolveRange(source, selection)</code> using their syntax tree. A return value of <code>undefined</code> disables automatic fallback for that position. Source offsets are UTF-16 positions.</p>
+<p>Any source edit or document switch invalidates an open draft, including edit-then-undo. External changes while editing in the popup still block Apply. Returning to the source caret reloads its current formula from the new source. Old-version drafts are not restored or rebased. Read-only documents reject Apply. Multiple selections are rejected. Multi-caret batch editing and concurrent-edit rebasing are not implemented.</p>
+<h2 id="localization-and-styling">Localization and styling</h2>
+<p><code>locale</code> controls the math editor. The popup includes English and Korean dictionaries. <code>messages</code> overrides individual popup labels for additional locales. Register core locale messages separately for mathematical suggestions and controls.</p>
+<p>The popup exposes <code>--me-text-background</code>, <code>--me-text-foreground</code>, <code>--me-text-border</code>, <code>--me-text-muted</code>, <code>--me-text-accent</code>, and <code>--me-text-on-accent</code>. Import both the core and text popup styles.</p>
+<h2 id="vs-code">VS Code</h2>
+<p>The extension supplies <strong>Barocss: Edit Formula</strong> and <strong>Barocss: Insert Formula</strong>. It uses a Webview and the public VS Code document API, not the internal Monaco DOM. In Markdown and LaTeX documents, Alt+Enter opens editing; users can change that binding in VS Code.</p>
+<p>Build and package from the workspace:</p>
+<pre><code class="language-sh">pnpm --filter barocss-math-editor type-check
+pnpm --filter barocss-math-editor package
+</code></pre>
+<p>Install the generated VSIX through <strong>Extensions: Install from VSIX</strong>. Desktop Extension Host validation and Marketplace publication must be checked separately from browser adapter tests.</p>
+<h2 id="validation-scenarios">Validation scenarios</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Scenario</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Caret enters a formula</td>
+<td>Edit affordance appears without taking focus</td>
+</tr>
+<tr>
+<td>Apply <code>x</code> → <code>y</code></td>
+<td>Only the formula contents change</td>
+</tr>
+<tr>
+<td>Undo / Redo</td>
+<td>One host history step restores/reapplies the edit</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>Original text and history remain unchanged</td>
+</tr>
+<tr>
+<td>Apply unchanged draft</td>
+<td>Exact original source remains</td>
+</tr>
+<tr>
+<td>Source edited while popup is open</td>
+<td>Conflict shown; newer source preserved</td>
+</tr>
+<tr>
+<td>Unsupported command</td>
+<td>Error shown; source preserved</td>
+</tr>
+<tr>
+<td>Caret in Markdown code</td>
+<td>No automatic formula popup</td>
+</tr>
+<tr>
+<td>Read-only host</td>
+<td>No source edit allowed</td>
+</tr>
+<tr>
+<td>Host destroyed</td>
+<td>Popup and listeners removed</td>
+</tr>
+</tbody>
+</table></div><p>Browser scenario source: <code>apps/math-text-demo/test/editing.browser.js</code>. Range tests: <code>packages/math-editor-text/test/ranges.test.ts</code>.</p>
+<p>When wrapping a compound source expression in an exponent, visible parentheses preserve its scope: selecting <code>a+b</code> inserts <code>{\left(a+b\right)}^{}</code>. A single variable, number, or already grouped structure does not receive redundant parentheses. Source text inside the base remains unchanged.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/integrations/wordpress.html"><small>Previous</small>WordPress plugin ZIP </a><a href="/docs/api-session.html"><small>Next</small>Session &amp; DOM API →</a></nav><footer>Barocss Math Editor core · 0.6.1 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#available-implementations">Available implementations</a><a class="h2" href="#codemirror-6">CodeMirror 6</a><a class="h2" href="#direct-latex-input">Direct LaTeX input</a><a class="h2" href="#user-workflow">User workflow</a><a class="h2" href="#source-safety-and-limitations">Source safety and limitations</a><a class="h2" href="#localization-and-styling">Localization and styling</a><a class="h2" href="#vs-code">VS Code</a><a class="h2" href="#validation-scenarios">Validation scenarios</a></nav></aside></div></body></html>

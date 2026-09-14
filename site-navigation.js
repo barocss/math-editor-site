@@ -3,9 +3,9 @@ const escape = (value) =>
   String(value).replace(
     /[&<>"']/g,
     (char) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
         char
-      ])
+      ],
   );
 export function renderSiteNavigation({
   locale = "en",
@@ -18,39 +18,34 @@ export function renderSiteNavigation({
   const current = (id) => (active === id ? ' aria-current="page"' : "");
   const link = (id, target) =>
     `<a href="${escape(target)}" data-site-label="${id}"${current(id)}>${escape(
-      text[id]
+      text[id],
     )}</a>`;
   return `<header class="math-site-header"><div class="math-site-header-inner">
     <a class="math-site-brand" href="${escape(
-      href("")
+      href(""),
     )}">barocss <span>/ math</span></a>
     <nav class="math-site-links" aria-label="${escape(text.main)}">
-      ${link("playground", href("", "#playground"))}${link(
-    "install",
-    href("", "#install")
-  )}
-      ${link("integrations", href("integrations/"))}
+      ${link("playground", href("", "#playground"))}
       <details class="math-site-samples"><summary data-site-label="samples"${
-        ["adapters", "layouts"].includes(active) ? ' data-active="true"' : ""
+        ["adapters", "integrations", "layouts", "textEditors"].includes(active)
+          ? ' data-active="true"'
+          : ""
       }>${escape(text.samples)}</summary><div>
-        ${link("adapters", href("adapters.html"))}${link(
-    "layouts",
-    href("layouts.html")
-  )}
-      </div></details>
-      ${link(
+        ${link("adapters", href("adapters.html"))}${link("integrations", href("integrations/"))}
+      ${link("textEditors", href("text-editors.html"))}${link("layouts", href("layouts.html"))}</div></details>
+      ${link("install", href("", "#install"))}${link(
         "docs",
-        href("docs/index.html")
+        href("docs/index.html"),
       )}<a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
     </nav>
     <label class="math-site-language"><span data-site-label="language">${escape(
-      text.language
+      text.language,
     )}</span><select aria-label="Language / 언어" data-site-locale>
       <option value="ko"${
         locale === "ko" ? " selected" : ""
       }>한국어</option><option value="en"${
-    locale === "en" ? " selected" : ""
-  }>English</option>
+        locale === "en" ? " selected" : ""
+      }>English</option>
     </select></label>
   </div></header>`;
 }

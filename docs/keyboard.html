@@ -1,0 +1,141 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Keyboard reference · Barocss Math Editor</title><meta name="description" content="Keyboard reference for Barocss Math Editor."><link rel="stylesheet" href="/docs.css?v=cobalt-2"><link rel="stylesheet" href="/site-navigation.css"></head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="math-site-header"><div class="math-site-header-inner">
+    <a class="math-site-brand" href="/?lang=en">barocss <span>/ math</span></a>
+    <nav class="math-site-links" aria-label="Main navigation">
+      <a href="/?lang=en#playground" data-site-label="playground">Playground</a>
+      <details class="math-site-samples"><summary data-site-label="samples">Examples</summary><div>
+        <a href="/adapters.html?lang=en" data-site-label="adapters">Frameworks</a><a href="/integrations/?lang=en" data-site-label="integrations">Document editors</a>
+      <a href="/text-editors.html?lang=en" data-site-label="textEditors">Code editors</a><a href="/layouts.html?lang=en" data-site-label="layouts">Editor layouts</a></div></details>
+      <a href="/?lang=en#install" data-site-label="install">Installation</a><a href="/docs/index.html?lang=en" data-site-label="docs" aria-current="page">Guides</a><a href="https://www.npmjs.com/package/@barocss/math-editor">npm ↗</a>
+    </nav>
+    <label class="math-site-language"><span data-site-label="language">Language</span><select aria-label="Language / 언어" data-site-locale>
+      <option value="ko">한국어</option><option value="en" selected>English</option>
+    </select></label>
+  </div></header>
+<div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/getting-started.html" >Learn to edit</a><a href="/docs/clipboard.html" >Copy &amp; paste</a><a href="/docs/keyboard.html" aria-current="page">Keyboard reference</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Text editors</h2><a href="/docs/text-editors.html" >LaTeX in text editors</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" >Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
+<main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="keyboard-reference">Keyboard reference</h1>
+<p>Open <strong>Keyboard &amp; clipboard help</strong> from the math toolbar, or press <strong>F1 while the formula has focus</strong>. This also works in a toolbar-free inline field. Some keyboards require Fn+F1. Close help to return to the previously focused input without editing the formula.</p>
+<p>Use Cmd on macOS and Ctrl on Windows/Linux. Alt is Option on macOS. The host and operating system can reserve keys; the field only handles its shortcuts while it has focus.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Context</th>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active input</td>
+<td>Left / Right</td>
+<td>Move the caret; repeated keydown continues across token and slot boundaries</td>
+</tr>
+<tr>
+<td>Active input, no suggestion menu</td>
+<td>Up / Down</td>
+<td>Move between supported structural slots or lines; repeated vertical movement retains the preferred column</td>
+</tr>
+<tr>
+<td>Editable slots</td>
+<td>Tab / Shift+Tab</td>
+<td>Next / previous slot</td>
+</tr>
+<tr>
+<td>Formula selection</td>
+<td>Shift+Left / Right</td>
+<td>Extend or shrink the selected range</td>
+</tr>
+<tr>
+<td>Active formula</td>
+<td>Ctrl+Left / Right (Option+Left / Right on macOS)</td>
+<td>Move by text units or whole math structures</td>
+</tr>
+<tr>
+<td>Active formula</td>
+<td>Ctrl+Shift+Left / Right (Option+Shift+Left / Right on macOS)</td>
+<td>Extend or shrink selection by text units or structures</td>
+</tr>
+<tr>
+<td>Matrix cell</td>
+<td>Alt+Shift+Backspace</td>
+<td>Delete the current column; Undo restores it</td>
+</tr>
+<tr>
+<td>Matrix cell</td>
+<td>Alt+Shift+Up</td>
+<td>Delete the current row; Undo restores it</td>
+</tr>
+<tr>
+<td>Nonempty math selection</td>
+<td><code>(</code>, <code>[</code>, <code>{</code>, <code>|</code></td>
+<td>Wrap in parentheses, brackets, braces or absolute value</td>
+</tr>
+<tr>
+<td>Nonempty math selection</td>
+<td><code>/</code></td>
+<td>Use the selection as numerator; enter the denominator next</td>
+</tr>
+<tr>
+<td>Nonempty math selection</td>
+<td><code>^</code> / <code>_</code></td>
+<td>Use the selection as base; enter the exponent or subscript next</td>
+</tr>
+<tr>
+<td>Active formula</td>
+<td>Alt+Down</td>
+<td>Open suggestions, including transformations for the nearest supported structure</td>
+</tr>
+<tr>
+<td>Suggestions open</td>
+<td>Up / Down, Enter</td>
+<td>Choose and apply a suggestion</td>
+</tr>
+<tr>
+<td>Suggestions open</td>
+<td>Escape</td>
+<td>Dismiss suggestions before returning to ordinary navigation</td>
+</tr>
+<tr>
+<td>Active formula</td>
+<td>Ctrl/Cmd+Z / Ctrl/Cmd+Shift+Z</td>
+<td>Undo / Redo</td>
+</tr>
+<tr>
+<td>Selected range</td>
+<td>Ctrl/Cmd+C / X</td>
+<td>Copy / Cut</td>
+</tr>
+<tr>
+<td>Active formula</td>
+<td>Ctrl/Cmd+V</td>
+<td>Paste available editor data or literal text</td>
+</tr>
+<tr>
+<td>Active formula</td>
+<td>Alt+Shift+V</td>
+<td>Open Paste as LaTeX</td>
+</tr>
+<tr>
+<td>LaTeX paste panel</td>
+<td>Ctrl/Cmd+Enter / Escape</td>
+<td>Insert / close the panel</td>
+</tr>
+<tr>
+<td>Active formula</td>
+<td>F1</td>
+<td>Open help</td>
+</tr>
+<tr>
+<td>Context footer available</td>
+<td>F6</td>
+<td>Move focus between the input and contextual controls</td>
+</tr>
+</tbody>
+</table></div><h2 id="enter-depends-on-context">Enter depends on context</h2>
+<p>An active suggestion normally receives Enter. Escape dismisses it first if you want a different action. Operand-only suggestions require navigation before Enter applies them, so ordinary Enter does not unexpectedly wrap an operand.</p>
+<p>In a block field, Enter follows the configured newline/commit policy. Shift+Enter bypasses suggestion acceptance and creates a row in a grid or a line at the outer block level. Inline fields do not create top-level formula lines. Their completion and boundary-exit behavior belongs to the embedding host.</p>
+<h2 id="delete-depends-on-context">Delete depends on context</h2>
+<p>Backspace/Delete removes a selection. At a structure boundary it can unwrap retained contents. An empty slot can remove or reduce its enclosing structure. Populated grids require their grid selection/deletion policy so cells are not silently flattened. At the end of a top-level line, Delete joins the following line; Backspace at the next line's start joins backward. Undo restores the change.</p>
+<p>The direct wrapping keys apply only to a nonempty math selection. Literal text, matrix rectangles and multiline ranges retain their own rules. See <a href="/docs/latex-guide.html#select-replace-and-wrap">selection editing</a>, <a href="/docs/clipboard.html">copy and paste</a> and <a href="/#tutorial">practice exercises</a>.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/clipboard.html"><small>Previous</small>Copy &amp; paste </a><a href="/docs/latex-guide.html"><small>Next</small>Writing &amp; editing LaTeX →</a></nav><footer>Barocss Math Editor core · 0.6.1 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#enter-depends-on-context">Enter depends on context</a><a class="h2" href="#delete-depends-on-context">Delete depends on context</a></nav></aside></div></body></html>

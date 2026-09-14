@@ -1,5 +1,15 @@
 # @barocss/math-editor
 
+## 0.7.0
+
+### Minor Changes
+
+- Make ^, \_ and / create powers, subscripts and fractions immediately during visual typing, using the preceding operand or selection and focusing the next slot. Preserve adjacent structures, combine opposite scripts on the same base, and retain Undo/Redo. Update keyboard help and add continuous typing and KaTeX placement checks for React and DOM editors.
+
+### Patch Changes
+
+- Keep combined superscripts and subscripts aligned to the start of their shared column. Growing one script no longer shifts the other horizontally. Add live typing and KaTeX horizontal-alignment regression checks for React and DOM editors.
+
 ## 0.6.1
 
 ### Patch Changes

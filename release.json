@@ -1,46 +1,46 @@
 {
   "package": "@barocss/math-editor",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "source": "workspace-source",
   "publicationChecked": false,
-  "builtAt": "2026-09-14T04:14:06.944Z",
+  "builtAt": "2026-09-14T09:26:40.437Z",
   "integrations": {
     "packages": [
       {
         "name": "@barocss/math-editor-tiptap",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-prosemirror",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-lexical",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-editorjs",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-tinymce",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-ckeditor",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-quill",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-slate",
-        "version": "1.0.1"
+        "version": "1.0.2"
       },
       {
         "name": "@barocss/math-editor-gutenberg",
-        "version": "1.0.1"
+        "version": "1.0.2"
       }
     ],
     "status": "workspace-source-build",

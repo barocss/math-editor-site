@@ -81,6 +81,16 @@
 <td>Use the selection as base; enter the exponent or subscript next</td>
 </tr>
 <tr>
+<td>Caret after an operand</td>
+<td><code>^</code> / <code>_</code></td>
+<td>Create a power/subscript and enter its empty script slot</td>
+</tr>
+<tr>
+<td>Caret after an operand</td>
+<td><code>/</code></td>
+<td>Use the preceding operand as numerator and enter the denominator</td>
+</tr>
+<tr>
 <td>Active formula</td>
 <td>Alt+Down</td>
 <td>Open suggestions, including transformations for the nearest supported structure</td>
@@ -136,6 +146,6 @@
 <p>In a block field, Enter follows the configured newline/commit policy. Shift+Enter bypasses suggestion acceptance and creates a row in a grid or a line at the outer block level. Inline fields do not create top-level formula lines. Their completion and boundary-exit behavior belongs to the embedding host.</p>
 <h2 id="delete-depends-on-context">Delete depends on context</h2>
 <p>Backspace/Delete removes a selection. At a structure boundary it can unwrap retained contents. An empty slot can remove or reduce its enclosing structure. Populated grids require their grid selection/deletion policy so cells are not silently flattened. At the end of a top-level line, Delete joins the following line; Backspace at the next line's start joins backward. Undo restores the change.</p>
-<p>The direct wrapping keys apply only to a nonempty math selection. Literal text, matrix rectangles and multiline ranges retain their own rules. See <a href="/docs/latex-guide.html#select-replace-and-wrap">selection editing</a>, <a href="/docs/clipboard.html">copy and paste</a> and <a href="/#tutorial">practice exercises</a>.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/clipboard.html"><small>Previous</small>Copy &amp; paste </a><a href="/docs/latex-guide.html"><small>Next</small>Writing &amp; editing LaTeX →</a></nav><footer>Barocss Math Editor core · 0.6.1 (workspace) · MIT License</footer></main>
+<p>Without a selection, <code>^</code>, <code>_</code>, and <code>/</code> immediately use the preceding operand. <code>a+b/</code> becomes <code>a+\frac{b}{}</code>; selecting all of <code>a+b</code> before <code>/</code> uses the whole selection as numerator. An existing structure immediately before the caret is one operand. <code>x^2_3</code> puts both scripts on the same base. With no operand, <code>/</code> starts in an empty numerator; <code>^</code> and <code>_</code> start in an empty script. Each conversion is one Undo step. Bracket wrapping keys still require a selection. Literal text, matrix rectangles and multiline ranges retain their own rules. See <a href="/docs/latex-guide.html#select-replace-and-wrap">selection editing</a>, <a href="/docs/clipboard.html">copy and paste</a> and <a href="/#tutorial">practice exercises</a>.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/clipboard.html"><small>Previous</small>Copy &amp; paste </a><a href="/docs/latex-guide.html"><small>Next</small>Writing &amp; editing LaTeX →</a></nav><footer>Barocss Math Editor core · 0.7.0 (workspace) · MIT License</footer></main>
 <aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#enter-depends-on-context">Enter depends on context</a><a class="h2" href="#delete-depends-on-context">Delete depends on context</a></nav></aside></div></body></html>

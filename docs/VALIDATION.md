@@ -800,3 +800,11 @@ This is local Chromium evidence. OS IME, Safari/Firefox, installed WordPress and
 - Text packages, main site and integration site build successfully. Main and integration bundles retain existing large-chunk warnings.
 - Scripts: `apps/math-text-demo/test/source.browser.js`, `source-layout.browser.js`, `example-guides.browser.js`. Evidence is under `output/playwright/math-text/`.
 - This does not establish Firefox/Safari, Windows/Linux, screen-reader or VS Code source-completion support. No npm or site publication was performed for this change.
+
+### Direct visual typing (2026-09-14)
+
+- `^`, `_`, and `/` now create structures at a collapsed caret in React and DOM fields. Selection wrapping remains supported.
+- Core: 1,762 unit tests passed. The added direct-typing suite has 19 cases covering operand boundaries, existing structures, both script orders, continued typing, Undo/Redo, literal text, modifiers, composition guards and key repeat. The targeted typing/selection/locale tests and TypeScript check passed after the final guard/help update.
+- EDIT-036: 30 browser cases passed in React block and DOM block/inline. Evidence: `output/playwright/editing-scenarios/2026-09-14T08-53-56-736Z/`. Each case types real keys and checks exported LaTeX, focus, Undo/Redo and a screenshot. The 27 nonempty-base cases compare vertical placement with KaTeX at 26px after font loading; direction agrees and the relative vertical-center difference stays below 0.4em. This is a bounded placement check, not a claim of pixel-identical rendering.
+- EDIT-033: all 63 existing selection wrapping cases passed. Evidence: `output/playwright/editing-scenarios/2026-09-14T08-52-56-019Z/`.
+- Editing guides and English/Korean help were updated. A minor changeset is pending. No npm, site or VS Code extension release was performed for this change. Physical mobile keyboards, native OS IME and every host integration were not rerun.

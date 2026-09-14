@@ -207,3 +207,11 @@ Run `pnpm --filter @barocss/math-editor test:editing --suite=learning`.
 Complete the five practice tasks with keyboard input: correction, selection-to-fraction, power, nearest root conversion and explicit LaTeX insertion. Reject a wrong answer; verify reset/close behavior and an unchanged playground. Pass criteria compare normalized model trees, not merely the rendered string. Test English and Korean help, toolbar access and F1 in React/native block and native inline fields. Closing must restore native selection, permit immediate wrapping/typing and preserve Undo. Destroying a field must remove open help.
 
 The continuous host suite also opens/closes help before its existing editing chain. This tests the host draft boundary separately from standalone focus checks. Native OS F1/Fn routing and screen-reader behavior remain separate device checks.
+
+## Direct caret typing — EDIT-036
+
+Run `pnpm --filter @barocss/math-editor test:editing --suite=typing`.
+
+Type `x^2`, `x_2`, `4ab/2`, and `a+b/2` without selecting a suggestion. Check the operand boundary, the active input slot, continued typing, Undo and Redo. Include both script orders, nested fractions, an existing parenthesized structure, and empty bases. Compare the actual edited expression with KaTeX. The fixture covers React block and DOM block/inline. Unit tests cover modifiers, literal text, composition guards and key repeat. This keyboard check does not certify native mobile keyboards or OS IME composition.
+
+EDIT-036 also covers `a_3^2` followed by `+1`, and `a^2_3` followed by `+1`. The opposite script must stay anchored as the active script grows. Both script rows share the start edge, with horizontal attachment compared against KaTeX (36 total browser cases).

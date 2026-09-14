@@ -12,7 +12,7 @@ The browser text-editor adapters support a visual popup and optional LaTeX sourc
 | `@barocss/math-editor-monaco` | Caret popup, Alt+Enter | Attachment and editor disposal |
 | Barocss Math Editor for VS Code | Webview beside the document | VS Code extension lifecycle |
 
-[Open the browser examples](../text-editors.html). The three examples import individual workspace packages directly from source. Published package exports target their own build artifacts. The new packages start at 0.1.0; npm and Marketplace publication are separate steps.
+[Open the browser examples](../text-editors.html). The three examples import individual workspace packages directly from source. Published package exports target their own build artifacts. npm packages and the VS Code extension are published separately.
 
 ## CodeMirror 6
 
@@ -126,7 +126,11 @@ The popup exposes `--me-text-background`, `--me-text-foreground`, `--me-text-bor
 
 ## VS Code
 
+Install [Barocss Math Editor from the Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=barocss.barocss-math-editor), or search for `Barocss Math Editor` in the Extensions view.
+
 The extension supplies **Barocss: Edit Formula** and **Barocss: Insert Formula**. It uses a Webview and the public VS Code document API, not the internal Monaco DOM. In Markdown and LaTeX documents, Alt+Enter opens editing; users can change that binding in VS Code.
+
+In the visual editor, type `^`, `_`, or `/` after an operand or selection to create a power, subscript, or fraction. The cursor moves to the next input slot. For example, `x^2` creates a power; `a+b/2` makes only `b` the numerator. Select `a+b` before `/` to use the whole expression. Use the arrow keys to leave a slot.
 
 Build and package from the workspace:
 

@@ -17,6 +17,8 @@ Use Cmd on macOS and Ctrl on Windows/Linux. Alt is Option on macOS. The host and
 | Nonempty math selection | `(`, `[`, `{`, `\|` | Wrap in parentheses, brackets, braces or absolute value |
 | Nonempty math selection | `/` | Use the selection as numerator; enter the denominator next |
 | Nonempty math selection | `^` / `_` | Use the selection as base; enter the exponent or subscript next |
+| Caret after an operand | `^` / `_` | Create a power/subscript and enter its empty script slot |
+| Caret after an operand | `/` | Use the preceding operand as numerator and enter the denominator |
 | Active formula | Alt+Down | Open suggestions, including transformations for the nearest supported structure |
 | Suggestions open | Up / Down, Enter | Choose and apply a suggestion |
 | Suggestions open | Escape | Dismiss suggestions before returning to ordinary navigation |
@@ -38,4 +40,4 @@ In a block field, Enter follows the configured newline/commit policy. Shift+Ente
 
 Backspace/Delete removes a selection. At a structure boundary it can unwrap retained contents. An empty slot can remove or reduce its enclosing structure. Populated grids require their grid selection/deletion policy so cells are not silently flattened. At the end of a top-level line, Delete joins the following line; Backspace at the next line's start joins backward. Undo restores the change.
 
-The direct wrapping keys apply only to a nonempty math selection. Literal text, matrix rectangles and multiline ranges retain their own rules. See [selection editing](LATEX-GUIDE.md#select-replace-and-wrap), [copy and paste](CLIPBOARD.md) and [practice exercises](https://math-editor.barocss.com/#tutorial).
+Without a selection, `^`, `_`, and `/` immediately use the preceding operand. `a+b/` becomes `a+\frac{b}{}`; selecting all of `a+b` before `/` uses the whole selection as numerator. An existing structure immediately before the caret is one operand. `x^2_3` puts both scripts on the same base. With no operand, `/` starts in an empty numerator; `^` and `_` start in an empty script. Each conversion is one Undo step. Bracket wrapping keys still require a selection. Literal text, matrix rectangles and multiline ranges retain their own rules. See [selection editing](LATEX-GUIDE.md#select-replace-and-wrap), [copy and paste](CLIPBOARD.md) and [practice exercises](https://math-editor.barocss.com/#tutorial).

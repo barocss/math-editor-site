@@ -52,7 +52,7 @@ Typing LaTeX into an ordinary editor slot is not the same as importing it. Use t
 - Type `operatorname` to enter a custom upright function name. Tab moves to the argument position.
 - After a function suggestion, choose an exponent or subscript to attach it to that function name.
 - At the end of an existing lower script, type `^` and choose Exponent to add an upper script to the same base. The reverse works with `_` and Subscript.
-- A symbol query can show a literal character first. For example, `/` offers division before Fraction. Use the candidate label or arrow keys to choose the structure you intend.
+- `^`, `_`, and `/` immediately create powers, subscripts, and fractions during visual typing. Use named symbol suggestions for a literal division symbol. LaTeX source editing and pasting retain their own syntax rules.
 
 Standard function names: `sin`, `cos`, `tan`, `cot`, `sec`, `csc`, `arcsin`, `arccos`, `arctan`, `sinh`, `cosh`, `tanh`, `log`, `ln`, `exp`, `min`, `max`, `det`, `gcd`. These represent notation; they do not calculate values. Hosts can add translated search aliases through [locale JSON](LOCALIZATION.md).
 
@@ -74,7 +74,7 @@ With a nonempty math selection, these keys apply immediately without choosing a 
 
 Compound power bases receive parentheses. Each wrap is one Undo step; subsequent typing is a separate edit. This works with mouse dragging, Shift+arrows and native input selections in React and DOM fields, including toolbar-free inline fields. The key handling is shared by the framework and host adapters through their renderer.
 
-Other printable characters replace the selection. Without a selection, the existing suggestion behavior stays unchanged; `{` can still offer braces and cases. Literal text slots retain text input. Ctrl/Cmd/Alt combinations and IME composition are not structural shortcuts. Multi-line selections remain selected and unchanged when a wrapping key is pressed. Rectangular matrix-cell selection retains its own typing behavior.
+Other printable characters replace the selection. Without a selection, `^`, `_`, and `/` immediately consume the preceding simple operand or adjacent structure. For example, type `x^2`, `x_2`, or `ab/2` without accepting a suggestion. In `a+b/2`, only `b` becomes the numerator. Use a selection to include `a+b` together. `x^2_3` and `x_3^2` create both scripts on the same base. A leading `/` starts in the empty numerator, while leading `^` or `_` starts in the empty script. Other trigger keys keep their suggestions; `{` can still offer braces and cases. Literal text slots retain text input. Ctrl/Cmd/Alt combinations and IME composition are not structural shortcuts. Multi-line selections remain selected and unchanged when a wrapping key is pressed. Rectangular matrix-cell selection retains its own typing behavior.
 
 Backspace/Delete removes the selection. Undo restores content. In combined scripts, Backspace in an empty script removes that side while retaining the other script.
 

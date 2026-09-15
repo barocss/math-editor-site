@@ -471,5 +471,37 @@ The fixture covers React block and native DOM block/inline. It sends repeated re
 <p>Run <code>pnpm --filter @barocss/math-editor test:editing --suite=typing</code>.</p>
 <p>Type <code>x^2</code>, <code>x_2</code>, <code>4ab/2</code>, and <code>a+b/2</code> without selecting a suggestion. Check the operand boundary, the active input slot, continued typing, Undo and Redo. Include both script orders, nested fractions, an existing parenthesized structure, and empty bases. Compare the actual edited expression with KaTeX. The fixture covers React block and DOM block/inline. Unit tests cover modifiers, literal text, composition guards and key repeat. This keyboard check does not certify native mobile keyboards or OS IME composition.</p>
 <p>EDIT-036 also covers <code>a_3^2</code> followed by <code>+1</code>, and <code>a^2_3</code> followed by <code>+1</code>. The opposite script must stay anchored as the active script grows. Both script rows share the start edge, with horizontal attachment compared against KaTeX (36 total browser cases).</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/implementation.html"><small>Previous</small>Implementation </a><a href="/docs/rendering-tests.html"><small>Next</small>Rendering checks →</a></nav><footer>Barocss Math Editor core · 0.7.0 (workspace) · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#current-milestone-evidence--2026-09-13">Current milestone evidence — 2026-09-13</a><a class="h2" href="#status-and-ownership">Status and ownership</a><a class="h2" href="#scenario-register">Scenario register</a><a class="h2" href="#contextual-structure-tools">Contextual structure tools</a><a class="h2" href="#inline-transformation-suggestions">Inline transformation suggestions</a><a class="h2" href="#test-environments">Test environments</a><a class="h2" href="#per-run-record">Per-run record</a><a class="h2" href="#change-workflow">Change workflow</a><a class="h2" href="#next-work">Next work</a><a class="h2" href="#direct-selection-wrapping--edit-033">Direct selection wrapping — EDIT-033</a><a class="h2" href="#held-arrow-navigation--edit-034">Held arrow navigation — EDIT-034</a><a class="h2" href="#learning-and-help--edit-035">Learning and help — EDIT-035</a><a class="h2" href="#direct-caret-typing--edit-036">Direct caret typing — EDIT-036</a></nav></aside></div></body></html>
+<h2 id="edit-037--replace-an-existing-symbol-at-the-caret">EDIT-037 — Replace an existing symbol at the caret</h2>
+<ul>
+<li>Place the caret before and after <code>ℝ</code> in <code>a+ℝ+b</code>. Related number sets must appear first.</li>
+<li>Choose <code>ℤ</code> with Down and Enter. Only <code>ℝ</code> changes. The input keeps focus.</li>
+<li>Continue typing on the same side of the symbol. Undo typing, undo replacement, then redo replacement.</li>
+<li>Compare the updated LaTeX and KaTeX preview. Repeat with React, native DOM block and native DOM inline.</li>
+<li>Catalog unit coverage checks both sides of every non-ASCII symbol, related ordering, localized labels, whitespace boundaries and stale/selected targets.</li>
+</ul>
+<p>Run <code>node packages/math-editor/test/editing/run.mjs --suite=symbols</code> with the demo server running.</p>
+<h2 id="edit-038--prioritize-related-letter-symbols">EDIT-038 — Prioritize related letter symbols</h2>
+<ul>
+<li>Type <code>r</code> or <code>R</code>: show <code>ℝ</code>, then <code>ρ</code>, before right arrows. Keep the typed letter until acceptance.</li>
+<li>Press Enter to choose <code>ℝ</code>; verify LaTeX, KaTeX preview, focus and Undo.</li>
+<li>Repeat in React, DOM block and DOM inline. Run the browser runner with <code>--suite=ranking</code>.</li>
+<li>Unit checks cover English/Korean, other number-set initials, explicit symbol names and arrow shortcuts.</li>
+</ul>
+<h2 id="edit-039--require-a-choice-for-passive-symbol-suggestions">EDIT-039 — Require a choice for passive symbol suggestions</h2>
+<ul>
+<li>Open an existing <code>ℝ</code>. Press Enter without choosing: retain the symbol and use the field/host Enter policy.</li>
+<li>Press Down to select the first candidate, then Enter: replace the symbol without also committing the host.</li>
+<li>Move away and return, or dismiss with Escape: the old choice must not be reused. Alt+Down can explicitly reopen and select the first action.</li>
+<li>Check direct pointer acceptance, Undo, and existing typed-letter acceptance. Repeat in React, DOM block and DOM inline.</li>
+<li>Run the browser runner with <code>--suite=choice</code>, alongside <code>--suite=symbols</code> and <code>--suite=ranking</code>.</li>
+</ul>
+<h2 id="edit-040--direct-fence-typing">EDIT-040 — Direct fence typing</h2>
+<ul>
+<li>Type <code>(x)y</code>, <code>[x]y</code>, <code>{x}y</code>, <code>|x|y</code> and <code>([x])y</code>. Verify the inner content, outside continuation, focus, Undo/Redo and generated KaTeX preview.</li>
+<li>Start an empty fence with each ASCII opening key, press Backspace and continue typing. No empty wrapper remains.</li>
+<li>Open an imported half-open interval and close with its actual right delimiter.</li>
+<li>Unit coverage additionally checks norm/angle key events, caret-middle and nested-slot guards, mismatched closers, escaped input, modifiers, composition and repeat suppression.</li>
+<li>Run the editing runner with <code>--suite=fences</code> (33 browser cases). Unicode key-event support does not imply that paste or OS character pickers synthesize those key events.</li>
+</ul>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/implementation.html"><small>Previous</small>Implementation </a><a href="/docs/rendering-tests.html"><small>Next</small>Rendering checks →</a></nav><footer>Barocss Math Editor core · 0.8.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#current-milestone-evidence--2026-09-13">Current milestone evidence — 2026-09-13</a><a class="h2" href="#status-and-ownership">Status and ownership</a><a class="h2" href="#scenario-register">Scenario register</a><a class="h2" href="#contextual-structure-tools">Contextual structure tools</a><a class="h2" href="#inline-transformation-suggestions">Inline transformation suggestions</a><a class="h2" href="#test-environments">Test environments</a><a class="h2" href="#per-run-record">Per-run record</a><a class="h2" href="#change-workflow">Change workflow</a><a class="h2" href="#next-work">Next work</a><a class="h2" href="#direct-selection-wrapping--edit-033">Direct selection wrapping — EDIT-033</a><a class="h2" href="#held-arrow-navigation--edit-034">Held arrow navigation — EDIT-034</a><a class="h2" href="#learning-and-help--edit-035">Learning and help — EDIT-035</a><a class="h2" href="#direct-caret-typing--edit-036">Direct caret typing — EDIT-036</a><a class="h2" href="#edit-037--replace-an-existing-symbol-at-the-caret">EDIT-037 — Replace an existing symbol at the caret</a><a class="h2" href="#edit-038--prioritize-related-letter-symbols">EDIT-038 — Prioritize related letter symbols</a><a class="h2" href="#edit-039--require-a-choice-for-passive-symbol-suggestions">EDIT-039 — Require a choice for passive symbol suggestions</a><a class="h2" href="#edit-040--direct-fence-typing">EDIT-040 — Direct fence typing</a></nav></aside></div></body></html>

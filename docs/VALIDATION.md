@@ -808,3 +808,36 @@ This is local Chromium evidence. OS IME, Safari/Firefox, installed WordPress and
 - EDIT-036: 30 browser cases passed in React block and DOM block/inline. Evidence: `output/playwright/editing-scenarios/2026-09-14T08-53-56-736Z/`. Each case types real keys and checks exported LaTeX, focus, Undo/Redo and a screenshot. The 27 nonempty-base cases compare vertical placement with KaTeX at 26px after font loading; direction agrees and the relative vertical-center difference stays below 0.4em. This is a bounded placement check, not a claim of pixel-identical rendering.
 - EDIT-033: all 63 existing selection wrapping cases passed. Evidence: `output/playwright/editing-scenarios/2026-09-14T08-52-56-019Z/`.
 - Editing guides and English/Korean help were updated. A minor changeset is pending. No npm, site or VS Code extension release was performed for this change. Physical mobile keyboards, native OS IME and every host integration were not rerun.
+
+## Adjacent symbol replacement — 2026-09-14
+
+- Core: 45 test files / 1,880 checks passed, including 118 symbol replacement checks covering all 114 non-ASCII catalog glyphs from both caret sides. Type check and formatting passed.
+- Browser: EDIT-037 passed 6/6 for React, native DOM block and native DOM inline, before and after the glyph. Verified related ordering, replacement heading, keyboard acceptance, retained input focus, generated LaTeX/KaTeX preview, continued typing, Undo and Redo.
+- Evidence: `output/playwright/editing-scenarios/2026-09-14T09-57-55-378Z/REPORT.md`.
+- This fixes visual-editor suggestions. Source-mode completion and multi-symbol selection use their existing paths. Local Chromium evidence does not certify every host or OS.
+- The previous npm batch stopped when its authentication URL expired. Its prepared artifacts do not contain this fix. Rebuild them before publication.
+
+## Single-letter suggestion ranking — 2026-09-14
+
+- Bare `r`/`R` ranks `ℝ` then `ρ` ahead of right-arrow matches. Other number-set initials follow the same rule. Explicit aliases and symbolic triggers retain their existing precedence.
+- Core: 45 files / 1,882 checks passed; type check passed.
+- EDIT-038: 6/6 browser scenarios passed for React and DOM block/inline. Verified first candidates, retained arrow options, literal input before acceptance, Enter, focus, KaTeX preview and Undo.
+- Evidence: `output/playwright/editing-scenarios/2026-09-14T10-02-40-125Z/REPORT.md`. Changes are local and pending release.
+
+## Explicit choice for existing-symbol suggestions — 2026-09-14
+
+- Existing-symbol replacement requires keyboard navigation or explicit Alt+Down before Enter can accept. Direct candidate clicks still apply. Typed-letter searches retain immediate Enter acceptance.
+- Caret/content changes, dismissal and blur clear the previous choice. A passive Enter follows the configured host/field policy.
+- Core: 45 files / 1,883 checks passed. Final type check and formatting passed.
+- Browser: 18/18 checks passed across React, DOM block and DOM inline. EDIT-039 verifies passive host commit, movement/dismissal reset, first Down, chosen acceptance, Undo and pointer acceptance. EDIT-037 verifies both caret sides, continued typing and KaTeX preview. EDIT-038 retains r/R ranking and immediate typed-query acceptance.
+- Evidence: `output/playwright/editing-scenarios/2026-09-14T10-15-44-127Z`, `2026-09-14T10-16-47-215Z`, and `2026-09-14T10-17-05-959Z`. Earlier timed-out fixtures assumed Undo automatically reopened dismissed menus; final checks explicitly reopen those menus.
+- Local changes remain pending release. Native OS IME and platform coverage remain separate.
+
+## Direct fence typing — 2026-09-14
+
+- Core: 45 files / 1,906 tests passed, including all existing direct script/fraction and selected-wrapper tests. Types and formatting passed.
+- ASCII opening keys create empty bodies at the caret. The matching closer at the end of the immediate fence body moves outside with the same document object. Empty-slot Backspace uses the existing unwrap behavior.
+- Unit coverage includes norm and angle key events, imported/half-open/custom fences, nested and nonterminal boundaries, empty deletion, repeat, literal, escape, modifier and composition guards. `<` and `>` stay comparisons.
+- EDIT-040: 33/33 native-key browser scenarios passed across React, DOM block and DOM inline. Compared generated LaTeX/KaTeX preview, continued typing, focus, Undo/Redo, nested shapes and empty wrappers. Evidence: `output/playwright/editing-scenarios/2026-09-14T10-35-14-366Z/REPORT.md`. The nested screenshot was visually inspected; this is not a new pixel-level geometry audit.
+- Unicode delimiter coverage is at key-event/model level. OS pickers, paste and IME do not necessarily emit these key events and are not claimed as direct typing support. The browser run precedes the help-text-only locale update.
+- Changes are local and pending release.

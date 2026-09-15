@@ -1,5 +1,19 @@
 # @barocss/math-editor
 
+## 0.8.0
+
+### Minor Changes
+
+- Create fence bodies directly from opening keys at an unselected caret. Close the matching immediate fence at its body end without inserting duplicate delimiters, including existing half-open/custom fences. Preserve selected wrapping, empty-body deletion, nested-slot boundaries, literal/escaped input, modifiers and composition rules. Keep < and > as comparisons. Add keyboard guidance and React/DOM typing, history and KaTeX preview scenarios.
+
+### Patch Changes
+
+- Offer replacement suggestions beside existing catalog symbols, including number sets, Greek letters and arrows. Place related symbols first, replace only the captured glyph, preserve the caret side and surrounding text, and reject stale targets. Add English and Korean action labels and unit/browser editing coverage.
+
+  Prioritize mathematical letter forms for single-letter searches, such as real numbers and rho before right arrows for r. Preserve explicit command and arrow shortcut matching.
+
+  Require an explicit keyboard choice before Enter accepts an existing-symbol replacement. Keep Enter available to the field/host when context suggestions are only visible. Clear the choice on cursor/content changes, dismissal and blur, while preserving direct pointer acceptance and typed-query completion.
+
 ## 0.7.0
 
 ### Minor Changes

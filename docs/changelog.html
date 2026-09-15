@@ -15,17 +15,30 @@
   </div></header>
 <div class="docs-layout"><nav class="docs-nav" aria-label="Documentation"><details open><summary>Browse documentation</summary><section><h2>Get started</h2><a href="/docs/index.html" >Introduction</a><a href="/docs/getting-started.html" >Learn to edit</a><a href="/docs/clipboard.html" >Copy &amp; paste</a><a href="/docs/keyboard.html" >Keyboard reference</a><a href="/docs/latex-guide.html" >Writing &amp; editing LaTeX</a><a href="/docs/adapters.html" >API &amp; framework adapters</a><a href="/docs/embedding.html" >Embedding &amp; layouts</a><a href="/docs/styling.html" >Styling &amp; themes</a></section><section><h2>Framework guides</h2><a href="/docs/api-javascript.html" >Pure JavaScript</a><a href="/docs/api-react.html" >React</a><a href="/docs/api-web-component.html" >Web Component</a><a href="/docs/api-vue.html" >Vue 3</a><a href="/docs/api-svelte.html" >Svelte</a><a href="/docs/api-solid.html" >Solid</a></section><section><h2>Editor integrations</h2><a href="/docs/integrations/index.html" >Integration overview</a><a href="/docs/integrations/tiptap.html" >Tiptap</a><a href="/docs/integrations/prosemirror.html" >ProseMirror</a><a href="/docs/integrations/lexical.html" >Lexical</a><a href="/docs/integrations/editorjs.html" >Editor.js</a><a href="/docs/integrations/tinymce.html" >TinyMCE</a><a href="/docs/integrations/ckeditor.html" >CKEditor 5</a><a href="/docs/integrations/quill.html" >Quill</a><a href="/docs/integrations/slate.html" >Slate</a><a href="/docs/integrations/gutenberg.html" >WordPress Gutenberg</a></section><section><h2>Integration reference</h2><a href="/docs/integrations/host-support.html" >Host support</a><a href="/docs/integrations/validation.html" >Integration validation</a><a href="/docs/integrations/releasing.html" >Integration release guide</a><a href="/docs/integrations/roadmap.html" >Integration roadmap</a><a href="/docs/integrations/commercial-model.html" >Licensing</a><a href="/docs/integrations/wordpress.html" >WordPress plugin ZIP</a></section><section><h2>Text editors</h2><a href="/docs/text-editors.html" >LaTeX in text editors</a></section><section><h2>Shared API</h2><a href="/docs/api-session.html" >Session &amp; DOM API</a></section><section><h2>Reference</h2><a href="/docs/support.html" >Supported features</a><a href="/docs/json-model.html" >JSON model specification</a><a href="/docs/symbols.html" >Symbol reference</a><a href="/docs/localization.html" >Localization</a><a href="/docs/latex-scope.html" >LaTeX support</a><a href="/docs/latex-model.html" >LaTeX → JSON model</a></section><section><h2>Project</h2><a href="/docs/implementation.html" >Implementation</a><a href="/docs/editing-scenarios.html" >Editing scenarios</a><a href="/docs/rendering-tests.html" >Rendering checks</a><a href="/docs/validation.html" >Testing &amp; validation</a><a href="/docs/roadmap.html" >Roadmap</a><a href="/docs/changelog.html" aria-current="page">Changelog</a><a href="/docs/releasing.html" >Releasing</a></section></details></nav><script type="module" src="/docs.js"></script>
 <main id="content" tabindex="-1"><div class="breadcrumb"><a href="/">Math Editor</a> / <a href="/docs/index.html">Docs</a></div><article><h1 id="barocssmath-editor">@barocss/math-editor</h1>
-<h2 id="070">0.7.0</h2>
+<h2 id="080">0.8.0</h2>
 <h3 id="minor-changes">Minor Changes</h3>
+<ul>
+<li>Create fence bodies directly from opening keys at an unselected caret. Close the matching immediate fence at its body end without inserting duplicate delimiters, including existing half-open/custom fences. Preserve selected wrapping, empty-body deletion, nested-slot boundaries, literal/escaped input, modifiers and composition rules. Keep &lt; and &gt; as comparisons. Add keyboard guidance and React/DOM typing, history and KaTeX preview scenarios.</li>
+</ul>
+<h3 id="patch-changes">Patch Changes</h3>
+<ul>
+<li>
+<p>Offer replacement suggestions beside existing catalog symbols, including number sets, Greek letters and arrows. Place related symbols first, replace only the captured glyph, preserve the caret side and surrounding text, and reject stale targets. Add English and Korean action labels and unit/browser editing coverage.</p>
+<p>Prioritize mathematical letter forms for single-letter searches, such as real numbers and rho before right arrows for r. Preserve explicit command and arrow shortcut matching.</p>
+<p>Require an explicit keyboard choice before Enter accepts an existing-symbol replacement. Keep Enter available to the field/host when context suggestions are only visible. Clear the choice on cursor/content changes, dismissal and blur, while preserving direct pointer acceptance and typed-query completion.</p>
+</li>
+</ul>
+<h2 id="070">0.7.0</h2>
+<h3 id="minor-changes-1">Minor Changes</h3>
 <ul>
 <li>Make ^, _ and / create powers, subscripts and fractions immediately during visual typing, using the preceding operand or selection and focusing the next slot. Preserve adjacent structures, combine opposite scripts on the same base, and retain Undo/Redo. Update keyboard help and add continuous typing and KaTeX placement checks for React and DOM editors.</li>
 </ul>
-<h3 id="patch-changes">Patch Changes</h3>
+<h3 id="patch-changes-1">Patch Changes</h3>
 <ul>
 <li>Keep combined superscripts and subscripts aligned to the start of their shared column. Growing one script no longer shifts the other horizontally. Add live typing and KaTeX horizontal-alignment regression checks for React and DOM editors.</li>
 </ul>
 <h2 id="061">0.6.1</h2>
-<h3 id="patch-changes-1">Patch Changes</h3>
+<h3 id="patch-changes-2">Patch Changes</h3>
 <ul>
 <li>Keep fraction terms at their resolved TeX size inside norms, absolute values,
 parentheses and roots. Use the same font size for passive glyphs, active inputs
@@ -46,7 +59,7 @@ in React and native DOM editors without changing document history. Move matrix
 column deletion to Alt+Shift+Backspace to avoid a selection shortcut conflict.</li>
 </ul>
 <h2 id="060">0.6.0</h2>
-<h3 id="minor-changes-1">Minor Changes</h3>
+<h3 id="minor-changes-2">Minor Changes</h3>
 <ul>
 <li>
 <p>Complete forward structural deletion and next-line joining, preserving retained content and one-step Undo. Keep the preferred horizontal caret position across vertical movement in React and native DOM. Reject malformed structured clipboard data without falling back to destructive plain-text insertion, and reject multiline paste in React single-line fields. Share Enter policy so Shift+Enter bypasses suggestions and follows row/newline rules.</p>
@@ -63,20 +76,20 @@ column deletion to Alt+Shift+Backspace to avoid a selection shortcut conflict.</
 <p>Expose <code>showHelp()</code> on DOM and React handles and <code>onHelp</code> for an independently mounted toolbar, so help targets an explicit field. Restore native selection as well as focus after help closes.</p>
 </li>
 </ul>
-<h3 id="patch-changes-2">Patch Changes</h3>
+<h3 id="patch-changes-3">Patch Changes</h3>
 <ul>
 <li>Center the keyboard-selected suggestion within the available list space in React, DOM and text-source editors. Clamp scrolling at list boundaries, account for sticky source hints, and scroll only the suggestion list so the host document stays in place.</li>
 <li>Read the native input selection before processing keydown in React and DOM editors. Held arrow keys now cross token and structure boundaries without waiting for keyup or a delayed selection event. Add repeated-keydown browser coverage for both directions, fraction slots, Shift selection, continued typing and Undo.</li>
 <li>Allow fixed suggestion menus to use viewport space outside compact dialogs. Constrain menus by actual CSS clipping boundaries, not dialog semantics, while retaining host action-control avoidance.</li>
 </ul>
 <h2 id="050">0.5.0</h2>
-<h3 id="minor-changes-2">Minor Changes</h3>
+<h3 id="minor-changes-3">Minor Changes</h3>
 <ul>
 <li>Show query-independent radical tools below the active editing surface. Include conversion, index editing, disabled explanations, F6/Escape focus navigation, en/ko labels and a contextTools opt-out (context-tools for Web Components). Preserve model history and hide stale context during range selection or blur.</li>
 <li>Add contextual bracket transformations to suggestions, with Alt+Down discovery and keyboard acceptance in inline fields without toolbar or footer. Preserve contents, caret and history; target the nearest root/fence and reject stale actions. Include optional footer bracket controls and localized keyboard guidance.</li>
 <li>Add contextual suggestions to convert a square root to an indexed root while preserving the radicand. Select the new index <code>2</code> for immediate editing. Allow conversion back to a square root only for an empty index or <code>2</code>. Include English/Korean labels and shared behavior in React and native DOM integrations.</li>
 </ul>
-<h3 id="patch-changes-3">Patch Changes</h3>
+<h3 id="patch-changes-4">Patch Changes</h3>
 <ul>
 <li>
 <p>Resolve operator presentation from mathematical slot context in React and native
@@ -133,7 +146,7 @@ fixtures to simple roots and short parentheses.</p>
 </li>
 </ul>
 <h2 id="041">0.4.1</h2>
-<h3 id="patch-changes-4">Patch Changes</h3>
+<h3 id="patch-changes-5">Patch Changes</h3>
 <ul>
 <li>
 <p>Move each host implementation, tests and host-specific styles into its own plugin
@@ -148,7 +161,7 @@ artifacts against their generated runtime and declaration paths.</p>
 </li>
 </ul>
 <h2 id="040">0.4.0</h2>
-<h3 id="minor-changes-3">Minor Changes</h3>
+<h3 id="minor-changes-4">Minor Changes</h3>
 <ul>
 <li>
 <p>Exclude JavaScript and declaration source maps from the npm package. Verify their absence alongside the MIT license and runtime entry points during release preparation.</p>
@@ -159,7 +172,7 @@ artifacts against their generated runtime and declaration paths.</p>
 </li>
 </ul>
 <h2 id="030">0.3.0</h2>
-<h3 id="minor-changes-4">Minor Changes</h3>
+<h3 id="minor-changes-5">Minor Changes</h3>
 <ul>
 <li>
 <p>Recognize matrix dimensions such as <code>2x1</code>, <code>1x2</code>, <code>3x7</code> and <code>4x4</code> as suggestion shortcuts, including uppercase <code>X</code> and <code>×</code>. Support 1–20 rows and 1–20 columns. Offer matching empty and zero matrices, with identity matrices only for square sizes. Focus the first cell after insertion and keep row-order Tab editing. Preserve the typed expression until a candidate is accepted, keep surrounding terms, and restore the shortcut in one Undo.</p>
@@ -187,7 +200,7 @@ its labels and disables editing commands.</p>
 <p>Expose inherited CSS variables for editor colors, token colors, slot backgrounds, toolbar density and menu appearance. Keep per-editor themes on portaled suggestion and selection menus, including live theme switches and iframe documents. Add a styling guide and website theme/size/density examples without changing formula data or LaTeX output.</p>
 </li>
 </ul>
-<h3 id="patch-changes-5">Patch Changes</h3>
+<h3 id="patch-changes-6">Patch Changes</h3>
 <ul>
 <li>Preserve keyboard suggestion navigation while the mouse rests over the list. Highlight a pointer candidate only on actual mouse movement, so menu redraws cannot restore the previous choice or scroll position. Notify host adapters after pointer highlighting to preserve the native input caret during Quill reconciliation.</li>
 <li>Keep suggestion menus at their normal size inside scrolling host editors such as CKEditor and Quill. Respect transformed containers and dialog boundaries, isolate menu text alignment from the host document, and highlight pointer candidates without resetting list scroll.</li>
@@ -197,12 +210,12 @@ its labels and disables editing commands.</p>
 <li>Restore the input caret when a plain arrow follows a Shift+arrow or dragged model selection. Left/Up collapses to the document-ordered start and Right/Down to the end, without changing the formula or host history. Apply the same behavior in both renderers. Use Alt+Up/Down to navigate wrapping suggestions while retaining a selection; Enter and pointer selection remain available.</li>
 </ul>
 <h2 id="021">0.2.1</h2>
-<h3 id="patch-changes-6">Patch Changes</h3>
+<h3 id="patch-changes-7">Patch Changes</h3>
 <ul>
 <li>Support Shift+arrow model selection in React and native DOM editors, sharing drag-range copying, deletion and wrapping behavior. Extend horizontal selections across balanced structures and vertical selections between document lines. Restore Cases alongside paired braces for the <code>{</code> suggestion trigger, preserving paired braces as the default. Update English/Korean interaction guidance.</li>
 </ul>
 <h2 id="020">0.2.0</h2>
-<h3 id="minor-changes-5">Minor Changes</h3>
+<h3 id="minor-changes-6">Minor Changes</h3>
 <ul>
 <li>
 <p>Add bounded LaTeX import and validated JSON loading with atomic diagnostics and undoable editor imports. Expand editable notation with combined scripts, matrices and cases, integral and limit variants, scalable fences and radicals, accents and brace annotations, explicit sizes, mathematical alphabets, spacing and labeled arrows. Import unnumbered equation wrappers without numbering semantics.</p>
@@ -226,5 +239,5 @@ its labels and disables editing commands.</p>
 <li>English/Korean JSON locale packs and host-registered translations and suggestion aliases.</li>
 </ul>
 <p>The native surface has documented feature differences from the rich React editor. See ADAPTERS.md and VALIDATION.md for the supported scope. This release does not parse arbitrary LaTeX or evaluate expressions.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/roadmap.html"><small>Previous</small>Roadmap </a><a href="/docs/releasing.html"><small>Next</small>Releasing →</a></nav><footer>Barocss Math Editor core · 0.7.0 (workspace) · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#070">0.7.0</a><a class="h3" href="#minor-changes">Minor Changes</a><a class="h3" href="#patch-changes">Patch Changes</a><a class="h2" href="#061">0.6.1</a><a class="h3" href="#patch-changes-1">Patch Changes</a><a class="h2" href="#060">0.6.0</a><a class="h3" href="#minor-changes-1">Minor Changes</a><a class="h3" href="#patch-changes-2">Patch Changes</a><a class="h2" href="#050">0.5.0</a><a class="h3" href="#minor-changes-2">Minor Changes</a><a class="h3" href="#patch-changes-3">Patch Changes</a><a class="h2" href="#041">0.4.1</a><a class="h3" href="#patch-changes-4">Patch Changes</a><a class="h2" href="#040">0.4.0</a><a class="h3" href="#minor-changes-3">Minor Changes</a><a class="h2" href="#030">0.3.0</a><a class="h3" href="#minor-changes-4">Minor Changes</a><a class="h3" href="#patch-changes-5">Patch Changes</a><a class="h2" href="#021">0.2.1</a><a class="h3" href="#patch-changes-6">Patch Changes</a><a class="h2" href="#020">0.2.0</a><a class="h3" href="#minor-changes-5">Minor Changes</a><a class="h3" href="#editing-and-compatibility-details">Editing and compatibility details</a><a class="h2" href="#010">0.1.0</a></nav></aside></div></body></html>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/roadmap.html"><small>Previous</small>Roadmap </a><a href="/docs/releasing.html"><small>Next</small>Releasing →</a></nav><footer>Barocss Math Editor core · 0.8.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#080">0.8.0</a><a class="h3" href="#minor-changes">Minor Changes</a><a class="h3" href="#patch-changes">Patch Changes</a><a class="h2" href="#070">0.7.0</a><a class="h3" href="#minor-changes-1">Minor Changes</a><a class="h3" href="#patch-changes-1">Patch Changes</a><a class="h2" href="#061">0.6.1</a><a class="h3" href="#patch-changes-2">Patch Changes</a><a class="h2" href="#060">0.6.0</a><a class="h3" href="#minor-changes-2">Minor Changes</a><a class="h3" href="#patch-changes-3">Patch Changes</a><a class="h2" href="#050">0.5.0</a><a class="h3" href="#minor-changes-3">Minor Changes</a><a class="h3" href="#patch-changes-4">Patch Changes</a><a class="h2" href="#041">0.4.1</a><a class="h3" href="#patch-changes-5">Patch Changes</a><a class="h2" href="#040">0.4.0</a><a class="h3" href="#minor-changes-4">Minor Changes</a><a class="h2" href="#030">0.3.0</a><a class="h3" href="#minor-changes-5">Minor Changes</a><a class="h3" href="#patch-changes-6">Patch Changes</a><a class="h2" href="#021">0.2.1</a><a class="h3" href="#patch-changes-7">Patch Changes</a><a class="h2" href="#020">0.2.0</a><a class="h3" href="#minor-changes-6">Minor Changes</a><a class="h3" href="#editing-and-compatibility-details">Editing and compatibility details</a><a class="h2" href="#010">0.1.0</a></nav></aside></div></body></html>

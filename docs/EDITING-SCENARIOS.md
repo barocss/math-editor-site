@@ -215,3 +215,37 @@ Run `pnpm --filter @barocss/math-editor test:editing --suite=typing`.
 Type `x^2`, `x_2`, `4ab/2`, and `a+b/2` without selecting a suggestion. Check the operand boundary, the active input slot, continued typing, Undo and Redo. Include both script orders, nested fractions, an existing parenthesized structure, and empty bases. Compare the actual edited expression with KaTeX. The fixture covers React block and DOM block/inline. Unit tests cover modifiers, literal text, composition guards and key repeat. This keyboard check does not certify native mobile keyboards or OS IME composition.
 
 EDIT-036 also covers `a_3^2` followed by `+1`, and `a^2_3` followed by `+1`. The opposite script must stay anchored as the active script grows. Both script rows share the start edge, with horizontal attachment compared against KaTeX (36 total browser cases).
+
+## EDIT-037 — Replace an existing symbol at the caret
+
+- Place the caret before and after `ℝ` in `a+ℝ+b`. Related number sets must appear first.
+- Choose `ℤ` with Down and Enter. Only `ℝ` changes. The input keeps focus.
+- Continue typing on the same side of the symbol. Undo typing, undo replacement, then redo replacement.
+- Compare the updated LaTeX and KaTeX preview. Repeat with React, native DOM block and native DOM inline.
+- Catalog unit coverage checks both sides of every non-ASCII symbol, related ordering, localized labels, whitespace boundaries and stale/selected targets.
+
+Run `node packages/math-editor/test/editing/run.mjs --suite=symbols` with the demo server running.
+
+## EDIT-038 — Prioritize related letter symbols
+
+- Type `r` or `R`: show `ℝ`, then `ρ`, before right arrows. Keep the typed letter until acceptance.
+- Press Enter to choose `ℝ`; verify LaTeX, KaTeX preview, focus and Undo.
+- Repeat in React, DOM block and DOM inline. Run the browser runner with `--suite=ranking`.
+- Unit checks cover English/Korean, other number-set initials, explicit symbol names and arrow shortcuts.
+
+## EDIT-039 — Require a choice for passive symbol suggestions
+
+- Open an existing `ℝ`. Press Enter without choosing: retain the symbol and use the field/host Enter policy.
+- Press Down to select the first candidate, then Enter: replace the symbol without also committing the host.
+- Move away and return, or dismiss with Escape: the old choice must not be reused. Alt+Down can explicitly reopen and select the first action.
+- Check direct pointer acceptance, Undo, and existing typed-letter acceptance. Repeat in React, DOM block and DOM inline.
+- Run the browser runner with `--suite=choice`, alongside `--suite=symbols` and `--suite=ranking`.
+
+
+## EDIT-040 — Direct fence typing
+
+- Type `(x)y`, `[x]y`, `{x}y`, `|x|y` and `([x])y`. Verify the inner content, outside continuation, focus, Undo/Redo and generated KaTeX preview.
+- Start an empty fence with each ASCII opening key, press Backspace and continue typing. No empty wrapper remains.
+- Open an imported half-open interval and close with its actual right delimiter.
+- Unit coverage additionally checks norm/angle key events, caret-middle and nested-slot guards, mismatched closers, escaped input, modifiers, composition and repeat suppression.
+- Run the editing runner with `--suite=fences` (33 browser cases). Unicode key-event support does not imply that paste or OS character pickers synthesize those key events.

@@ -142,10 +142,44 @@
 </tr>
 </tbody>
 </table></div><h2 id="enter-depends-on-context">Enter depends on context</h2>
-<p>An active suggestion normally receives Enter. Escape dismisses it first if you want a different action. Operand-only suggestions require navigation before Enter applies them, so ordinary Enter does not unexpectedly wrap an operand.</p>
+<p>An active suggestion normally receives Enter. Escape dismisses it first if you want a different action. Operand-only suggestions and existing-symbol replacement suggestions require an explicit keyboard choice before Enter applies them. The first Down selects the first candidate; further Up/Down changes the choice. Alt+Down explicitly opens and selects a context action. Clicking a candidate applies it directly. Moving the caret, changing the formula, leaving the field, or dismissing the menu clears the previous keyboard choice. Without a choice, Enter follows the field or host policy.</p>
 <p>In a block field, Enter follows the configured newline/commit policy. Shift+Enter bypasses suggestion acceptance and creates a row in a grid or a line at the outer block level. Inline fields do not create top-level formula lines. Their completion and boundary-exit behavior belongs to the embedding host.</p>
 <h2 id="delete-depends-on-context">Delete depends on context</h2>
 <p>Backspace/Delete removes a selection. At a structure boundary it can unwrap retained contents. An empty slot can remove or reduce its enclosing structure. Populated grids require their grid selection/deletion policy so cells are not silently flattened. At the end of a top-level line, Delete joins the following line; Backspace at the next line's start joins backward. Undo restores the change.</p>
-<p>Without a selection, <code>^</code>, <code>_</code>, and <code>/</code> immediately use the preceding operand. <code>a+b/</code> becomes <code>a+\frac{b}{}</code>; selecting all of <code>a+b</code> before <code>/</code> uses the whole selection as numerator. An existing structure immediately before the caret is one operand. <code>x^2_3</code> puts both scripts on the same base. With no operand, <code>/</code> starts in an empty numerator; <code>^</code> and <code>_</code> start in an empty script. Each conversion is one Undo step. Bracket wrapping keys still require a selection. Literal text, matrix rectangles and multiline ranges retain their own rules. See <a href="/docs/latex-guide.html#select-replace-and-wrap">selection editing</a>, <a href="/docs/clipboard.html">copy and paste</a> and <a href="/#tutorial">practice exercises</a>.</p>
-</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/clipboard.html"><small>Previous</small>Copy &amp; paste </a><a href="/docs/latex-guide.html"><small>Next</small>Writing &amp; editing LaTeX →</a></nav><footer>Barocss Math Editor core · 0.7.0 (workspace) · MIT License</footer></main>
-<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#enter-depends-on-context">Enter depends on context</a><a class="h2" href="#delete-depends-on-context">Delete depends on context</a></nav></aside></div></body></html>
+<p>Without a selection, <code>^</code>, <code>_</code>, and <code>/</code> immediately use the preceding operand. <code>a+b/</code> becomes <code>a+\frac{b}{}</code>; selecting all of <code>a+b</code> before <code>/</code> uses the whole selection as numerator. An existing structure immediately before the caret is one operand. <code>x^2_3</code> puts both scripts on the same base. With no operand, <code>/</code> starts in an empty numerator; <code>^</code> and <code>_</code> start in an empty script. Each conversion is one Undo step. Without a selection, opening fence keys create an empty body at the caret without consuming the preceding operand. Literal text, matrix rectangles and multiline ranges retain their own rules. See <a href="/docs/latex-guide.html#select-replace-and-wrap">selection editing</a>, <a href="/docs/clipboard.html">copy and paste</a> and <a href="/#tutorial">practice exercises</a>.</p>
+<h2 id="change-an-existing-symbol">Change an existing symbol</h2>
+<p>Move the caret directly before or after a catalog symbol such as <code>ℝ</code>, <code>α</code>, or <code>→</code>. Suggestions show related symbols first. Press Down to select the first replacement, use Up/Down to change the choice, then Enter to apply it. Merely moving beside a symbol does not let Enter replace it. Only that symbol changes; surrounding text and the caret side remain intact. Escape closes the menu. At a boundary between two symbols, the left symbol is the target.</p>
+<p>A bare letter prioritizes related mathematical letter forms: <code>r</code> or <code>R</code> shows <code>ℝ</code> and <code>ρ</code> before right-arrow matches. Use <code>right</code>, <code>rightarrow</code>, or <code>-&gt;</code> to search for arrows explicitly. Text changes only after you accept a candidate.</p>
+<h2 id="type-brackets-directly">Type brackets directly</h2>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead>
+<tr>
+<th>Input</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(</code>, <code>[</code>, <code>{</code></td>
+<td>Create parentheses, brackets or braces at the caret and focus the body</td>
+</tr>
+<tr>
+<td><code>)</code>, <code>]</code>, <code>}</code></td>
+<td>At the end of the matching immediate fence body, move outside without inserting another delimiter</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>At the end of an absolute-value body, close it; elsewhere create a new absolute-value body</td>
+</tr>
+<tr>
+<td><code>‖</code>, <code>⟨</code>, <code>⟩</code></td>
+<td>Support norm and angle fences when these characters arrive as key events</td>
+</tr>
+<tr>
+<td>Backspace in an empty body</td>
+<td>Remove the empty wrapper</td>
+</tr>
+</tbody>
+</table></div><p>A nonempty selection is wrapped instead. Nested fences close one at a time. A cursor inside a fraction or other nested slot must leave that slot before it can close the outer fence. A mismatched closer or a closer in the middle of a body remains ordinary text.</p>
+<p>Half-open intervals and custom fences use their actual closing delimiter, including <code>(…]</code> and <code>[… )</code>. Choose their shape in suggestions or the toolbar; <code>(</code> and <code>[</code> start the ordinary matched pair. <code>&lt;</code> and <code>&gt;</code> remain comparison symbols. Two <code>|</code> keystrokes open and close an empty absolute value; use the norm tool or the <code>‖</code> character for a norm. Clipboard and IME input retain their own rules. Type <code>cases</code> or use the toolbar for a cases structure; <code>{</code> now creates braces directly.</p>
+</article><nav class="adjacent" aria-label="Previous and next document"><a href="/docs/clipboard.html"><small>Previous</small>Copy &amp; paste </a><a href="/docs/latex-guide.html"><small>Next</small>Writing &amp; editing LaTeX →</a></nav><footer>Barocss Math Editor core · 0.8.0 (workspace) · MIT License</footer></main>
+<aside class="docs-toc"><nav aria-label="On this page"><h2>On this page</h2><a class="h2" href="#enter-depends-on-context">Enter depends on context</a><a class="h2" href="#delete-depends-on-context">Delete depends on context</a><a class="h2" href="#change-an-existing-symbol">Change an existing symbol</a><a class="h2" href="#type-brackets-directly">Type brackets directly</a></nav></aside></div></body></html>

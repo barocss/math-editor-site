@@ -1,5 +1,12 @@
 # @barocss/math-editor
 
+## 0.8.1
+
+### Patch Changes
+
+- Scale fence height with the containing math style inside fractions, prevent empty caret boundaries from enlarging compact fraction rows, retain compact line heights in nested fractions, and improve display-fraction superscript placement. The default 14px editing font minimum is unchanged.
+- Update repository metadata after moving math packages and development tools to the private barocss/math repository. Public package names, APIs and source/publish export separation are unchanged.
+
 ## 0.8.0
 
 ### Minor Changes
